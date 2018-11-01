@@ -15,4 +15,8 @@ public class Token extends Circle
 	{
 		this.setTranslateY(this.getTranslateY() + amt);
 	}
+
+    public String getType() {
+        return type;
+    }
 }

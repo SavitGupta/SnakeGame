@@ -109,7 +109,11 @@ public class Main extends Application {
 
 
     private void collectTokens(){
-//        for(Token t: tokens)
+        for(Token t: tokens){
+            if(s.intersection(t)){
+                System.out.println("Token of type " + t.getT);
+            }
+        }
 
     }
     private void update() {

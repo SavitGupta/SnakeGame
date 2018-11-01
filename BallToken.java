@@ -1,9 +1,16 @@
-public class BallToken extends Token
+import javafx.scene.control.Button;
+import javafx.scene.shape.Circle;
+
+public class BallToken extends Button
 {
-	private int value;
-	public BallToken(double x, double y, int value)
+	public BallToken(double x, double y, String value)
 	{
-		super(x, y, "BallToken");
-		this.value = value;
+		super(value);
+		double r=15;
+		this.setShape(new Circle(r));
+		this.setMinSize(2*r, 2*r);
+		this.setMaxSize(2*r, 2*r);
+		this.setLayoutX(x);
+		this.setLayoutY(y);
 	}
 }

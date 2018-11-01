@@ -1,5 +1,3 @@
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
-
 import javafx.scene.shape.Circle;
 
 public class Token extends Circle

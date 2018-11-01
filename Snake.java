@@ -40,10 +40,10 @@ public class Snake{
             size-=1;
         }
     }
-    public void moveLeft(int amt){
+    public void moveLeft(double amt){
         System.out.println(l1.size());
         for(Balls b : l1){
-            System.out.println("hereaa");
+            //System.out.println("hereaa");
             b.moveLeft(amt);
         }
     }
@@ -52,9 +52,12 @@ public class Snake{
     }
 
 
-    public void moveRight(int amt) {
+    public void moveRight(double amt) {
         for (Balls b : l1) {
             b.moveRight(amt);
         }
+    }
+    public double getx(){
+        return l1.get(0).getTranslateX();
     }
 }

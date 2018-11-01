@@ -1,3 +1,5 @@
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
+
 import javafx.scene.shape.Circle;
 
 public class Token extends Circle
@@ -7,5 +9,10 @@ public class Token extends Circle
 	{
 		super(x, y, 8);
 		this.type = type;
+	}
+
+	public void MoveDown(double amt)
+	{
+		this.setTranslateY(this.getTranslateY() + amt);
 	}
 }

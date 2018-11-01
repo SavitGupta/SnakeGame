@@ -9,5 +9,7 @@ public class Block extends Button
 		super(value);
 		this.setLayoutX(x);
 		this.setLayoutY(y);
+		this.setPrefHeight(15);
+		this.setPrefWidth(15);
 	}
 }

@@ -9,7 +9,7 @@ public class Token extends Circle
 		this.type = type;
 	}
 
-	public void MoveDown(double amt)
+	public void moveDown(double amt)
 	{
 		this.setTranslateY(this.getTranslateY() + amt);
 	}

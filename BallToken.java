@@ -12,5 +12,9 @@ public class BallToken extends Button
 		this.setMaxSize(2*r, 2*r);
 		this.setLayoutX(x);
 		this.setLayoutY(y);
+		this.setStyle(
+				"-fx-focus-color: transparent;" +
+				"-fx-faint-focus-color: transparent;"
+				);
 	}
 }

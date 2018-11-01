@@ -14,6 +14,13 @@ public class Block extends Button
 		this.setLayoutY(y);
 		this.setPrefHeight(15);
 		this.setPrefWidth(15);
+		//this.setDisable(true);
+		this.setStyle(
+				"-fx-border-radius: 5 5 5 5;" +
+				"-fx-background-radius: 5 5 5 5;" +
+				"-fx-focus-color: transparent;" +
+				"-fx-faint-focus-color: transparent;"
+				);
 	}
 
 	public int getValue()

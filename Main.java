@@ -4,6 +4,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
@@ -31,11 +33,34 @@ public class Main extends Application {
 
         timer.start();
         nextLevel();
-        root.getChildren().add(new Shield(100,100));
-        root.getChildren().add(new Magnet(150,100));
-        root.getChildren().add(new BrickBuster(200,100));
-        root.getChildren().add(new Coins(250,100));
+        addToken(100,300,"Shield");
+        addToken(150,300,"coin");
+        addToken(200,300,"magnet");
+        addToken(350,300,"brickbuster");
+
         return root;
+    }
+    public void addToken(double x, double y,String type){
+        if(type.equalsIgnoreCase("Shield")) {
+            Shield s1 = new Shield(x, y);
+            tokens.add(s1);
+            root.getChildren().add(s1);
+        }
+        else if(type.equalsIgnoreCase("coin")) {
+            Coins s1 = new Coins(x, y);
+            tokens.add(s1);
+            root.getChildren().add(s1);
+        }
+        else if(type.equalsIgnoreCase("Magnet")) {
+            Magnet s1 = new Magnet(x, y);
+            tokens.add(s1);
+            root.getChildren().add(s1);
+        }
+        else if(type.equalsIgnoreCase("BrickBuster")) {
+            BrickBuster s1 = new BrickBuster(x, y);
+            tokens.add(s1);
+            root.getChildren().add(s1);
+        }
     }
 
     private void nextLevel() {
@@ -109,19 +134,19 @@ public class Main extends Application {
 
 
     private void collectTokens(){
-        for(Token t: tokens){
-            if(s.intersection(t)){
-                System.out.println("Token of type " + t.getT);
+        for(int i=0;i<tokens.size();i++){
+            Token t1 = tokens.get(i);
+            if(s.intersection(t1)){
+                System.out.println("Token of type " + t1.getType());
+                root.getChildren().remove(t1);
+                tokens.remove(t1);
             }
         }
-
     }
     private void update() {
         t += 0.016;
-        for(Token t: tokens){
-            t.moveDown(5);
-        }
 
+        collectTokens();
 
         for(Wall w: walls){
             w.setTranslateY(w.getTranslateY() + 0.5);

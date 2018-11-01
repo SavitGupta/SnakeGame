@@ -8,7 +8,6 @@ public class Balls extends Circle
     {
         super(0,0,5);
         //System.out.println(" x for balls" + String.valueOf(x));
-        //System.out.println("gettranslatex" + String.valueOf(this.getTranslateX()));
         this.setTranslateX(x);
         this.setTranslateY(y);
         //this.setFill(imagePattern);

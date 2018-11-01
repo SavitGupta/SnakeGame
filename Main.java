@@ -61,6 +61,7 @@ public class Main extends Application {
         }
     }
 
+
     private void nextLevel() {
         for (int i = 0; i < 5; i++) {
             Wall s = new Wall(90 + i*100, 150, 50);

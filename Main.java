@@ -7,18 +7,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import jdk.nashorn.internal.parser.Token;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.lang.Math.abs;
 
 
 public class Main extends Application {
     private Pane root = new Pane();
     private double t = 0;
     private ArrayList<Wall> walls = new ArrayList<>();
-    //private ArrayList<Token> tokens;
+    private ArrayList<Token> tokens = new ArrayList<>();
     //private ArrayList<RowOfBlocks> blocks;
 
     Snake s = new Snake(250,300,5,root);
@@ -51,11 +51,17 @@ public class Main extends Application {
 
         s.moveLeft(amt);
         boolean flag = false;
+        double dist = 0;
         for(Wall w: walls){
             flag |= s.intersection(w);
+            if(flag) {
+                System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
+                dist = abs(s.getx() - w.getTranslateX() - 14);
+                break;
+            }
         }
         if(flag){
-            s.moveRight(amt);
+            s.moveRight(dist);
         }
 
 
@@ -65,11 +71,17 @@ public class Main extends Application {
 
         s.moveRight(amt);
         boolean flag = false;
+        double dist = 0;
         for(Wall w: walls){
             flag |= s.intersection(w);
+            if(flag) {
+                System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
+                dist = abs(s.getx() - w.getTranslateX() + 4);
+                break;
+            }
         }
         if(flag){
-            s.moveLeft(amt);
+            s.moveLeft(dist);
         }
     }
 
@@ -98,10 +110,15 @@ public class Main extends Application {
 
 
     private void collectTokens(){
+//        for(Token t: tokens)
 
     }
     private void update() {
         t += 0.016;
+        for(Token t: tokens){
+            t.moveDown(5);
+        }
+
 
         for(Wall w: walls){
             w.setTranslateY(w.getTranslateY() + 0.5);

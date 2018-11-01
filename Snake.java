@@ -34,7 +34,7 @@ public class Snake{
     public void incLenghtBy (int amt)
     {
         for(int i=0;i<amt;i++){
-            Balls b = new Balls(x,y + 8*size);
+            Balls b = new Balls(l1.get(0).getTranslateX(),y + 8*size);
             root.getChildren().add(b);
             l1.add(b);
             size+=1;

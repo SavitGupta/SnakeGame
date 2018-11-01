@@ -1,10 +1,11 @@
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
-public class Balls extends Circle {
+public class Balls extends Circle
+{
     ImagePattern imagePattern;
-    public Balls(double x,double y){
-
+    public Balls(double x,double y)
+    {
         super(0,0,5);
         //System.out.println(" x for balls" + String.valueOf(x));
         //System.out.println("gettranslatex" + String.valueOf(this.getTranslateX()));
@@ -12,23 +13,30 @@ public class Balls extends Circle {
         this.setTranslateY(y);
         //this.setFill(imagePattern);
     }
-    //Ap sucks
-    public void moveRight(int amt){
+
+    public void moveRight(double amt)
+    {
         double x = this.getTranslateX();
         System.out.println("x is " + String.valueOf(x));
-        if(x > 500 - amt){
+        if(x > 500 - amt)
+        {
             this.setTranslateX(500);
         }
-        else{
+        else
+        {
             this.setTranslateX(x + amt);
         }
     }
-    public void moveLeft(int amt){
+
+    public void moveLeft(double amt)
+    {
         double x = this.getTranslateX();
-        if(x  < amt){
+        if(x  < amt)
+        {
             this.setTranslateX(0);
         }
-        else{
+        else
+        {
             this.setTranslateX(x - amt);
         }
     }

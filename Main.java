@@ -13,6 +13,8 @@ public class Main extends Application {
     private double t = 0;
     private ArrayList<Wall> walls = new ArrayList<>();
     private ArrayList<Token> tokens = new ArrayList<>();
+    private ArrayList<BallToken> balls = new ArrayList<>();
+    private ArrayList<Block> blocks = new ArrayList<>();
     //private ArrayList<RowOfBlocks> blocks;
 
     Snake s = new Snake(250,300,5,root);
@@ -133,7 +135,7 @@ public class Main extends Application {
 
         }
     }
-    
+
     public void deflectFromBlocks(){
         Block hitter;
         boolean flag = true;

@@ -1,15 +1,11 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 import static java.lang.Math.abs;
 
@@ -35,7 +31,10 @@ public class Main extends Application {
 
         timer.start();
         nextLevel();
-
+        root.getChildren().add(new Shield(100,100));
+        root.getChildren().add(new Magnet(150,100));
+        root.getChildren().add(new BrickBuster(200,100));
+        root.getChildren().add(new Coins(250,100));
         return root;
     }
 

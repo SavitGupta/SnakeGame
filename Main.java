@@ -186,6 +186,31 @@ public class Main extends Application {
         	System.exit(0);
         }
     }
+    
+    public void deflectFromBalls()
+    {
+        BallToken hitter;
+        boolean flag = true;
+        for(BallToken w: balls)
+        {
+            if(s.intersection(w))
+            {
+            	System.out.println("HAHA");
+            	flag = false;
+                hitter = w;
+                int value = Integer.parseInt(hitter.getValue());
+                System.out.println("Value of circle " + String.valueOf(value));
+                System.out.println("Value of snake " + String.valueOf(s.getSize()));
+                s.incLenghtBy(value);
+                root.getChildren().remove(hitter);
+                balls.remove(hitter);
+            }
+            if(flag == false)
+            {
+            	break;
+            }
+        }
+    }
 
     private void collectTokens(){
         for(int i=0;i<tokens.size();i++){
@@ -208,6 +233,7 @@ public class Main extends Application {
 
         deflectFromWalls();
         deflectFromBlocks();
+        deflectFromBalls();
 
         boolean flag = false;
         if(flag)

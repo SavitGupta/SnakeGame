@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Snake{
     int size;
     Pane root;
-    ArrayList<balls> l1 = new ArrayList<>();
+    ArrayList<Balls> l1 = new ArrayList<>();
     double x;
     double y;
 
@@ -18,7 +18,7 @@ public class Snake{
         this.root = root;
         System.out.println("x is " + String.valueOf(x));
         for (int i = 0; i < size; i++) {
-            balls b = new balls(x,y);
+            Balls b = new Balls(x,y);
             root.getChildren().add(b);
             l1.add(b);
             y += 8;
@@ -26,7 +26,7 @@ public class Snake{
     }
     public void incLenghtBy (int amt){
         for(int i=0;i<amt;i++){
-            balls b = new balls(x,y + 8*size);
+            Balls b = new Balls(x,y + 8*size);
             root.getChildren().add(b);
             l1.add(b);
             size+=1;
@@ -42,7 +42,7 @@ public class Snake{
     }
     public void moveLeft(int amt){
         System.out.println(l1.size());
-        for(balls b : l1){
+        for(Balls b : l1){
             System.out.println("hereaa");
             b.moveLeft(amt);
         }
@@ -53,7 +53,7 @@ public class Snake{
 
 
     public void moveRight(int amt) {
-        for (balls b : l1) {
+        for (Balls b : l1) {
             b.moveRight(amt);
         }
     }

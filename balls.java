@@ -12,6 +12,7 @@ public class balls extends Circle {
         this.setTranslateY(y);
         //this.setFill(imagePattern);
     }
+    //Ap sucks
     public void moveRight(int amt){
         double x = this.getTranslateX();
         System.out.println("x is " + String.valueOf(x));

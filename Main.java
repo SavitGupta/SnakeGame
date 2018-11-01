@@ -4,13 +4,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-
 import static java.lang.Math.abs;
-
 
 public class Main extends Application {
     private Pane root = new Pane();
@@ -69,10 +65,18 @@ public class Main extends Application {
             walls.add(s);
             root.getChildren().add(s);
         }
+        for (int i = 0; i < 5; i++) {
+        	Block b = new Block(90 + i*100, 300, "1");
+            blocks.add(b);
+            root.getChildren().add(b);
+        }
+        for (int i = 0; i < 5; i++) {
+        	BallToken b = new BallToken(90 + i*100, 350, "1");
+            balls.add(b);
+            root.getChildren().add(b);
+        }
     }
     private void moveLeft(double amt){
-
-
         s.moveLeft(amt);
         boolean flag = false;
         double dist = 0;
@@ -91,8 +95,6 @@ public class Main extends Application {
 
     }
     private void moveRight(double amt){
-
-
         s.moveRight(amt);
         boolean flag = false;
         double dist = 0;
@@ -131,7 +133,57 @@ public class Main extends Application {
 
         }
     }
+    
+    public void deflectFromBlocks(){
+        Block hitter;
+        boolean flag = true;
+        for(Block w: blocks){
+            if(s.intersection(w))
+            {
+            	flag = false;
+            	System.out.println("LOL");
+                hitter = w;
+                int value = hitter.getValue();
+                System.out.println("Value of block " + String.valueOf(value));
+                System.out.println("Value of snake " + String.valueOf(s.getSize()));
+                if(value > s.getSize())
+                {
 
+                	 for(int i = 0; i < value; i++)
+                     {
+                     	hitter.setText(Integer.toString(value - 1));
+                     	if(s.getSize() > 0)
+                     	{
+                     		s.decLenghtBy(1);
+                     	}
+                     }
+                }
+                else
+                {
+                	for(int i = 0; i < value; i++)
+                    {
+                    	hitter.setText(Integer.toString(value - 1));
+                    	if(s.getSize() > 0)
+                     	{
+                     		s.decLenghtBy(1);
+                     	}
+                    }
+                	System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
+                	System.out.println("hitter is removed " + String.valueOf(hitter));
+                	root.getChildren().remove(hitter);
+                	blocks.remove(hitter);
+                }
+            }
+            if(flag == false)
+            {
+            	break;
+            }
+        }
+        if(s.getSize() == 0)
+        {
+        	System.exit(0);
+        }
+    }
 
     private void collectTokens(){
         for(int i=0;i<tokens.size();i++){
@@ -153,6 +205,7 @@ public class Main extends Application {
         }
 
         deflectFromWalls();
+        deflectFromBlocks();
 
         boolean flag = false;
         if(flag)

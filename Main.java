@@ -102,10 +102,6 @@ public class Main extends Application {
     }
     private void update() {
         t += 0.016;
-//        for(int i=0;i<root.getChildren().size(); i++){
-//
-//
-//        }
 
         for(Wall w: walls){
             w.setTranslateY(w.getTranslateY() + 0.5);

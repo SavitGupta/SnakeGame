@@ -14,7 +14,7 @@ public class Block extends Rectangle
 	private Label a;
 	public Block(double x, double y, String value)
 	{
-		super(x,y,40,40);
+		super(x,y,60,40);
 		Image mag = new Image(getClass().getResourceAsStream("square3.png"));
 		this.setFill(new ImagePattern(mag));
 		a = new Label(value);

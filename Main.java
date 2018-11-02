@@ -1,12 +1,21 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Random;
+
+import static java.lang.Integer.min;
 import static java.lang.Math.abs;
+import static java.lang.Math.floor;
+import static java.lang.Math.random;
 
 public class Main extends Application {
     private Pane root = new Pane();
@@ -16,12 +25,12 @@ public class Main extends Application {
     private ArrayList<BallToken> balls = new ArrayList<>();
     private ArrayList<Block> blocks = new ArrayList<>();
     //private ArrayList<RowOfBlocks> blocks;
-
+    private double last;
     Snake s = new Snake(250,300,5,root);
 
     private Parent createContent() {
         root.setPrefSize(500, 600);
-
+        last = 0;
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -30,54 +39,192 @@ public class Main extends Application {
         };
 
         timer.start();
-        nextLevel();
-        addToken(100,300,"Shield");
-        addToken(150,300,"coin");
-        addToken(200,300,"magnet");
-        addToken(350,300,"brickbuster");
+        //nextLevel();
+//        addToken(100,300,"Shield");
+//        addToken(150,300,"coin");
+//        addToken(200,300,"magnet");
+//        addToken(350,300,"brickbuster");
+        Pane a = new Pane();
+        a.getChildren().add(new Label("check"));
+        a.setTranslateX(50);
+        a.setTranslateY(0);
+        a.setPrefWidth(500);
+        a.setStyle("-fx-background-color: #00FFFF");
+
+        root.getChildren().add(a);
+        //addBallToken(50,50,3);
+//        Wall w1 = new Wall(51,80,50);
+//        Wall w2 = new Wall(55,80,50);
+//        walls.add(w1);
+//        walls.add(w2);
+//        Balls b3 = new Balls(50,80);
+//        Balls b4 = new Balls(59,80);
+//        root.getChildren().add(w1);
+//        addToken(60,100,"magnet");
+//        //root.getChildren().add(b2);
+//        System.out.println(w1.getBoundsInParent().intersects(w2.getBoundsInParent()));
+//        System.out.println(w2.getBoundsInParent().intersects(b3.getBoundsInParent()));
 
         return root;
+
     }
-    public void addToken(double x, double y,String type){
+    public boolean addBallToken(double x,double y,int value){
+        if(value <= 0){
+            return false;
+        }
+        if(value >= 10){
+            return false;
+        }
+        BallToken b1 = new BallToken(x,y,String.valueOf(value));
+        if(checkAlreadyOccupied(b1)){
+            return false;
+        }
+        balls.add(b1);
+        root.getChildren().add(b1);
+        root.getChildren().add(b1.getA());
+        return true;
+    }
+
+    public boolean addToken(double x, double y,String type){
         if(type.equalsIgnoreCase("Shield")) {
             Shield s1 = new Shield(x, y);
+            if(checkAlreadyOccupied(s1)){
+                return false;
+            }
             tokens.add(s1);
             root.getChildren().add(s1);
         }
         else if(type.equalsIgnoreCase("coin")) {
             Coins s1 = new Coins(x, y);
+            if(checkAlreadyOccupied(s1)){
+                //System.out.println("skipped");
+                return false;
+            }
             tokens.add(s1);
             root.getChildren().add(s1);
         }
         else if(type.equalsIgnoreCase("Magnet")) {
             Magnet s1 = new Magnet(x, y);
+            if(checkAlreadyOccupied(s1)){
+                //System.out.println("skipped");
+                return false;
+            }
             tokens.add(s1);
             root.getChildren().add(s1);
         }
         else if(type.equalsIgnoreCase("BrickBuster")) {
             BrickBuster s1 = new BrickBuster(x, y);
+            if(checkAlreadyOccupied(s1)){
+                //System.out.println("skipped");
+                return false;
+            }
             tokens.add(s1);
             root.getChildren().add(s1);
         }
+        return true;
     }
+    public void addBlocks(ArrayList<Integer> locs){
+        for(int i=0;i<locs.size(); i++){
+            Random rand = new Random();
+            Block b1 = new Block(locs.get(i) * 500/8,30,String.valueOf(rand.nextInt(10)+1));
+            root.getChildren().addAll(b1,b1.getA());
+            blocks.add(b1);
+        }
 
-    private void nextLevel() {
-        for (int i = 0; i < 5; i++) {
-            Wall s = new Wall(90 + i*100, 50, 50);
-            walls.add(s);
-            root.getChildren().add(s);
+    }
+    public boolean addWall(int x, double y, double height){
+        Wall w1 = new Wall(x*500/8,y,height);
+        if(checkAlreadyOccupied(w1)){
+            return false;
         }
-        for (int i = 0; i < 5; i++) {
-        	Block b = new Block(90 + i*100, 200, "03");
-            blocks.add(b);
-            root.getChildren().add(b);
-            root.getChildren().add(b.getA());
+        walls.add(w1);
+        root.getChildren().add(w1);
+        return true;
+    }
+    public void generateContent(){
+        Random random = new Random();
+        int guess = random.nextInt(81);
+        if(t > 2){
+            t =0;
+            guess = random.nextInt(6) + 2;
+            ArrayList<Integer> locs = new ArrayList<Integer>();
+            int min1 = 100000;
+            int sum1 =0;
+            for(int i=0;i< guess; i++){
+                int num = random.nextInt(8);
+                if(locs.contains(num)){
+                    i-=1;
+                }
+                else {
+                    min1 = min(min1,num);
+                    sum1 += num;
+                    locs.add(num);
+                }
+            }
+
+            addBlocks(locs);
+            if(min1 > s.getSize()){
+                locs.remove(0);
+                locs.add(s.getSize() -1);
+            }
+            last -= sum1*0.05;
+
         }
-        for (int i = 0; i < 5; i++) {
-        	BallToken b = new BallToken(90 + i*100, 350, "7");
-        	balls.add(b);
-            root.getChildren().add(b);
-            root.getChildren().add(b.getA());
+
+        if(guess < 80 + 0.1*last){
+
+        }
+        else {
+            t = 0;
+            guess = random.nextInt(100);
+            int numofwalls = guess / 40;
+            int cnt =0;
+
+            for (int i = 0; i < numofwalls; i++) {
+                int guessx = random.nextInt(6) + 1;
+                cnt ++;
+                int guessHeight = random.nextInt(50) + 40;
+                if(!addWall(guessx,30,guessHeight)){
+                    i-=1;
+                }
+                if(cnt > 15){
+                    break;
+                }
+            }
+            last -= numofwalls*0.01;
+            guess = random.nextInt(100);
+            int numoftokens = guess / 19;
+            for (int i = 0; i < numoftokens; i++) {
+                guess = random.nextInt(100);
+                int guessx = random.nextInt(440) + 30;
+                int guessy = random.nextInt(30) + 20;
+                if (guess < 60) {
+                    if (!addToken(guessx, guessy, "coin"))
+                        i -= 1;
+                } else if (guess < 80) {
+                    int guessval = (int) floor(random.nextGaussian());
+                    if (!addBallToken(guessx, guessy, guessval + 3))
+                        i -= 1;
+                    else
+                        last += 0.1*guessval;
+
+                } else if (guess < 87) {
+                    if (!addToken(guessx, guessy, "magnet"))
+                        i -= 1;
+                    else
+                        last += 0.2;
+                } else if (guess < 94) {
+                    if (!addToken(guessx, guessy, "brickbuster"))
+                        i -= 1;
+                    else
+                        last += 1;
+                } else {
+                    if (!addToken(guessx, guessy, "shield"))
+                        i -= 1;
+                    else
+                        last += 1;
+                }
+            }
         }
     }
     private void moveLeft(double amt){
@@ -114,7 +261,25 @@ public class Main extends Application {
             s.moveLeft(dist);
         }
     }
-
+    public boolean checkAlreadyOccupied(Node first) {
+        boolean flag = false;
+        for (Wall w : walls) {
+            flag |= w.getBoundsInParent().intersects(first.getBoundsInParent());
+        }
+        for (Token t1 : tokens) {
+            flag |= t1.getBoundsInParent().intersects(first.getBoundsInParent());
+        }
+        for (BallToken b1 : balls) {
+            flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
+        }
+        for (Block b1: blocks){
+            flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
+        }
+        if (flag) {
+            System.out.println("SKIPPED");
+        }
+        return flag;
+    }
     public void deflectFromWalls(){
         boolean flag = false;
         Wall hitter;
@@ -155,7 +320,7 @@ public class Main extends Application {
 
                 	 for(int i = 0; i < value; i++)
                      {
-                     	hitter.setText(Integer.toString(value - 1));
+                     	hitter.getA().setText(Integer.toString(value - 1));
                      	if(s.getSize() > 0)
                      	{
                      		s.decLenghtBy(1);
@@ -166,7 +331,7 @@ public class Main extends Application {
                 {
                 	for(int i = 0; i < value; i++)
                     {
-                    	hitter.setText(Integer.toString(value - 1));
+                    	hitter.getA().setText(Integer.toString(value - 1));
                     	if(s.getSize() > 0)
                      	{
                      		s.decLenghtBy(1);
@@ -189,7 +354,7 @@ public class Main extends Application {
         	System.exit(0);
         }
     }
-    
+
     public void deflectFromBalls()
     {
         BallToken hitter;
@@ -226,9 +391,14 @@ public class Main extends Application {
             }
         }
     }
-    private void update() {
+    private void update(){
         t += 0.016;
+        if(t > 0.5){
+            generateContent();
+            System.out.println(t);
+            System.out.println(last);
 
+        }
         collectTokens();
 
         for(Wall w: walls){
@@ -239,7 +409,9 @@ public class Main extends Application {
             w.setTranslateY(w.getTranslateY() + 0.5);
             w.getA().setTranslateY(w.getTranslateY() + 0.5);
         }
-
+        for(Token t1: tokens){
+            t1.moveDown(0.5);
+        }
         for(Block w: blocks){
             w.setTranslateY(w.getTranslateY() + 0.5);
             w.getA().setTranslateY(w.getTranslateY() + 0.5);
@@ -253,10 +425,6 @@ public class Main extends Application {
         if(flag)
             System.out.println("intersection");
 
-
-        if (t > 2) {
-            t = 0;
-        }
     }
 
     @Override

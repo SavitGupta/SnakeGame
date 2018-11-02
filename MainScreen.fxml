@@ -12,7 +12,7 @@
             <Font name="AR JULIAN" size="36.0" />
          </font>
       </Label>
-      <Button fx:id="start" layoutX="156.0" layoutY="173.0" mnemonicParsing="false" onAction="#start" prefHeight="57.0" prefWidth="191.0" text="Start Game">
+      <Button fx:id="start" layoutX="156.0" layoutY="173.0" mnemonicParsing="false" onAction="#startGame" prefHeight="57.0" prefWidth="191.0" text="Start Game">
          <font>
             <Font size="24.0" />
          </font>

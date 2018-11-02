@@ -7,15 +7,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Block extends Rectangle
 {
 	private boolean alive = true;
 	private int value;
 	private Label a;
+
 	public Block(double x, double y, String value)
 	{
 		super(x,y,60,40);
-		Image mag = new Image(getClass().getResourceAsStream("square3.png"));
+		Random rand = new Random();
+		System.out.println("square" + String.valueOf(rand.nextInt(3) + 2) + ".png");
+		Image mag = new Image(getClass().getResourceAsStream("square" + String.valueOf(rand.nextInt(3) + 2) + ".png"));
 		this.setFill(new ImagePattern(mag));
 		a = new Label(value);
 		this.value = Integer.parseInt(value);

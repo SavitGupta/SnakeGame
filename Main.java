@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static java.lang.Integer.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.floor;
-import static java.lang.Math.random;
+import static java.lang.Math.*;
 
 public class Main extends Application
 {
@@ -33,20 +31,19 @@ public class Main extends Application
     private ArrayList<Token> tokens = new ArrayList<>();
     private ArrayList<BallToken> balls = new ArrayList<>();
     private ArrayList<Block> blocks = new ArrayList<>();
+    private double speedScale = 1;
     //private ArrayList<RowOfBlocks> blocks;
     private double last;
     Snake s = new Snake(250,300,5,root);
 
-    private Parent createContent()
-    {
+    private Parent createContent() {
         root.setPrefSize(500, 600);
         root.getChildren().add(sizeLabel);
         last = 0;
-        AnimationTimer timer = new AnimationTimer()
-        {
+        AnimationTimer timer = new AnimationTimer() {
+
             @Override
-            public void handle(long now)
-            {
+            public void handle(long now) {
                 update();
             }
         };
@@ -125,11 +122,12 @@ public class Main extends Application
         }
         return true;
     }
-    public void addBlocks(ArrayList<Integer> locs){
-        for(int i=0;i<locs.size(); i++){
-            Random rand = new Random();
-            Block b1 = new Block(locs.get(i) * 500/8,30,String.valueOf(rand.nextInt(10)+1));
-            root.getChildren().addAll(b1,b1.getA());
+    public void addBlocks(ArrayList<Integer> locs, ArrayList<Integer> vals){
+        for (int i = 0; i < locs.size(); i++) {
+            Integer loc = locs.get(i);
+            int val = vals.get(i);
+            Block b1 = new Block(loc * 500 / 8, 45, String.valueOf(val));
+            root.getChildren().addAll(b1, b1.getA());
             blocks.add(b1);
         }
 
@@ -146,39 +144,52 @@ public class Main extends Application
     public void generateContent(){
         Random random = new Random();
         int guess = random.nextInt(81);
-        if(t > 2){
+        if(t > 3){
             t =0;
             guess = random.nextInt(6) + 2;
-            ArrayList<Integer> locs = new ArrayList<Integer>();
+            ArrayList<Integer> locs = new ArrayList<>();
+            if(guess < 8) {
+                for (int i = 0; i < guess; i++) {
+                    int num = random.nextInt(8);
+                    if (locs.contains(num)) {
+                        i -= 1;
+                    } else {
+                        locs.add(num);
+                    }
+                }
+            }
+            else{
+                locs.clear();
+                for(int i=1;i<=8;i++){
+                    locs.add(i);
+                }
+            }
             int min1 = 100000;
             int sum1 =0;
-            for(int i=0;i< guess; i++){
-                int num = random.nextInt(8);
-                if(locs.contains(num)){
+            ArrayList<Integer> vals = new ArrayList<>();
+            for(int i=0;i<guess;i++){
+                int num = (int) (3*random.nextGaussian() + 5);
+                if(num <= 0){
                     i-=1;
+                    continue;
                 }
-                else {
-                    min1 = min(min1,num);
-                    sum1 += num;
-                    locs.add(num);
-                }
+                min1 = min(min1,num);
+                sum1 += num;
+                vals.add(num);
             }
 
-            addBlocks(locs);
-            if(min1 > s.getSize()){
-                locs.remove(0);
-                locs.add(s.getSize() -1);
+            addBlocks(locs,vals);
+            if(min1 >= s.getSize()){
+                vals.remove(0);
+                vals.add(s.getSize() -1);
             }
-            last -= sum1*0.05;
+            last -= sum1*0.3;
 
         }
-
-        if(guess < 80 + 0.1*last){
-
-        }
-        else {
+        if(guess >= 75 + last){
             t = 0;
-            guess = random.nextInt(100);
+            last = 0;
+            guess = random.nextInt(82);
             int numofwalls = guess / 40;
             int cnt =0;
 
@@ -186,20 +197,20 @@ public class Main extends Application
                 int guessx = random.nextInt(6) + 1;
                 cnt ++;
                 int guessHeight = random.nextInt(50) + 40;
-                if(!addWall(guessx,30,guessHeight)){
+                if(!addWall(guessx,60,guessHeight)){
                     i-=1;
                 }
                 if(cnt > 15){
                     break;
                 }
             }
-            last -= numofwalls*0.01;
-            guess = random.nextInt(100);
+//            last -= numofwalls*0.01;
+            guess = random.nextInt(40);
             int numoftokens = guess / 19;
             for (int i = 0; i < numoftokens; i++) {
                 guess = random.nextInt(100);
                 int guessx = random.nextInt(440) + 30;
-                int guessy = random.nextInt(30) + 20;
+                int guessy = random.nextInt(30) + 60;
                 if (guess < 60) {
                     if (!addToken(guessx, guessy, "coin"))
                         i -= 1;
@@ -319,13 +330,13 @@ public class Main extends Application
                 System.out.println("Value of snake " + String.valueOf(s.getSize()));
                 if(value > s.getSize())
                 {
+
                 	 for(int i = 0; i < value; i++)
                      {
                      	hitter.getA().setText(Integer.toString(value - 1));
                      	if(s.getSize() > 0)
                      	{
                      		s.decLenghtBy(1);
-                     		score+=1;
                      	}
                      }
                 }
@@ -337,7 +348,6 @@ public class Main extends Application
                     	if(s.getSize() > 0)
                      	{
                      		s.decLenghtBy(1);
-                     		score+=1;
                      	}
                     }
                 	System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
@@ -390,43 +400,56 @@ public class Main extends Application
             if(s.intersection(t1)){
                 System.out.println("Token of type " + t1.getType());
                 root.getChildren().remove(t1);
-                if(t1.getType().equals("Coin"))
-                {
-                	score+=2;
-                }
                 tokens.remove(t1);
             }
         }
     }
     private void update(){
-        t += 0.016;
-        if(t > 0.5)
+        speedScale = max(2*sqrt(s.getSize())/sqrt(5),1.5);
+        t += 0.03 * speedScale;
+        if(t > 1.5)
         {
-            generateContent();
+            generateContent();/*
             System.out.println(t);
-            System.out.println(last);
-        }
+            System.out.println(last);*/
 
+        }
         collectTokens();
 
-        for(Wall w: walls)
-        {
-            w.setTranslateY(w.getTranslateY() + 0.5);
+        for (int i = 0; i < walls.size(); i++) {
+            Wall w = walls.get(i);
+            w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+            if (w.getTranslateY() > 800) {
+                root.getChildren().remove(w);
+                blocks.remove(w);
+            }
         }
 
-        for(BallToken w: balls)
-        {
-            w.setTranslateY(w.getTranslateY() + 0.5);
-            w.getA().setTranslateY(w.getTranslateY() + 0.5);
+        for (int i = 0; i < balls.size(); i++) {
+            BallToken w = balls.get(i);
+            w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+            w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+            if (w.getTranslateY() > 800) {
+                root.getChildren().remove(w);
+                blocks.remove(w);
+            }
         }
-        for(Token t1: tokens)
-        {
-            t1.moveDown(0.5);
+        for (int i = 0; i < tokens.size(); i++) {
+            Token t1 = tokens.get(i);
+            t1.moveDown(0.5 * speedScale);
+            if (t1.getTranslateY() > 800) {
+                root.getChildren().remove(t1);
+                blocks.remove(t1);
+            }
         }
-        for(Block w: blocks)
-        {
-            w.setTranslateY(w.getTranslateY() + 0.5);
-            w.getA().setTranslateY(w.getTranslateY() + 0.5);
+        for (int i = 0; i < blocks.size(); i++) {
+            Block w = blocks.get(i);
+            w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+            w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+            if (w.getTranslateY() > 800) {
+                root.getChildren().remove(w);
+                blocks.remove(w);
+            }
         }
 
         deflectFromWalls();
@@ -437,9 +460,6 @@ public class Main extends Application
         sizeLabel.setText(Integer.toString(s.size));
         sizeLabel.setTranslateX(s.getx() - 3);
         sizeLabel.setTranslateY(275);
-        System.out.println("SIZE " + Integer.toString(s.size));
-        System.out.println(sizeLabel.getLayoutX());
-        System.out.println(sizeLabel.getLayoutY());
     }
 
     @Override

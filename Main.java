@@ -1,5 +1,6 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,7 +26,7 @@ public class Main extends Application
     private Pane root = new Pane();
     private Label scoreLabel = new Label();
     private Label sizeLabel = new Label();
-    private ChoiceBox<String> dropdown = new ChoiceBox<>();
+    private ComboBox<String> dropdown = new ComboBox<>();
     private int score = 0;
     private double t = 0;
     private ArrayList<Wall> walls = new ArrayList<>();
@@ -55,11 +56,14 @@ public class Main extends Application
         a.setPrefHeight(30);
         a.setPrefWidth(500);
         a.getChildren().add(scoreLabel);
-        a.setStyle("-fx-background-color: #00FFFF");
+        a.setStyle("-fx-background-color: #008000");
         dropdown.getItems().add("Pause");
         dropdown.getItems().add("Restart");
         dropdown.getItems().add("Exit");
-
+        dropdown.setPromptText("Options");
+        a.getChildren().add(dropdown);
+        a.setSpacing(320);
+        a.setPadding(new Insets(10,10,10,10));
 
         root.getChildren().add(a);
 

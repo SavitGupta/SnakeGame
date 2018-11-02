@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -17,8 +18,12 @@ import static java.lang.Math.abs;
 import static java.lang.Math.floor;
 import static java.lang.Math.random;
 
-public class Main extends Application {
+public class Main extends Application
+{
     private Pane root = new Pane();
+    private Label scoreLabel = new Label();
+    private Label sizeLabel = new Label();
+    private int score = 0;
     private double t = 0;
     private ArrayList<Wall> walls = new ArrayList<>();
     private ArrayList<Token> tokens = new ArrayList<>();
@@ -28,42 +33,26 @@ public class Main extends Application {
     private double last;
     Snake s = new Snake(250,300,5,root);
 
-    private Parent createContent() {
+    private Parent createContent()
+    {
         root.setPrefSize(500, 600);
+        root.getChildren().add(sizeLabel);
         last = 0;
-        AnimationTimer timer = new AnimationTimer() {
+        AnimationTimer timer = new AnimationTimer()
+        {
             @Override
-            public void handle(long now) {
+            public void handle(long now)
+            {
                 update();
             }
         };
 
         timer.start();
-        //nextLevel();
-//        addToken(100,300,"Shield");
-//        addToken(150,300,"coin");
-//        addToken(200,300,"magnet");
-//        addToken(350,300,"brickbuster");
-        Pane a = new Pane();
-        a.getChildren().add(new Label("check"));
-        a.setTranslateX(50);
-        a.setTranslateY(0);
-        a.setPrefWidth(500);
+        HBox a = new HBox();
+        a.getChildren().add(scoreLabel);
         a.setStyle("-fx-background-color: #00FFFF");
 
         root.getChildren().add(a);
-        //addBallToken(50,50,3);
-//        Wall w1 = new Wall(51,80,50);
-//        Wall w2 = new Wall(55,80,50);
-//        walls.add(w1);
-//        walls.add(w2);
-//        Balls b3 = new Balls(50,80);
-//        Balls b4 = new Balls(59,80);
-//        root.getChildren().add(w1);
-//        addToken(60,100,"magnet");
-//        //root.getChildren().add(b2);
-//        System.out.println(w1.getBoundsInParent().intersects(w2.getBoundsInParent()));
-//        System.out.println(w2.getBoundsInParent().intersects(b3.getBoundsInParent()));
 
         return root;
 
@@ -317,13 +306,13 @@ public class Main extends Application {
                 System.out.println("Value of snake " + String.valueOf(s.getSize()));
                 if(value > s.getSize())
                 {
-
                 	 for(int i = 0; i < value; i++)
                      {
                      	hitter.getA().setText(Integer.toString(value - 1));
                      	if(s.getSize() > 0)
                      	{
                      		s.decLenghtBy(1);
+                     		score+=1;
                      	}
                      }
                 }
@@ -335,6 +324,7 @@ public class Main extends Application {
                     	if(s.getSize() > 0)
                      	{
                      		s.decLenghtBy(1);
+                     		score+=1;
                      	}
                     }
                 	System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
@@ -387,32 +377,41 @@ public class Main extends Application {
             if(s.intersection(t1)){
                 System.out.println("Token of type " + t1.getType());
                 root.getChildren().remove(t1);
+                if(t1.getType().equals("Coin"))
+                {
+                	score+=2;
+                }
                 tokens.remove(t1);
             }
         }
     }
     private void update(){
         t += 0.016;
-        if(t > 0.5){
+        if(t > 0.5)
+        {
             generateContent();
             System.out.println(t);
             System.out.println(last);
-
         }
+
         collectTokens();
 
-        for(Wall w: walls){
+        for(Wall w: walls)
+        {
             w.setTranslateY(w.getTranslateY() + 0.5);
         }
 
-        for(BallToken w: balls){
+        for(BallToken w: balls)
+        {
             w.setTranslateY(w.getTranslateY() + 0.5);
             w.getA().setTranslateY(w.getTranslateY() + 0.5);
         }
-        for(Token t1: tokens){
+        for(Token t1: tokens)
+        {
             t1.moveDown(0.5);
         }
-        for(Block w: blocks){
+        for(Block w: blocks)
+        {
             w.setTranslateY(w.getTranslateY() + 0.5);
             w.getA().setTranslateY(w.getTranslateY() + 0.5);
         }
@@ -421,10 +420,13 @@ public class Main extends Application {
         deflectFromBlocks();
         deflectFromBalls();
 
-        boolean flag = false;
-        if(flag)
-            System.out.println("intersection");
-
+        scoreLabel.setText("Score " + Integer.toString(score));
+        sizeLabel.setText(Integer.toString(s.size));
+        sizeLabel.setTranslateX(s.getx() - 3);
+        sizeLabel.setTranslateY(275);
+        System.out.println("SIZE " + Integer.toString(s.size));
+        System.out.println(sizeLabel.getLayoutX());
+        System.out.println(sizeLabel.getLayoutY());
     }
 
     @Override

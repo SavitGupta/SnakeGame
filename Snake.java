@@ -1,10 +1,8 @@
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
-
-import com.sun.org.apache.bcel.internal.generic.L2D;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 public class Snake{
     int size;
@@ -78,6 +76,10 @@ public class Snake{
     public double getx()
     {
         return l1.get(0).getTranslateX();
+    }
+    public double gety()
+    {
+        return l1.get(0).getTranslateY();
     }
 	public int getSize()
 	{

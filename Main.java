@@ -4,15 +4,11 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -263,7 +259,7 @@ public class Main extends Application
         boolean flag = false;
         double dist = 0;
         for(Wall w: walls){
-            flag |= s.intersection(w);
+            flag = s.intersection(w);
             if(flag) {
                 System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
                 dist = abs(s.getx() - w.getTranslateX() + 4);
@@ -311,9 +307,6 @@ public class Main extends Application
                 break;
             }
         }
-        if(flag){
-
-        }
     }
 
     public void deflectFromBlocks(){
@@ -357,7 +350,7 @@ public class Main extends Application
                 	blocks.remove(hitter);
                 }
             }
-            if(flag == false)
+            if(!flag)
             {
             	break;
             }
@@ -387,7 +380,7 @@ public class Main extends Application
                 root.getChildren().remove(hitter.getA());
                 balls.remove(hitter);
             }
-            if(flag == false)
+            if(!flag)
             {
             	break;
             }
@@ -421,7 +414,7 @@ public class Main extends Application
             w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
             if (w.getTranslateY() > 800) {
                 root.getChildren().remove(w);
-                blocks.remove(w);
+                walls.remove(w);
             }
         }
 
@@ -431,7 +424,7 @@ public class Main extends Application
             w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
             if (w.getTranslateY() > 800) {
                 root.getChildren().remove(w);
-                blocks.remove(w);
+                balls.remove(w);
             }
         }
         for (int i = 0; i < tokens.size(); i++) {
@@ -439,7 +432,7 @@ public class Main extends Application
             t1.moveDown(0.5 * speedScale);
             if (t1.getTranslateY() > 800) {
                 root.getChildren().remove(t1);
-                blocks.remove(t1);
+                tokens.remove(t1);
             }
         }
         for (int i = 0; i < blocks.size(); i++) {

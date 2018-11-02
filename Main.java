@@ -55,7 +55,7 @@ public class Main extends Application
         dropdown.getItems().add("Exit");
         dropdown.setPromptText("Options");
         a.getChildren().add(dropdown);
-        a.setSpacing(320);
+        a.setSpacing(300);
         a.setPadding(new Insets(10,10,10,10));
 
         root.getChildren().add(a);

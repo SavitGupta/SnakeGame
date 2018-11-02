@@ -1,20 +1,33 @@
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
-public class BallToken extends Button
+public class BallToken extends Circle
 {
+	private String value;
+	private Label a;
 	public BallToken(double x, double y, String value)
 	{
-		super(value);
-		double r=15;
-		this.setShape(new Circle(r));
-		this.setMinSize(2*r, 2*r);
-		this.setMaxSize(2*r, 2*r);
-		this.setLayoutX(x);
-		this.setLayoutY(y);
-		this.setStyle(
-				"-fx-focus-color: transparent;" +
-				"-fx-faint-focus-color: transparent;"
-				);
+		super(x, y, 12);
+		this.value = value;
+		this.setFill(Color.YELLOW);
+		a = new Label(value);
+		a.setLayoutX(x-5);
+		a.setLayoutY(y-11);
+		a.setAlignment(Pos.CENTER);
+	}
+
+	public Label getA()
+	{
+		return a;
+	}
+
+	public String getValue()
+	{
+		return value;
 	}
 }

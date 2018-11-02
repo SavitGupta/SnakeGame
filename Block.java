@@ -1,26 +1,28 @@
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-public class Block extends Button
+public class Block extends Rectangle
 {
 	private boolean alive = true;
 	private int value;
+	private Label a;
 	public Block(double x, double y, String value)
 	{
-		super(value);
+		super(x,y,40,40);
+		Image mag = new Image(getClass().getResourceAsStream("square3.png"));
+		this.setFill(new ImagePattern(mag));
+		a = new Label(value);
 		this.value = Integer.parseInt(value);
-		this.setLayoutX(x);
-		this.setLayoutY(y);
-		this.setPrefHeight(15);
-		this.setPrefWidth(15);
-		//this.setDisable(true);
-		this.setStyle(
-				"-fx-border-radius: 5 5 5 5;" +
-				"-fx-background-radius: 5 5 5 5;" +
-				"-fx-focus-color: transparent;" +
-				"-fx-faint-focus-color: transparent;"
-				);
+		a.setLayoutX(x+10);
+		a.setLayoutY(y+10);
+		a.setAlignment(Pos.CENTER);
+		//a.setStyle("-fx-background-color: #008000");
 	}
 
 	public int getValue()
@@ -41,5 +43,10 @@ public class Block extends Button
 	public boolean isDead()
 	{
 		return !this.alive;
+	}
+
+	public Label getA()
+	{
+		return a;
 	}
 }

@@ -3,6 +3,8 @@ import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -23,6 +25,7 @@ public class Main extends Application
     private Pane root = new Pane();
     private Label scoreLabel = new Label();
     private Label sizeLabel = new Label();
+    private ChoiceBox<String> dropdown = new ChoiceBox<>();
     private int score = 0;
     private double t = 0;
     private ArrayList<Wall> walls = new ArrayList<>();
@@ -49,8 +52,14 @@ public class Main extends Application
 
         timer.start();
         HBox a = new HBox();
+        a.setPrefHeight(30);
+        a.setPrefWidth(500);
         a.getChildren().add(scoreLabel);
         a.setStyle("-fx-background-color: #00FFFF");
+        dropdown.getItems().add("Pause");
+        dropdown.getItems().add("Restart");
+        dropdown.getItems().add("Exit");
+
 
         root.getChildren().add(a);
 

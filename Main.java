@@ -63,19 +63,21 @@ public class Main extends Application {
 
     private void nextLevel() {
         for (int i = 0; i < 5; i++) {
-            Wall s = new Wall(90 + i*100, 150, 50);
+            Wall s = new Wall(90 + i*100, 50, 50);
             walls.add(s);
             root.getChildren().add(s);
         }
         for (int i = 0; i < 5; i++) {
-        	Block b = new Block(90 + i*100, 300, "1");
+        	Block b = new Block(90 + i*100, 200, "03");
             blocks.add(b);
             root.getChildren().add(b);
+            root.getChildren().add(b.getA());
         }
         for (int i = 0; i < 5; i++) {
-        	BallToken b = new BallToken(90 + i*100, 350, "1");
-            balls.add(b);
+        	BallToken b = new BallToken(90 + i*100, 350, "7");
+        	balls.add(b);
             root.getChildren().add(b);
+            root.getChildren().add(b.getA());
         }
     }
     private void moveLeft(double amt){
@@ -173,6 +175,7 @@ public class Main extends Application {
                 	System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
                 	System.out.println("hitter is removed " + String.valueOf(hitter));
                 	root.getChildren().remove(hitter);
+                    root.getChildren().remove(hitter.getA());
                 	blocks.remove(hitter);
                 }
             }
@@ -203,6 +206,7 @@ public class Main extends Application {
                 System.out.println("Value of snake " + String.valueOf(s.getSize()));
                 s.incLenghtBy(value);
                 root.getChildren().remove(hitter);
+                root.getChildren().remove(hitter.getA());
                 balls.remove(hitter);
             }
             if(flag == false)
@@ -229,6 +233,16 @@ public class Main extends Application {
 
         for(Wall w: walls){
             w.setTranslateY(w.getTranslateY() + 0.5);
+        }
+
+        for(BallToken w: balls){
+            w.setTranslateY(w.getTranslateY() + 0.5);
+            w.getA().setTranslateY(w.getTranslateY() + 0.5);
+        }
+
+        for(Block w: blocks){
+            w.setTranslateY(w.getTranslateY() + 0.5);
+            w.getA().setTranslateY(w.getTranslateY() + 0.5);
         }
 
         deflectFromWalls();

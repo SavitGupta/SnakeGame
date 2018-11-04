@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 public class BallToken extends Circle
 {
 	private String value;
+	private String value2;
 	private Label a;
 	public BallToken(double x, double y, String value)
 	{

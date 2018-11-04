@@ -1,6 +1,4 @@
-
-//tryingchanges3
-//tryingchanges
+//Eclipse and GIT
 import static java.lang.Integer.min;
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;

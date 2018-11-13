@@ -55,6 +55,7 @@ public class Main extends Application
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
 	ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
+	
 	private Parent createContent()
 	{
 		root.setPrefSize(500, 700);
@@ -79,7 +80,6 @@ public class Main extends Application
 		dropdown.setOnAction(e -> getChoice(dropdown, e));
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
-		// ScaleTransition r1s = new ScaleTransition(Duration.seconds(5), r1);
 		timer = new AnimationTimer()
 		{
 			@Override
@@ -121,14 +121,16 @@ public class Main extends Application
 			System.exit(0);
 		}
 	}
-	public void restart(){
+	
+	public void restart()
+	{
 		root.getChildren().clear();
 		s = new Snake(250, 450, 8, root);
 		blocks.clear();
 		walls.clear();
 		burst.clear();
 		tokens.clear();
-
+		dropdown = new ComboBox<>();
 		score = 0;
 		t = 0;
 		ColorCheck = 0;
@@ -150,8 +152,6 @@ public class Main extends Application
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
 		a.getChildren().add(scoreLabel);
-		dropdown.getItems().clear();
-
 		dropdown.getItems().add("Pause");
 		dropdown.getItems().add("Resume");
 		dropdown.getItems().add("Restart");
@@ -160,8 +160,8 @@ public class Main extends Application
 		dropdown.setOnAction(e -> getChoice(dropdown, e));
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
-
 	}
+	
 	public boolean addBallToken(double x, double y, int value)
 	{
 		if (value <= 0)
@@ -275,7 +275,7 @@ public class Main extends Application
 	{
 		Random random = new Random();
 		int guess = random.nextInt(150);
-		if (distSinceBlock > 350 && distSinceBlock + guess > 500 )
+		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
 		{
 			t = 0;
 			guess = random.nextInt(7) + 1;
@@ -418,12 +418,17 @@ public class Main extends Application
 		for (Block b : blocks)
 		{
 			flag |= s.intersection(b);
-			if (flag) {
-				System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
-				dist = abs(s.getx() - b.getTranslateX() - 53); // width of block - radius ( as translatex is measured form top-l
+			if (flag)
+			{
+				System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : "
+						+ String.valueOf(b.getTranslateX()));
+				dist = abs(s.getx() - b.getTranslateX() - 53); // width of block
+																// - radius ( as
+																// translatex is
+																// measured form
+																// top-l
 				break;
 			}
-
 		}
 		if (flag)
 		{
@@ -454,12 +459,14 @@ public class Main extends Application
 		for (Block b : blocks)
 		{
 			flag |= s.intersection(b);
-			if (flag) {
-				System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
-				dist = abs(s.getx() + 7 - b.getTranslateX()); // 7 is radius of snake
+			if (flag)
+			{
+				System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : "
+						+ String.valueOf(b.getTranslateX()));
+				dist = abs(s.getx() + 7 - b.getTranslateX()); // 7 is radius of
+																// snake
 				break;
 			}
-
 		}
 		if (flag)
 		{
@@ -522,8 +529,8 @@ public class Main extends Application
 		{
 			if (s.intersection(w))
 			{
-
-				if(w.getTranslateY() < 390) {
+				if (w.getTranslateY() < 390)
+				{
 					System.out.println("location of block is " + String.valueOf(w.getTranslateY()));
 					System.out.println("LOL");
 					Block hitter = w;
@@ -531,10 +538,13 @@ public class Main extends Application
 					int value2 = hitter.getInitialValue();
 					System.out.println("Value of block " + String.valueOf(value));
 					System.out.println("Value of snake " + String.valueOf(s.getSize()));
-					if (ShieldOn == false) {
-						if (s.getSize() > 0) {
+					if (ShieldOn == false)
+					{
+						if (s.getSize() > 0)
+						{
 							s.decLenghtBy(1);
-							if (value2 > 5) {
+							if (value2 > 5)
+							{
 								moveUp();
 							}
 							score += 1;
@@ -542,11 +552,12 @@ public class Main extends Application
 							value = value - 1;
 							hitter.getA().setText(Integer.toString(value));
 							hitter.setValue(value);
-							if (value == 0) {
+							if (value == 0)
+							{
 								System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
 								System.out.println("hitter is removed " + String.valueOf(hitter));
-								Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20,
-										20);
+								Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30,
+										20, 20);
 								root.getChildren().remove(hitter);
 								root.getChildren().remove(hitter.getA());
 								blocks.remove(hitter);
@@ -564,13 +575,14 @@ public class Main extends Application
 								scale1.play();
 							}
 						}
-					} else {
+					}
+					else
+					{
 						score += value;
 						Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
 						root.getChildren().remove(hitter);
 						root.getChildren().remove(hitter.getA());
 						blocks.remove(hitter);
-
 						r1.setFill(explosionImage);
 						burst.add(r1);
 						root.getChildren().add(r1);
@@ -584,8 +596,8 @@ public class Main extends Application
 						scale1.play();
 					}
 				}
-				else{
-
+				else
+				{
 				}
 			}
 		}
@@ -681,7 +693,8 @@ public class Main extends Application
 					while (blocks.size() > 0)
 					{
 						score += blocks.get(j).getValue();
-						Rectangle r1 = new Rectangle(blocks.get(j).getTranslateX() + 15,blocks.get(j).getTranslateY() + 30, 20, 20);
+						Rectangle r1 = new Rectangle(blocks.get(j).getTranslateX() + 15,
+								blocks.get(j).getTranslateY() + 30, 20, 20);
 						root.getChildren().remove(blocks.get(j));
 						root.getChildren().remove(blocks.get(j).getA());
 						blocks.remove(blocks.get(j));

@@ -54,7 +54,7 @@ public class Main extends Application
 	private boolean ShieldOn = false;
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
-	ImagePattern mag1 = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
+	ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
 	private Parent createContent()
 	{
 		root.setPrefSize(500, 700);
@@ -107,6 +107,7 @@ public class Main extends Application
 		}
 		else if (dropdown.getValue().equals("Restart"))
 		{
+			restart();
 			timer.start();
 			GameOn = true;
 		}
@@ -120,7 +121,47 @@ public class Main extends Application
 			System.exit(0);
 		}
 	}
-	
+	public void restart(){
+		root.getChildren().clear();
+		s = new Snake(250, 450, 8, root);
+		blocks.clear();
+		walls.clear();
+		burst.clear();
+		tokens.clear();
+
+		score = 0;
+		t = 0;
+		ColorCheck = 0;
+		GameOn = true;
+		ShieldOn = false;
+		ShieldCheck = 0;
+		distSinceBlock = 0;
+		root.setPrefSize(500, 700);
+		root.setStyle("-fx-background-color: #000000;");
+		sizeLabel.setTextFill(Color.DEEPPINK);
+		sizeLabel.setStyle("-fx-font-weight: bold;");
+		root.getChildren().add(sizeLabel);
+		HBox a = new HBox();
+		a.setPrefHeight(30);
+		a.setPrefWidth(500);
+		a.setStyle("-fx-background-color: #000000");
+		a.setSpacing(300);
+		a.setPadding(new Insets(10, 10, 10, 10));
+		scoreLabel.setTextFill(Color.DEEPPINK);
+		scoreLabel.setStyle("-fx-font-weight: bold;");
+		a.getChildren().add(scoreLabel);
+		dropdown.getItems().clear();
+
+		dropdown.getItems().add("Pause");
+		dropdown.getItems().add("Resume");
+		dropdown.getItems().add("Restart");
+		dropdown.getItems().add("Exit");
+		dropdown.setPromptText("Options");
+		dropdown.setOnAction(e -> getChoice(dropdown, e));
+		a.getChildren().add(dropdown);
+		root.getChildren().add(a);
+
+	}
 	public boolean addBallToken(double x, double y, int value)
 	{
 		if (value <= 0)
@@ -530,7 +571,7 @@ public class Main extends Application
 						root.getChildren().remove(hitter.getA());
 						blocks.remove(hitter);
 
-						r1.setFill(mag1);
+						r1.setFill(explosionImage);
 						burst.add(r1);
 						root.getChildren().add(r1);
 						ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
@@ -640,12 +681,11 @@ public class Main extends Application
 					while (blocks.size() > 0)
 					{
 						score += blocks.get(j).getValue();
-						Rectangle r1 = new Rectangle(blocks.get(j).getTranslateX() + 15,
-								blocks.get(j).getTranslateY() + 30, 20, 20);
+						Rectangle r1 = new Rectangle(blocks.get(j).getTranslateX() + 15,blocks.get(j).getTranslateY() + 30, 20, 20);
 						root.getChildren().remove(blocks.get(j));
 						root.getChildren().remove(blocks.get(j).getA());
 						blocks.remove(blocks.get(j));
-						r1.setFill(mag1);
+						r1.setFill(explosionImage);
 						burst.add(r1);
 						root.getChildren().add(r1);
 						ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);

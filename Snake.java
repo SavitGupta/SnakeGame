@@ -1,30 +1,31 @@
 
 //@formatter:on
-import java.io.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
 
 public class Snake implements Serializable
 {
 	private int size;
-	private transient Pane root;
+	private Pane root;
 	private ArrayList<Balls> l1 = new ArrayList<>();
 	private double x;
 	private double y;
+	private int type;
 	
-	public Snake(double x, double y, int size, Pane root)
+	public Snake(double x, double y, int size, Pane root, int j)
 	{
 		this.x = x;
 		this.y = y;
 		this.size = size;
 		this.root = root;
+		this.type = j;
 		System.out.println("x is " + String.valueOf(x));
 		for (int i = 0; i < size; i++)
 		{
-			Balls b = new Balls(x, y);
+			Balls b = new Balls(x, y, type);
 			root.getChildren().add(b);
 			l1.add(b);
 			y += 13;
@@ -33,21 +34,24 @@ public class Snake implements Serializable
 		System.out.println("Size2 is " + String.valueOf(l1.size()));
 		assert (size == l1.size());
 	}
-	public void deserialize(Pane root){
+	
+	public void deserialize(Pane root)
+	{
 		this.root = root;
 		for (int i = 0; i < size; i++)
 		{
-			Balls b = new Balls(x, y);
+			Balls b = new Balls(x, y, type);
 			root.getChildren().add(b);
 			l1.add(b);
 			y += 13;
 		}
 	}
+	
 	public void incLenghtBy(int amt)
 	{
 		for (int i = 0; i < amt; i++)
 		{
-			Balls b = new Balls(l1.get(0).getTranslateX(), y + 13 * size);
+			Balls b = new Balls(l1.get(0).getTranslateX(), y + 13 * size, type);
 			root.getChildren().add(b);
 			l1.add(b);
 			size += 1;
@@ -122,12 +126,11 @@ public class Snake implements Serializable
 		this.size = size;
 	}
 	
-	public void animate()
+	public void animate(int j)
 	{
 		for (int i = 0; i < l1.size(); i++)
 		{
-			l1.get(i).animate();
+			l1.get(i).animate(j);
 		}
 	}
-
 }

@@ -34,7 +34,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class Main extends Application implements Serializable
@@ -143,7 +142,7 @@ public class Main extends Application implements Serializable
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(140);
+		a.setSpacing(130);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
@@ -228,7 +227,7 @@ public class Main extends Application implements Serializable
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(140);
+		a.setSpacing(130);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
@@ -356,6 +355,129 @@ public class Main extends Application implements Serializable
 		return true;
 	}
 	
+	// public void generateContent()
+	// {
+	// Random random = new Random();
+	// int guess = random.nextInt(150);
+	// if (distSinceBlock > 350 && distSinceBlock + guess > 500)
+	// {
+	// t = 0;
+	// guess = random.nextInt(7) + 1;
+	// distSinceBlock = 0;
+	// ArrayList<Integer> locs = new ArrayList<>();
+	// if (guess < 8)
+	// {
+	// for (int i = 0; i < guess; i++)
+	// {
+	// int num = random.nextInt(8);
+	// if (locs.contains(num))
+	// {
+	// i -= 1;
+	// }
+	// else
+	// {
+	// locs.add(num);
+	// }
+	// }
+	// }
+	// else
+	// {
+	// locs.clear();
+	// for (int i = 1; i <= 8; i++)
+	// {
+	// locs.add(i);
+	// }
+	// }
+	// int min1 = 100000;
+	// int sum1 = 0;
+	// ArrayList<Integer> vals = new ArrayList<>();
+	// for (int i = 0; i < guess; i++)
+	// {
+	// int num = (int) (random.nextInt(s.getSize() + s.getSize() / 3)) + 1;
+	// if (num <= 0)
+	// {
+	// i -= 1;
+	// continue;
+	// }
+	// min1 = min(min1, num);
+	// sum1 += num;
+	// vals.add(num);
+	// }
+	// addBlocks(locs, vals);
+	// if (min1 >= s.getSize())
+	// {
+	// vals.remove(0);
+	// vals.add(s.getSize() - 1);
+	// }
+	// last -= sum1 * 0.3;
+	// }
+	// guess = random.nextInt(81);
+	// if (guess >= 75 + last)
+	// {
+	// t = 0;
+	// last = 0;
+	// guess = random.nextInt(82);
+	// int numofwalls = guess / 40;
+	// int cnt = 0;
+	// for (int i = 0; i < numofwalls; i++)
+	// {
+	// int guessx = random.nextInt(6) + 1;
+	// cnt++;
+	// int guessHeight = random.nextInt(50) + 40;
+	// if (!addWall(guessx, 60, guessHeight))
+	// {
+	// i -= 1;
+	// }
+	// if (cnt > 15)
+	// {
+	// break;
+	// }
+	// }
+	// // last -= numofwalls*0.01;
+	// guess = random.nextInt(40);
+	// int numoftokens = guess / 19;
+	// for (int i = 0; i < numoftokens; i++)
+	// {
+	// guess = random.nextInt(100);
+	// int guessx = random.nextInt(440) + 30;
+	// int guessy = random.nextInt(30) + 60;
+	// if (guess < 60)
+	// {
+	// if (!addToken(guessx, guessy, "coin"))
+	// i -= 1;
+	// }
+	// else if (guess < 80)
+	// {
+	// int guessval = (int) floor(random.nextGaussian());
+	// if (!addBallToken(guessx, guessy, guessval + 3))
+	// i -= 1;
+	// else
+	// last += 0.1 * guessval;
+	// }
+	// else if (guess < 87)
+	// {
+	// if (!addToken(guessx, guessy, "magnet"))
+	// i -= 1;
+	// else
+	// last += 0.2;
+	// }
+	// else if (guess < 94)
+	// {
+	// if (!addToken(guessx, guessy, "brickbuster"))
+	// i -= 1;
+	// else
+	// last += 1;
+	// }
+	// else
+	// {
+	// if (!addToken(guessx, guessy, "shield"))
+	// i -= 1;
+	// else
+	// last += 1;
+	// }
+	// }
+	// }
+	// }
 	public void generateContent()
 	{
 		Random random = new Random();
@@ -914,12 +1036,22 @@ public class Main extends Application implements Serializable
 				blocks.remove(w);
 			}
 		}
+		for (int i = 0; i < burst.size(); i++)
+		{
+			Rectangle w = burst.get(i);
+			w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+			if (w.getTranslateY() > 750)
+			{
+				root.getChildren().remove(w);
+				burst.remove(w);
+			}
+		}
 	}
 	
 	private void update() throws ConcurrentModificationException
 	{
 		distSinceBlock += 0.5 * speedScale;
-		speedScale = max(2 * sqrt(s.getSize()) / sqrt(5), 1.5);
+		speedScale = max(2 * sqrt(s.getSize()) / sqrt(3), 2.5);
 		t += 0.05;
 		ColorCheck += 1;
 		if (ShieldOn == true)
@@ -1011,7 +1143,7 @@ public class Main extends Application implements Serializable
 			}
 		});
 		stage.setScene(scene);
-		stage.initStyle(StageStyle.UNDECORATED);
+		// stage.initStyle(StageStyle.UNDECORATED);
 		stage.show();
 	}
 	

@@ -645,8 +645,7 @@ public class Main extends Application
 						root.getChildren().remove(blocks.get(j));
 						root.getChildren().remove(blocks.get(j).getA());
 						blocks.remove(blocks.get(j));
-						Image mag = new Image(getClass().getResourceAsStream("exp.png"));
-						r1.setFill(new ImagePattern(mag));
+						r1.setFill(mag1);
 						burst.add(r1);
 						root.getChildren().add(r1);
 						ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);

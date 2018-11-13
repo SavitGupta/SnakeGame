@@ -6,16 +6,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
-import java.io.Serializable;
-
 public class Balls extends Circle implements Serializable
 {
-	public Balls(double x, double y)
+	public Balls(double x, double y, int i)
 	{
 		super(0, 0, 7);
 		this.setTranslateX(x);
 		this.setTranslateY(y);
-		this.setFill(Color.BLUEVIOLET);
+		if (i == 0)
+		{
+			this.setFill(Color.BLUEVIOLET);
+		}
+		else if (i == 1)
+		{
+			this.setFill(Color.BLACK);
+		}
 	}
 	
 	public void moveRight(double amt)
@@ -30,19 +35,6 @@ public class Balls extends Circle implements Serializable
 		{
 			this.setTranslateX(x + amt);
 		}
-		// TranslateTransition transition = new TranslateTransition();
-		// transition.setDuration(Duration.millis(10));
-		// if (this.getTranslateX() > 500 - amt)
-		// {
-		// transition.setToX(500);
-		// }
-		// else
-		// {
-		// transition.setToX(this.getTranslateX() + amt);
-		// }
-		// transition.setToY(this.getTranslateY());
-		// transition.setNode(this);
-		// transition.play();
 	}
 	
 	public void moveLeft(double amt)
@@ -58,12 +50,23 @@ public class Balls extends Circle implements Serializable
 		}
 	}
 	
-	public void animate()
+	public void animate(int i)
 	{
-		FillTransition fillTransition = new FillTransition(Duration.seconds(1.5), this, Color.BLUEVIOLET,
-				Color.DEEPPINK);
-		fillTransition.setCycleCount(Animation.INDEFINITE);
-		fillTransition.setAutoReverse(true);
-		fillTransition.play();
+		if (i == 0)
+		{
+			FillTransition fillTransition = new FillTransition(Duration.seconds(1.5), this, Color.BLUEVIOLET,
+					Color.DEEPPINK);
+			fillTransition.setCycleCount(Animation.INDEFINITE);
+			fillTransition.setAutoReverse(true);
+			fillTransition.play();
+		}
+		else if (i == 1)
+		{
+			FillTransition fillTransition = new FillTransition(Duration.seconds(1.5), this, Color.BLACK,
+					Color.DEEPPINK);
+			fillTransition.setCycleCount(Animation.INDEFINITE);
+			fillTransition.setAutoReverse(true);
+			fillTransition.play();
+		}
 	}
 }

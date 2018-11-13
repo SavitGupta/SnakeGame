@@ -584,11 +584,40 @@ public class Main extends Application
 				if (t1.getType().equals("Coin"))
 				{
 					score += 2;
+					Rectangle r2 = new Rectangle(t1.getTranslateX() - 10, t1.getTranslateY(), 10, 10);
+					Image mag2 = new Image(getClass().getResourceAsStream("expcoin.png"));
+					r2.setFill(new ImagePattern(mag2));
+					burst.add(r2);
+					root.getChildren().add(r2);
+					ScaleTransition scale2 = new ScaleTransition(Duration.seconds(1), r2);
+					scale2.setToX(5);
+					scale2.setToY(5);
+					scale2.setOnFinished((ActionEvent event) -> {
+						burst.remove(r2);
+						root.getChildren().remove(r2);
+					});
+					scale2.play();
 					root.getChildren().remove(t1);
 					tokens.remove(t1);
 				}
 				else if (t1.getType().equals("Magnet"))
 				{
+					Rectangle r2 = new Rectangle(t1.getTranslateX() - 10, t1.getTranslateY(), 10, 10);
+					Image mag2 = new Image(getClass().getResourceAsStream("expmagnet.png"));
+					r2.setFill(new ImagePattern(mag2));
+					burst.add(r2);
+					root.getChildren().add(r2);
+					ScaleTransition scale2 = new ScaleTransition(Duration.seconds(1), r2);
+					scale2.setToX(5);
+					scale2.setToY(5);
+					scale2.setOnFinished((ActionEvent event) -> {
+						burst.remove(r2);
+						root.getChildren().remove(r2);
+					});
+					scale2.play();
+					ShieldOn = true;
+					root.getChildren().remove(t1);
+					tokens.remove(t1);
 					for (int j = 0; j < tokens.size(); j++)
 					{
 						if (tokens.get(j).getType().equals("Coin"))
@@ -634,6 +663,19 @@ public class Main extends Application
 				}
 				else if (t1.getType().equals("Shield"))
 				{
+					Rectangle r2 = new Rectangle(t1.getTranslateX(), t1.getTranslateY(), 10, 10);
+					Image mag2 = new Image(getClass().getResourceAsStream("expshield.png"));
+					r2.setFill(new ImagePattern(mag2));
+					burst.add(r2);
+					root.getChildren().add(r2);
+					ScaleTransition scale2 = new ScaleTransition(Duration.seconds(1), r2);
+					scale2.setToX(5);
+					scale2.setToY(5);
+					scale2.setOnFinished((ActionEvent event) -> {
+						burst.remove(r2);
+						root.getChildren().remove(r2);
+					});
+					scale2.play();
 					ShieldOn = true;
 					root.getChildren().remove(t1);
 					tokens.remove(t1);

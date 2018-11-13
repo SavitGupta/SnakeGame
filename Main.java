@@ -44,7 +44,7 @@ public class Main extends Application implements Serializable
 	private ArrayList<Block> blocks = new ArrayList<>();
 	private ArrayList<Rectangle> burst = new ArrayList<>();
 	private double speedScale = 1;
-	private Snake s = new Snake(250, 450, 8, root);
+	private Snake s = new Snake(250, 450, 8, root, 0);
 	private double last = 0;
 	private int score = 0;
 	private double t = 0;
@@ -180,7 +180,7 @@ public class Main extends Application implements Serializable
 	}
 	public void restart(){
 		root.getChildren().clear();
-		s = new Snake(250, 450, 8, root);
+		s = new Snake(250, 450, 8, root, 0);
 		blocks.clear();
 		walls.clear();
 		burst.clear();
@@ -883,7 +883,7 @@ public class Main extends Application implements Serializable
 		}
 		if (ColorCheck == 180)
 		{
-			s.animate();
+			s.animate(0);
 			ColorCheck = 0;
 		}
 		if (ShieldCheck == 301)

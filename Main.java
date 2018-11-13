@@ -233,6 +233,10 @@ public class Main extends Application implements Serializable
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
 		a.getChildren().add(scoreLabel);
+		shield = new Rectangle(20, 20);
+		Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
+		shield.setFill(new ImagePattern(mag2));
+		a.getChildren().add(shield);
 		dropdown.getItems().add("Pause");
 		dropdown.getItems().add("Resume");
 		dropdown.getItems().add("Restart");

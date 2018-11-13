@@ -11,6 +11,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -20,9 +21,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -37,6 +41,7 @@ public class Main extends Application
 	private ArrayList<Token> tokens = new ArrayList<>();
 	private ArrayList<BallToken> balls = new ArrayList<>();
 	private ArrayList<Block> blocks = new ArrayList<>();
+	private ArrayList<Rectangle> burst = new ArrayList<>();
 	private double speedScale = 1;
 	private Snake s = new Snake(250, 450, 8, root);
 	private double last = 0;
@@ -47,7 +52,8 @@ public class Main extends Application
 	private boolean GameOn = true;
 	private boolean ShieldOn = false;
 	private int ShieldCheck = 0;
-	
+	private Rectangle r1;
+
 	private Parent createContent()
 	{
 		root.setPrefSize(500, 700);
@@ -72,6 +78,9 @@ public class Main extends Application
 		dropdown.setOnAction(e -> getChoice(dropdown, e));
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
+
+
+//		ScaleTransition r1s = new ScaleTransition(Duration.seconds(5), r1);
 		timer = new AnimationTimer()
 		{
 			@Override
@@ -501,7 +510,9 @@ public class Main extends Application
 					if (s.getSize() > 0)
 					{
 						s.decLenghtBy(1);
-						moveUp();
+						if(value >= 5){
+							moveUp();
+						}
 						score += 1;
 						scoreLabel.setText(Integer.toString(score));
 						value = value - 1;
@@ -511,9 +522,15 @@ public class Main extends Application
 						{
 							System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
 							System.out.println("hitter is removed " + String.valueOf(hitter));
+							Rectangle r1 = new Rectangle(hitter.getX(),hitter.getY(),75,75);
 							root.getChildren().remove(hitter);
 							root.getChildren().remove(hitter.getA());
 							blocks.remove(hitter);
+							Image mag = new Image(getClass().getResourceAsStream("exp.png"));
+							r1.setFill(new ImagePattern(mag));
+							burst.add(r1);
+							root.getChildren().add(r1);
+
 						}
 					}
 				}
@@ -705,6 +722,22 @@ public class Main extends Application
 		speedScale = max(2 * sqrt(s.getSize()) / sqrt(5), 1.5);
 		t += 0.05;
 		ColorCheck += 1;
+
+		for(int i=0;i<burst.size();i++){
+			Rectangle r1 = burst.get(i);
+			if(r1.getHeight() > 115){
+				root.getChildren().remove(r1);
+				burst.remove(r1);
+
+			}
+			else {
+				r1.setHeight(r1.getHeight() + 0.6);
+				r1.setWidth(r1.getWidth() + 0.6);
+				r1.setTranslateX(r1.getTranslateX() - 0.3);
+				r1.setTranslateY(r1.getTranslateY() - 0.3);
+			}
+		}
+
 		if (ShieldOn == true)
 		{
 			ShieldCheck += 1;

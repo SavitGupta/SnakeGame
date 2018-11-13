@@ -1,3 +1,5 @@
+
+//@formatter:on
 import static java.lang.Integer.min;
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
@@ -5,10 +7,13 @@ import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,7 +22,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 public class Main extends Application
 {
@@ -25,45 +33,84 @@ public class Main extends Application
 	private Label scoreLabel = new Label();
 	private Label sizeLabel = new Label();
 	private ComboBox<String> dropdown = new ComboBox<>();
-	private int score = 0;
-	private double t = 0;
 	private ArrayList<Wall> walls = new ArrayList<>();
 	private ArrayList<Token> tokens = new ArrayList<>();
 	private ArrayList<BallToken> balls = new ArrayList<>();
 	private ArrayList<Block> blocks = new ArrayList<>();
 	private double speedScale = 1;
-	// private ArrayList<RowOfBlocks> blocks;
-	private double last;
-	Snake s = new Snake(250, 300, 5, root);
+	private Snake s = new Snake(250, 450, 8, root);
+	private double last = 0;
+	private int score = 0;
+	private double t = 0;
+	private AnimationTimer timer;
+	private int ColorCheck = 0;
+	private boolean GameOn = true;
+	private boolean ShieldOn = false;
+	private int ShieldCheck = 0;
 	
 	private Parent createContent()
 	{
-		root.setPrefSize(500, 600);
+		root.setPrefSize(500, 700);
+		root.setStyle("-fx-background-color: #000000;");
+		sizeLabel.setTextFill(Color.DEEPPINK);
+		sizeLabel.setStyle("-fx-font-weight: bold;");
 		root.getChildren().add(sizeLabel);
-		last = 0;
-		AnimationTimer timer = new AnimationTimer()
+		HBox a = new HBox();
+		a.setPrefHeight(30);
+		a.setPrefWidth(500);
+		a.setStyle("-fx-background-color: #000000");
+		a.setSpacing(300);
+		a.setPadding(new Insets(10, 10, 10, 10));
+		scoreLabel.setTextFill(Color.DEEPPINK);
+		scoreLabel.setStyle("-fx-font-weight: bold;");
+		a.getChildren().add(scoreLabel);
+		dropdown.getItems().add("Pause");
+		dropdown.getItems().add("Resume");
+		dropdown.getItems().add("Restart");
+		dropdown.getItems().add("Exit");
+		dropdown.setPromptText("Options");
+		dropdown.setOnAction(e -> getChoice(dropdown, e));
+		a.getChildren().add(dropdown);
+		root.getChildren().add(a);
+		timer = new AnimationTimer()
 		{
 			@Override
 			public void handle(long now)
 			{
-				update();
+				try
+				{
+					update();
+				}
+				catch (Exception e)
+				{
+				}
 			}
 		};
 		timer.start();
-		HBox a = new HBox();
-		a.setPrefHeight(30);
-		a.setPrefWidth(500);
-		a.getChildren().add(scoreLabel);
-		a.setStyle("-fx-background-color: #008000");
-		dropdown.getItems().add("Pause");
-		dropdown.getItems().add("Restart");
-		dropdown.getItems().add("Exit");
-		dropdown.setPromptText("Options");
-		a.getChildren().add(dropdown);
-		a.setSpacing(300);
-		a.setPadding(new Insets(10, 10, 10, 10));
-		root.getChildren().add(a);
 		return root;
+	}
+	
+	public void getChoice(ComboBox<String> dropdown, ActionEvent e)
+	{
+		if (dropdown.getValue().equals("Pause"))
+		{
+			timer.stop();
+			GameOn = false;
+		}
+		else if (dropdown.getValue().equals("Restart"))
+		{
+			timer.start();
+			GameOn = true;
+		}
+		else if (dropdown.getValue().equals("Resume"))
+		{
+			timer.start();
+			GameOn = true;
+		}
+		else if (dropdown.getValue().equals("Exit"))
+		{
+			System.exit(0);
+		}
 	}
 	
 	public boolean addBallToken(double x, double y, int value)
@@ -99,7 +146,7 @@ public class Main extends Application
 			tokens.add(s1);
 			root.getChildren().add(s1);
 		}
-		else if (type.equalsIgnoreCase("coin"))
+		else if (type.equalsIgnoreCase("Coin"))
 		{
 			Coins s1 = new Coins(x, y);
 			if (checkAlreadyOccupied(s1))
@@ -139,9 +186,25 @@ public class Main extends Application
 	{
 		for (int i = 0; i < locs.size(); i++)
 		{
-			Integer loc = locs.get(i);
+			int loc = locs.get(i);
 			int val = vals.get(i);
-			Block b1 = new Block(loc * 500 / 8, 45, String.valueOf(val));
+			Block b1;
+			if (val <= s.getSize() / 3)
+			{
+				b1 = new Block(loc * 500 / 8, 45, String.valueOf(val), 1);
+			}
+			else if (val > s.getSize() / 3 && val <= (s.getSize() - s.getSize() / 3))
+			{
+				b1 = new Block(loc * 500 / 8, 45, String.valueOf(val), 2);
+			}
+			else if (val > s.getSize())
+			{
+				b1 = new Block(loc * 500 / 8, 45, String.valueOf(val), 4);
+			}
+			else
+			{
+				b1 = new Block(loc * 500 / 8, 45, String.valueOf(val), 3);
+			}
 			root.getChildren().addAll(b1, b1.getA());
 			blocks.add(b1);
 		}
@@ -196,7 +259,7 @@ public class Main extends Application
 			ArrayList<Integer> vals = new ArrayList<>();
 			for (int i = 0; i < guess; i++)
 			{
-				int num = (int) (3 * random.nextGaussian() + 5);
+				int num = (int) (random.nextInt(s.getSize() + s.getSize() / 3)) + 1;
 				if (num <= 0)
 				{
 					i -= 1;
@@ -292,7 +355,7 @@ public class Main extends Application
 			if (flag)
 			{
 				System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
-				dist = abs(s.getx() - w.getTranslateX() - 14);
+				dist = abs(s.getx() - w.getTranslateX() - 10);
 				break;
 			}
 		}
@@ -313,7 +376,7 @@ public class Main extends Application
 			if (flag)
 			{
 				System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
-				dist = abs(s.getx() - w.getTranslateX() + 4);
+				dist = abs(s.getx() - w.getTranslateX() + 8);
 				break;
 			}
 		}
@@ -351,74 +414,116 @@ public class Main extends Application
 	
 	public void deflectFromWalls()
 	{
-		boolean flag = false;
 		Wall hitter;
 		for (Wall w : walls)
 		{
 			if (s.intersection(w))
 			{
-				flag = true;
 				hitter = w;
 				double dist = hitter.getTranslateX() - s.getx() + 5;
 				System.out.println("Inersection with wall head " + String.valueOf(dist));
 				if (dist > 0)
 				{
-					s.moveLeft(9 - dist);
+					s.moveLeft(12 - dist);
 				}
 				else
 				{
-					s.moveRight(9 + dist);
+					s.moveRight(6 + dist);
 				}
 				break;
 			}
 		}
 	}
 	
+	// public void deflectFromBlocks()
+	// {
+	// for (Block w : blocks)
+	// {
+	// if (s.intersection(w))
+	// {
+	// System.out.println("LOL");
+	// Block hitter = w;
+	// int value = hitter.getValue();
+	// System.out.println("Value of block " + String.valueOf(value));
+	// System.out.println("Value of snake " + String.valueOf(s.getSize()));
+	// if (value > s.getSize())
+	// {
+	// for (int i = 0; i < value; i++)
+	// {
+	// if (s.getSize() > 0)
+	// {
+	// s.decLenghtBy(1);
+	// score += 1;
+	// scoreLabel.setText(Integer.toString(score));
+	// hitter.getA().setText(Integer.toString(value - 1));
+	// }
+	// }
+	// }
+	// else
+	// {
+	// for (int i = 0; i < value; i++)
+	// {
+	// if (s.getSize() > 0)
+	// {
+	// s.decLenghtBy(1);
+	// score += 1;
+	// scoreLabel.setText(Integer.toString(score));
+	// hitter.getA().setText(Integer.toString(value - 1));
+	// }
+	// }
+	// System.out.println("Size of children " +
+	// String.valueOf(root.getChildren().size()));
+	// System.out.println("hitter is removed " + String.valueOf(hitter));
+	// root.getChildren().remove(hitter);
+	// root.getChildren().remove(hitter.getA());
+	// blocks.remove(hitter);
+	// }
+	// }
+	// }
+	// if (s.getSize() == 0)
+	// {
+	// System.exit(0);
+	// }
+	// }
 	public void deflectFromBlocks()
 	{
-		Block hitter;
-		boolean flag = true;
 		for (Block w : blocks)
 		{
 			if (s.intersection(w))
 			{
-				flag = false;
 				System.out.println("LOL");
-				hitter = w;
+				Block hitter = w;
 				int value = hitter.getValue();
 				System.out.println("Value of block " + String.valueOf(value));
 				System.out.println("Value of snake " + String.valueOf(s.getSize()));
-				if (value > s.getSize())
+				if (ShieldOn == false)
 				{
-					for (int i = 0; i < value; i++)
+					if (s.getSize() > 0)
 					{
-						hitter.getA().setText(Integer.toString(value - 1));
-						if (s.getSize() > 0)
+						s.decLenghtBy(1);
+						moveUp();
+						score += 1;
+						scoreLabel.setText(Integer.toString(score));
+						value = value - 1;
+						hitter.getA().setText(Integer.toString(value));
+						hitter.setValue(value);
+						if (value == 0)
 						{
-							s.decLenghtBy(1);
+							System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
+							System.out.println("hitter is removed " + String.valueOf(hitter));
+							root.getChildren().remove(hitter);
+							root.getChildren().remove(hitter.getA());
+							blocks.remove(hitter);
 						}
 					}
 				}
 				else
 				{
-					for (int i = 0; i < value; i++)
-					{
-						hitter.getA().setText(Integer.toString(value - 1));
-						if (s.getSize() > 0)
-						{
-							s.decLenghtBy(1);
-						}
-					}
-					System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
-					System.out.println("hitter is removed " + String.valueOf(hitter));
+					score += value;
 					root.getChildren().remove(hitter);
 					root.getChildren().remove(hitter.getA());
 					blocks.remove(hitter);
 				}
-			}
-			if (!flag)
-			{
-				break;
 			}
 		}
 		if (s.getSize() == 0)
@@ -430,13 +535,10 @@ public class Main extends Application
 	public void deflectFromBalls()
 	{
 		BallToken hitter;
-		boolean flag = true;
 		for (BallToken w : balls)
 		{
 			if (s.intersection(w))
 			{
-				System.out.println("HAHA");
-				flag = false;
 				hitter = w;
 				int value = Integer.parseInt(hitter.getValue());
 				System.out.println("Value of circle " + String.valueOf(value));
@@ -446,14 +548,10 @@ public class Main extends Application
 				root.getChildren().remove(hitter.getA());
 				balls.remove(hitter);
 			}
-			if (!flag)
-			{
-				break;
-			}
 		}
 	}
 	
-	private void collectTokens()
+	private void deflectFromTokens()
 	{
 		for (int i = 0; i < tokens.size(); i++)
 		{
@@ -461,29 +559,107 @@ public class Main extends Application
 			if (s.intersection(t1))
 			{
 				System.out.println("Token of type " + t1.getType());
-				root.getChildren().remove(t1);
-				tokens.remove(t1);
+				if (t1.getType().equals("Coin"))
+				{
+					score += 2;
+					root.getChildren().remove(t1);
+					tokens.remove(t1);
+				}
+				else if (t1.getType().equals("Magnet"))
+				{
+					for (int j = 0; j < tokens.size(); j++)
+					{
+						if (tokens.get(j).getType().equals("Coin"))
+						{
+							TranslateTransition transition = new TranslateTransition();
+							transition.setDuration(Duration.millis(500));
+							transition.setToX(250);
+							transition.setToY(710);
+							transition.setNode(tokens.get(j));
+							score += 2;
+							transition.play();
+						}
+					}
+					root.getChildren().remove(t1);
+					tokens.remove(t1);
+				}
+				else if (t1.getType().equals("BrickBuster"))
+				{
+					int j = 0;
+					while (blocks.size() > 0)
+					{
+						score += blocks.get(j).getValue();
+						root.getChildren().remove(blocks.get(j).getA());
+						root.getChildren().remove(blocks.get(j));
+						blocks.remove(j);
+						j++;
+					}
+					root.getChildren().remove(t1);
+					tokens.remove(t1);
+				}
+				else if (t1.getType().equals("Shield"))
+				{
+					ShieldOn = true;
+					root.getChildren().remove(t1);
+					tokens.remove(t1);
+				}
 			}
 		}
 	}
 	
-	private void update()
+	public void moveUp()
 	{
-		speedScale = max(2 * sqrt(s.getSize()) / sqrt(5), 1.5);
-		t += 0.03 * speedScale;
-		if (t > 1.5)
+		for (int i = 0; i < walls.size(); i++)
 		{
-			generateContent();/*
-								 * System.out.println(t);
-								 * System.out.println(last);
-								 */
+			Wall w = walls.get(i);
+			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
+			if (w.getTranslateY() > 800)
+			{
+				root.getChildren().remove(w);
+				walls.remove(w);
+			}
 		}
-		collectTokens();
+		for (int i = 0; i < balls.size(); i++)
+		{
+			BallToken w = balls.get(i);
+			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
+			w.getA().setTranslateY(w.getTranslateY() - 3 * speedScale);
+			if (w.getTranslateY() > 800)
+			{
+				root.getChildren().remove(w);
+				balls.remove(w);
+			}
+		}
+		for (int i = 0; i < tokens.size(); i++)
+		{
+			Token t1 = tokens.get(i);
+			t1.moveDown(-(3 * speedScale));
+			if (t1.getTranslateY() > 800)
+			{
+				root.getChildren().remove(t1);
+				tokens.remove(t1);
+			}
+		}
+		for (int i = 0; i < blocks.size(); i++)
+		{
+			Block w = blocks.get(i);
+			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
+			w.getA().setTranslateY(w.getTranslateY() - 3 * speedScale);
+			if (w.getTranslateY() > 800)
+			{
+				root.getChildren().remove(w);
+				blocks.remove(w);
+			}
+		}
+	}
+	
+	private void removeItems()
+	{
 		for (int i = 0; i < walls.size(); i++)
 		{
 			Wall w = walls.get(i);
 			w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-			if (w.getTranslateY() > 800)
+			if (w.getTranslateY() > 750)
 			{
 				root.getChildren().remove(w);
 				walls.remove(w);
@@ -494,7 +670,7 @@ public class Main extends Application
 			BallToken w = balls.get(i);
 			w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
 			w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-			if (w.getTranslateY() > 800)
+			if (w.getTranslateY() > 750)
 			{
 				root.getChildren().remove(w);
 				balls.remove(w);
@@ -504,7 +680,7 @@ public class Main extends Application
 		{
 			Token t1 = tokens.get(i);
 			t1.moveDown(0.5 * speedScale);
-			if (t1.getTranslateY() > 800)
+			if (t1.getTranslateY() > 750)
 			{
 				root.getChildren().remove(t1);
 				tokens.remove(t1);
@@ -515,19 +691,54 @@ public class Main extends Application
 			Block w = blocks.get(i);
 			w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
 			w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-			if (w.getTranslateY() > 800)
+			if (w.getTranslateY() > 750)
 			{
 				root.getChildren().remove(w);
+				root.getChildren().remove(w.getA());
 				blocks.remove(w);
 			}
 		}
+	}
+	
+	private void update() throws ConcurrentModificationException
+	{
+		speedScale = max(2 * sqrt(s.getSize()) / sqrt(5), 1.5);
+		t += 0.05;
+		ColorCheck += 1;
+		if (ShieldOn == true)
+		{
+			ShieldCheck += 1;
+		}
+		if (ColorCheck == 180)
+		{
+			s.animate();
+			ColorCheck = 0;
+		}
+		if (ShieldCheck == 301)
+		{
+			ShieldCheck = 0;
+			ShieldOn = false;
+		}
+		if (t > 1.5)
+		{
+			generateContent();
+		}
+		deflectFromTokens();
 		deflectFromWalls();
 		deflectFromBlocks();
 		deflectFromBalls();
+		removeItems();
 		scoreLabel.setText("Score " + Integer.toString(score));
-		sizeLabel.setText(Integer.toString(s.size));
-		sizeLabel.setTranslateX(s.getx() - 3);
-		sizeLabel.setTranslateY(275);
+		sizeLabel.setText(Integer.toString(s.getSize()));
+		if (s.getSize() < 10)
+		{
+			sizeLabel.setTranslateX(s.getx() - 4);
+		}
+		else
+		{
+			sizeLabel.setTranslateX(s.getx() - 8);
+		}
+		sizeLabel.setTranslateY(420);
 	}
 	
 	@Override
@@ -539,16 +750,23 @@ public class Main extends Application
 			switch (e.getCode())
 			{
 				case A:
-					moveLeft(10);
+					if (GameOn == true)
+					{
+						moveLeft(10);
+					}
 					System.out.println("left");
 					break;
 				case D:
-					moveRight(10);
+					if (GameOn == true)
+					{
+						moveRight(10);
+					}
 					System.out.println("Right");
 					break;
 			}
 		});
 		stage.setScene(scene);
+		stage.initStyle(StageStyle.UNDECORATED);
 		stage.show();
 	}
 	

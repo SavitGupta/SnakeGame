@@ -1,22 +1,26 @@
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
+
+//@formatter:on
 import javafx.scene.shape.Circle;
 
 public class Token extends Circle
 {
 	private String type;
+	
 	public Token(double x, double y, String type)
 	{
-		super(x, y, 8);
+		super(0, 0, 10);
+		this.setTranslateX(x);
+		this.setTranslateY(y);
 		this.type = type;
 	}
-
+	
 	public void moveDown(double amt)
 	{
 		this.setTranslateY(this.getTranslateY() + amt);
 	}
-
-    public String getType() {
-        return type;
-    }
+	
+	public String getType()
+	{
+		return type;
+	}
 }

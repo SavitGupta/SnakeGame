@@ -1,60 +1,67 @@
-//AYUSH
-import javafx.scene.paint.ImagePattern;
+
+//@formatter:on
+import javafx.animation.Animation;
+import javafx.animation.FillTransition;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 public class Balls extends Circle
 {
-    ImagePattern imagePattern;
-    private boolean alive = true;
-    public Balls(double x,double y)
-    {
-        super(0,0,5);
-        //System.out.println(" x for balls" + String.valueOf(x));
-        //System.out.println("gettranslatex" + String.valueOf(this.getTranslateX()));
-        this.setTranslateX(x);
-        this.setTranslateY(y);
-        //this.setFill(imagePattern);
-    }
-
-    public void moveRight(double amt)
-    {
-        double x = this.getTranslateX();
-        //System.out.println("x is " + String.valueOf(x));
-        if(x > 500 - amt)
-        {
-            this.setTranslateX(500);
-        }
-        else
-        {
-            this.setTranslateX(x + amt);
-        }
-    }
-
-    public void moveLeft(double amt)
-    {
-        double x = this.getTranslateX();
-        if(x  < amt)
-        {
-            this.setTranslateX(0);
-        }
-        else
-        {
-            this.setTranslateX(x - amt);
-        }
-    }
-
-    public boolean isAlive()
+	public Balls(double x, double y)
 	{
-		return alive;
+		super(0, 0, 7);
+		this.setTranslateX(x);
+		this.setTranslateY(y);
+		this.setFill(Color.BLUEVIOLET);
 	}
-
-	public void setAlive(boolean alive)
+	
+	public void moveRight(double amt)
 	{
-		this.alive = alive;
+		double x = this.getTranslateX();
+		System.out.println("x is " + String.valueOf(x));
+		if (x > 500 - amt)
+		{
+			this.setTranslateX(500);
+		}
+		else
+		{
+			this.setTranslateX(x + amt);
+		}
+		// TranslateTransition transition = new TranslateTransition();
+		// transition.setDuration(Duration.millis(10));
+		// if (this.getTranslateX() > 500 - amt)
+		// {
+		// transition.setToX(500);
+		// }
+		// else
+		// {
+		// transition.setToX(this.getTranslateX() + amt);
+		// }
+		// transition.setToY(this.getTranslateY());
+		// transition.setNode(this);
+		// transition.play();
 	}
-
-	public boolean isDead()
+	
+	public void moveLeft(double amt)
 	{
-		return !this.alive;
+		double x = this.getTranslateX();
+		if (x < amt)
+		{
+			this.setTranslateX(0);
+		}
+		else
+		{
+			this.setTranslateX(x - amt);
+		}
+	}
+	
+	public void animate()
+	{
+		FillTransition fillTransition = new FillTransition(Duration.seconds(1.5), this, Color.BLUEVIOLET,
+				Color.DEEPPINK);
+		fillTransition.setCycleCount(Animation.INDEFINITE);
+		fillTransition.setAutoReverse(true);
+		fillTransition.play();
 	}
 }

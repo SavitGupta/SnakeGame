@@ -1,3 +1,5 @@
+
+//@formatter:on
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 
@@ -9,5 +11,4 @@ public class BrickBuster extends Token
 		Image mag = new Image(getClass().getResourceAsStream("bomb.jpg"));
 		this.setFill(new ImagePattern(mag));
 	}
-
 }

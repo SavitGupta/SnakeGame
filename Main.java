@@ -143,7 +143,7 @@ public class Main extends Application implements Serializable
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(300);
+		a.setSpacing(140);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
@@ -228,7 +228,7 @@ public class Main extends Application implements Serializable
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(300);
+		a.setSpacing(140);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");

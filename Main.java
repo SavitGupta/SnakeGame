@@ -42,7 +42,6 @@ public class Main extends Application
 	private ArrayList<BallToken> balls = new ArrayList<>();
 	private ArrayList<Block> blocks = new ArrayList<>();
 	private ArrayList<Rectangle> burst = new ArrayList<>();
-	private ArrayList<Rectangle> burst2 = new ArrayList<>();
 	private double speedScale = 1;
 	private Snake s = new Snake(250, 450, 8, root);
 	private double last = 0;
@@ -886,12 +885,38 @@ public class Main extends Application
 					}
 					System.out.println("left");
 					break;
+				case LEFT:
+					if (GameOn == true)
+					{
+						moveLeft(10);
+					}
+					System.out.println("left");
+					break;
 				case D:
 					if (GameOn == true)
 					{
 						moveRight(10);
 					}
 					System.out.println("Right");
+					break;
+				case RIGHT:
+					if (GameOn == true)
+					{
+						moveRight(10);
+					}
+					System.out.println("Right");
+					break;
+				case ENTER:
+					if (GameOn == true)
+					{
+						timer.stop();
+						GameOn = false;
+					}
+					else
+					{
+						timer.start();
+						GameOn = true;
+					}
 					break;
 			}
 		});

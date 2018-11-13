@@ -26,7 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -42,6 +42,7 @@ public class Main extends Application
 	private ArrayList<BallToken> balls = new ArrayList<>();
 	private ArrayList<Block> blocks = new ArrayList<>();
 	private ArrayList<Rectangle> burst = new ArrayList<>();
+	private ArrayList<Rectangle> burst2 = new ArrayList<>();
 	private double speedScale = 1;
 	private Snake s = new Snake(250, 450, 8, root);
 	private double last = 0;
@@ -52,8 +53,7 @@ public class Main extends Application
 	private boolean GameOn = true;
 	private boolean ShieldOn = false;
 	private int ShieldCheck = 0;
-	private Rectangle r1;
-
+	
 	private Parent createContent()
 	{
 		root.setPrefSize(500, 700);
@@ -78,9 +78,7 @@ public class Main extends Application
 		dropdown.setOnAction(e -> getChoice(dropdown, e));
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
-
-
-//		ScaleTransition r1s = new ScaleTransition(Duration.seconds(5), r1);
+		// ScaleTransition r1s = new ScaleTransition(Duration.seconds(5), r1);
 		timer = new AnimationTimer()
 		{
 			@Override
@@ -444,56 +442,6 @@ public class Main extends Application
 		}
 	}
 	
-	// public void deflectFromBlocks()
-	// {
-	// for (Block w : blocks)
-	// {
-	// if (s.intersection(w))
-	// {
-	// System.out.println("LOL");
-	// Block hitter = w;
-	// int value = hitter.getValue();
-	// System.out.println("Value of block " + String.valueOf(value));
-	// System.out.println("Value of snake " + String.valueOf(s.getSize()));
-	// if (value > s.getSize())
-	// {
-	// for (int i = 0; i < value; i++)
-	// {
-	// if (s.getSize() > 0)
-	// {
-	// s.decLenghtBy(1);
-	// score += 1;
-	// scoreLabel.setText(Integer.toString(score));
-	// hitter.getA().setText(Integer.toString(value - 1));
-	// }
-	// }
-	// }
-	// else
-	// {
-	// for (int i = 0; i < value; i++)
-	// {
-	// if (s.getSize() > 0)
-	// {
-	// s.decLenghtBy(1);
-	// score += 1;
-	// scoreLabel.setText(Integer.toString(score));
-	// hitter.getA().setText(Integer.toString(value - 1));
-	// }
-	// }
-	// System.out.println("Size of children " +
-	// String.valueOf(root.getChildren().size()));
-	// System.out.println("hitter is removed " + String.valueOf(hitter));
-	// root.getChildren().remove(hitter);
-	// root.getChildren().remove(hitter.getA());
-	// blocks.remove(hitter);
-	// }
-	// }
-	// }
-	// if (s.getSize() == 0)
-	// {
-	// System.exit(0);
-	// }
-	// }
 	public void deflectFromBlocks()
 	{
 		for (Block w : blocks)
@@ -503,6 +451,7 @@ public class Main extends Application
 				System.out.println("LOL");
 				Block hitter = w;
 				int value = hitter.getValue();
+				int value2 = hitter.getInitialValue();
 				System.out.println("Value of block " + String.valueOf(value));
 				System.out.println("Value of snake " + String.valueOf(s.getSize()));
 				if (ShieldOn == false)
@@ -510,7 +459,8 @@ public class Main extends Application
 					if (s.getSize() > 0)
 					{
 						s.decLenghtBy(1);
-						if(value >= 5){
+						if (value2 >= 5)
+						{
 							moveUp();
 						}
 						score += 1;
@@ -522,7 +472,8 @@ public class Main extends Application
 						{
 							System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
 							System.out.println("hitter is removed " + String.valueOf(hitter));
-							Rectangle r1 = new Rectangle(hitter.getX(),hitter.getY(),75,75);
+							Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20,
+									20);
 							root.getChildren().remove(hitter);
 							root.getChildren().remove(hitter.getA());
 							blocks.remove(hitter);
@@ -530,16 +481,36 @@ public class Main extends Application
 							r1.setFill(new ImagePattern(mag));
 							burst.add(r1);
 							root.getChildren().add(r1);
-
+							ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
+							scale1.setToX(5);
+							scale1.setToY(5);
+							scale1.setOnFinished((ActionEvent event) -> {
+								burst.remove(r1);
+								root.getChildren().remove(r1);
+							});
+							scale1.play();
 						}
 					}
 				}
 				else
 				{
 					score += value;
+					Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
 					root.getChildren().remove(hitter);
 					root.getChildren().remove(hitter.getA());
 					blocks.remove(hitter);
+					Image mag = new Image(getClass().getResourceAsStream("exp.png"));
+					r1.setFill(new ImagePattern(mag));
+					burst.add(r1);
+					root.getChildren().add(r1);
+					ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
+					scale1.setToX(5);
+					scale1.setToY(5);
+					scale1.setOnFinished((ActionEvent event) -> {
+						burst.remove(r1);
+						root.getChildren().remove(r1);
+					});
+					scale1.play();
 				}
 			}
 		}
@@ -606,10 +577,23 @@ public class Main extends Application
 					while (blocks.size() > 0)
 					{
 						score += blocks.get(j).getValue();
-						root.getChildren().remove(blocks.get(j).getA());
+						Rectangle r1 = new Rectangle(blocks.get(j).getTranslateX() + 15,
+								blocks.get(j).getTranslateY() + 30, 20, 20);
 						root.getChildren().remove(blocks.get(j));
-						blocks.remove(j);
-						j++;
+						root.getChildren().remove(blocks.get(j).getA());
+						blocks.remove(blocks.get(j));
+						Image mag = new Image(getClass().getResourceAsStream("exp.png"));
+						r1.setFill(new ImagePattern(mag));
+						burst.add(r1);
+						root.getChildren().add(r1);
+						ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
+						scale1.setToX(5);
+						scale1.setToY(5);
+						scale1.setOnFinished((ActionEvent event) -> {
+							burst.remove(r1);
+							root.getChildren().remove(r1);
+						});
+						scale1.play();
 					}
 					root.getChildren().remove(t1);
 					tokens.remove(t1);
@@ -722,22 +706,6 @@ public class Main extends Application
 		speedScale = max(2 * sqrt(s.getSize()) / sqrt(5), 1.5);
 		t += 0.05;
 		ColorCheck += 1;
-
-		for(int i=0;i<burst.size();i++){
-			Rectangle r1 = burst.get(i);
-			if(r1.getHeight() > 115){
-				root.getChildren().remove(r1);
-				burst.remove(r1);
-
-			}
-			else {
-				r1.setHeight(r1.getHeight() + 0.6);
-				r1.setWidth(r1.getWidth() + 0.6);
-				r1.setTranslateX(r1.getTranslateX() - 0.3);
-				r1.setTranslateY(r1.getTranslateY() - 0.3);
-			}
-		}
-
 		if (ShieldOn == true)
 		{
 			ShieldCheck += 1;

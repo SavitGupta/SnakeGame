@@ -2,7 +2,9 @@
 //@formatter:on
 import javafx.scene.shape.Circle;
 
-public class Token extends Circle
+import java.io.Serializable;
+
+public class Token extends Circle implements Serializable
 {
 	private String type;
 	

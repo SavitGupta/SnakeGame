@@ -5,11 +5,13 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class BallToken extends Circle
+import java.io.Serializable;
+
+public class BallToken extends Circle implements Serializable
 {
 	private String value;
-	private Label a;
-	
+	private transient Label a;
+
 	public BallToken(double x, double y, String value)
 	{
 		super(x, y, 12);
@@ -20,7 +22,13 @@ public class BallToken extends Circle
 		a.setLayoutY(y - 11);
 		a.setAlignment(Pos.CENTER);
 	}
-	
+	public void deserialize(){
+		a = new Label(value);
+		System.out.println("in deserialize BallToken" + String.valueOf(this.getTranslateX()));
+		a.setLayoutX(this.getTranslateX() - 5);
+		a.setLayoutY(this.getTranslateY() - 11);
+		a.setAlignment(Pos.CENTER);
+	}
 	public Label getA()
 	{
 		return a;

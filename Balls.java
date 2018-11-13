@@ -6,7 +6,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
-public class Balls extends Circle
+import java.io.Serializable;
+
+public class Balls extends Circle implements Serializable
 {
 	public Balls(double x, double y)
 	{

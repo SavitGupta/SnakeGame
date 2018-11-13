@@ -3,7 +3,9 @@
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Wall extends Rectangle
+import java.io.Serializable;
+
+public class Wall extends Rectangle implements Serializable
 {
 	public Wall(double x, double y, double h)
 	{

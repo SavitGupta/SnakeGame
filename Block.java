@@ -7,10 +7,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-public class Block extends Rectangle
+import java.io.Serializable;
+
+public class Block extends Rectangle implements Serializable
 {
 	private int value;
-	private Label a;
+	private transient Label a;
 	private  int InitialValue;
 	public Block(double x, double y, String value, int type)
 	{

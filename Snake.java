@@ -1,14 +1,16 @@
 
 //@formatter:on
+import java.io.*;
 import java.util.ArrayList;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 
-public class Snake
+public class Snake implements Serializable
 {
 	private int size;
-	private Pane root;
+	private transient Pane root;
 	private ArrayList<Balls> l1 = new ArrayList<>();
 	private double x;
 	private double y;
@@ -31,7 +33,16 @@ public class Snake
 		System.out.println("Size2 is " + String.valueOf(l1.size()));
 		assert (size == l1.size());
 	}
-	
+	public void deserialize(Pane root){
+		this.root = root;
+		for (int i = 0; i < size; i++)
+		{
+			Balls b = new Balls(x, y);
+			root.getChildren().add(b);
+			l1.add(b);
+			y += 13;
+		}
+	}
 	public void incLenghtBy(int amt)
 	{
 		for (int i = 0; i < amt; i++)
@@ -118,4 +129,5 @@ public class Snake
 			l1.get(i).animate();
 		}
 	}
+
 }

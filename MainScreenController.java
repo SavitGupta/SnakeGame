@@ -63,7 +63,7 @@ public class MainScreenController
 	{
 		Random random = new Random();
 		int guess = random.nextInt(12);
-		if (guess < 6)
+		if (true)
 		{
 			// ((javafx.scene.Node)
 			// e.getSource()).getScene().getWindow().hide();

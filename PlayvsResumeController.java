@@ -58,7 +58,7 @@ public class PlayvsResumeController
 			try
 			{
 				((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-				Game = new Main();
+				Game = Main.deserialize();
 				Stage primaryStage = new Stage();
 				Game.start(primaryStage);
 			}

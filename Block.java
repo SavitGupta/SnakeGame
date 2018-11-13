@@ -11,13 +11,14 @@ public class Block extends Rectangle
 {
 	private int value;
 	private Label a;
-	
+	private  int InitialValue;
 	public Block(double x, double y, String value, int type)
 	{
 		super(0, 0, 60, 60);
 		this.setTranslateX(x);
 		this.setTranslateY(y);
 		this.value = Integer.parseInt(value);
+		this.InitialValue = Integer.parseInt(value);
 		Image mag;
 		if (type == 1)
 		{
@@ -49,7 +50,11 @@ public class Block extends Rectangle
 		a.setTextFill(Color.WHITE);
 		a.setStyle("-fx-font-weight: bold;");
 	}
-	
+
+	public int getInitialValue() {
+		return InitialValue;
+	}
+
 	public int getValue()
 	{
 		return value;

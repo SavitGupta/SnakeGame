@@ -53,7 +53,8 @@ public class Main extends Application
 	private boolean GameOn = true;
 	private boolean ShieldOn = false;
 	private int ShieldCheck = 0;
-	
+	private double distSinceBlock = 0;
+	ImagePattern mag1 = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
 	private Parent createContent()
 	{
 		root.setPrefSize(500, 700);
@@ -232,11 +233,12 @@ public class Main extends Application
 	public void generateContent()
 	{
 		Random random = new Random();
-		int guess = random.nextInt(81);
-		if (t > 3)
+		int guess = random.nextInt(150);
+		if (distSinceBlock > 350 && distSinceBlock + guess > 500 )
 		{
 			t = 0;
-			guess = random.nextInt(6) + 2;
+			guess = random.nextInt(7) + 1;
+			distSinceBlock = 0;
 			ArrayList<Integer> locs = new ArrayList<>();
 			if (guess < 8)
 			{
@@ -284,6 +286,7 @@ public class Main extends Application
 			}
 			last -= sum1 * 0.3;
 		}
+		guess = random.nextInt(81);
 		if (guess >= 75 + last)
 		{
 			t = 0;
@@ -369,6 +372,21 @@ public class Main extends Application
 		if (flag)
 		{
 			s.moveRight(dist);
+			return;
+		}
+		for (Block b : blocks)
+		{
+			flag |= s.intersection(b);
+			if (flag) {
+				System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
+				dist = abs(s.getx() - b.getTranslateX() - 53); // width of block - radius ( as translatex is measured form top-l
+				break;
+			}
+
+		}
+		if (flag)
+		{
+			s.moveRight(dist);
 		}
 	}
 	
@@ -386,6 +404,21 @@ public class Main extends Application
 				dist = abs(s.getx() - w.getTranslateX() + 8);
 				break;
 			}
+		}
+		if (flag)
+		{
+			s.moveLeft(dist);
+			return;
+		}
+		for (Block b : blocks)
+		{
+			flag |= s.intersection(b);
+			if (flag) {
+				System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
+				dist = abs(s.getx() + 7 - b.getTranslateX()); // 7 is radius of snake
+				break;
+			}
+
 		}
 		if (flag)
 		{
@@ -448,69 +481,70 @@ public class Main extends Application
 		{
 			if (s.intersection(w))
 			{
-				System.out.println("LOL");
-				Block hitter = w;
-				int value = hitter.getValue();
-				int value2 = hitter.getInitialValue();
-				System.out.println("Value of block " + String.valueOf(value));
-				System.out.println("Value of snake " + String.valueOf(s.getSize()));
-				if (ShieldOn == false)
-				{
-					if (s.getSize() > 0)
-					{
-						s.decLenghtBy(1);
-						if (value2 >= 5)
-						{
-							moveUp();
+
+				if(w.getTranslateY() < 390) {
+					System.out.println("location of block is " + String.valueOf(w.getTranslateY()));
+					System.out.println("LOL");
+					Block hitter = w;
+					int value = hitter.getValue();
+					int value2 = hitter.getInitialValue();
+					System.out.println("Value of block " + String.valueOf(value));
+					System.out.println("Value of snake " + String.valueOf(s.getSize()));
+					if (ShieldOn == false) {
+						if (s.getSize() > 0) {
+							s.decLenghtBy(1);
+							if (value2 > 5) {
+								moveUp();
+							}
+							score += 1;
+							scoreLabel.setText(Integer.toString(score));
+							value = value - 1;
+							hitter.getA().setText(Integer.toString(value));
+							hitter.setValue(value);
+							if (value == 0) {
+								System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
+								System.out.println("hitter is removed " + String.valueOf(hitter));
+								Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20,
+										20);
+								root.getChildren().remove(hitter);
+								root.getChildren().remove(hitter.getA());
+								blocks.remove(hitter);
+								Image mag = new Image(getClass().getResourceAsStream("exp.png"));
+								r1.setFill(new ImagePattern(mag));
+								burst.add(r1);
+								root.getChildren().add(r1);
+								ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
+								scale1.setToX(5);
+								scale1.setToY(5);
+								scale1.setOnFinished((ActionEvent event) -> {
+									burst.remove(r1);
+									root.getChildren().remove(r1);
+								});
+								scale1.play();
+							}
 						}
-						score += 1;
-						scoreLabel.setText(Integer.toString(score));
-						value = value - 1;
-						hitter.getA().setText(Integer.toString(value));
-						hitter.setValue(value);
-						if (value == 0)
-						{
-							System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
-							System.out.println("hitter is removed " + String.valueOf(hitter));
-							Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20,
-									20);
-							root.getChildren().remove(hitter);
-							root.getChildren().remove(hitter.getA());
-							blocks.remove(hitter);
-							Image mag = new Image(getClass().getResourceAsStream("exp.png"));
-							r1.setFill(new ImagePattern(mag));
-							burst.add(r1);
-							root.getChildren().add(r1);
-							ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
-							scale1.setToX(5);
-							scale1.setToY(5);
-							scale1.setOnFinished((ActionEvent event) -> {
-								burst.remove(r1);
-								root.getChildren().remove(r1);
-							});
-							scale1.play();
-						}
+					} else {
+						score += value;
+						Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
+						root.getChildren().remove(hitter);
+						root.getChildren().remove(hitter.getA());
+						blocks.remove(hitter);
+
+						r1.setFill(mag1);
+						burst.add(r1);
+						root.getChildren().add(r1);
+						ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
+						scale1.setToX(5);
+						scale1.setToY(5);
+						scale1.setOnFinished((ActionEvent event) -> {
+							burst.remove(r1);
+							root.getChildren().remove(r1);
+						});
+						scale1.play();
 					}
 				}
-				else
-				{
-					score += value;
-					Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
-					root.getChildren().remove(hitter);
-					root.getChildren().remove(hitter.getA());
-					blocks.remove(hitter);
-					Image mag = new Image(getClass().getResourceAsStream("exp.png"));
-					r1.setFill(new ImagePattern(mag));
-					burst.add(r1);
-					root.getChildren().add(r1);
-					ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
-					scale1.setToX(5);
-					scale1.setToY(5);
-					scale1.setOnFinished((ActionEvent event) -> {
-						burst.remove(r1);
-						root.getChildren().remove(r1);
-					});
-					scale1.play();
+				else{
+
 				}
 			}
 		}
@@ -703,6 +737,7 @@ public class Main extends Application
 	
 	private void update() throws ConcurrentModificationException
 	{
+		distSinceBlock += 0.5 * speedScale;
 		speedScale = max(2 * sqrt(s.getSize()) / sqrt(5), 1.5);
 		t += 0.05;
 		ColorCheck += 1;

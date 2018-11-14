@@ -114,6 +114,7 @@ public class Main extends Application implements Serializable
 				in = new ObjectInputStream(new FileInputStream("game.txt"));
 				m1 = (Main) in.readObject();
 				m1.root = new Pane();
+				m1.GameOn = true;
 				for (BallToken b : m1.balls)
 				{
 					b.deserialize();
@@ -378,7 +379,7 @@ public class Main extends Application implements Serializable
 			distSinceBlock = 0;
 			addBlocks();
 		}
-		guess = random.nextInt(81);
+		guess = random.nextInt(100);
 		if (guess >= 75 + last)
 		{
 			t = 0;
@@ -405,7 +406,7 @@ public class Main extends Application implements Serializable
 			int numoftokens = guess / 19;
 			for (int i = 0; i < numoftokens; i++)
 			{
-				guess = random.nextInt(100);
+				guess = random.nextInt(100000);
 				int guessx = random.nextInt(440) + 30;
 				int guessy = random.nextInt(30) + 60;
 				if (guess < 60)
@@ -413,7 +414,7 @@ public class Main extends Application implements Serializable
 					if (!addToken(guessx, guessy, "coin"))
 						i -= 1;
 				}
-				else if (guess < 80)
+				else if (true)
 				{
 					int guessval = (int) floor(random.nextGaussian());
 					if (!addBallToken(guessx, guessy, guessval + 3))

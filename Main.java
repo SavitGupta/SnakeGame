@@ -475,7 +475,7 @@ public class Main extends Application implements Serializable
 				{
 					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : "
 							+ String.valueOf(b.getTranslateX()));
-					dist = abs(s.getx() - b.getTranslateX() - 53); // width of
+					dist = abs(s.getx() - b.getTranslateX() - 67); // width of
 																	// block
 																	// - radius
 																	// ( as
@@ -486,6 +486,10 @@ public class Main extends Application implements Serializable
 																	// top-l
 					break;
 				}
+			}
+			if (flag)
+			{
+				break;
 			}
 		}
 		if (flag)
@@ -516,9 +520,12 @@ public class Main extends Application implements Serializable
 		}
 		for (RowOfBlocks b1 : blocks)
 		{
+			int cnt1 = 0;
 			for (Block b : b1.getBlockrow())
 			{
+				System.out.println("cnt is " + String.valueOf(cnt1));
 				flag |= s.intersection(b);
+				cnt1++;
 				if (flag)
 				{
 					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : "
@@ -529,9 +536,14 @@ public class Main extends Application implements Serializable
 					break;
 				}
 			}
+			if (flag)
+			{
+				break;
+			}
 		}
 		if (flag)
 		{
+			System.out.println("dist moved left " + String.valueOf(dist));
 			s.moveLeft(dist);
 		}
 	}

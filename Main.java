@@ -39,17 +39,19 @@ import javafx.util.Duration;
 public class Main extends Application implements Serializable
 {
 	private transient Pane root = new Pane();
+	private int gameMode = 0;
 	private transient Label scoreLabel = new Label();
 	private transient Label sizeLabel = new Label();
+	private transient Label sizeLabel2 = new Label();
 	private transient ComboBox<String> dropdown = new ComboBox<>();
 	private transient Rectangle shield;
 	private ArrayList<Wall> walls = new ArrayList<>();
 	private ArrayList<Token> tokens = new ArrayList<>();
 	private ArrayList<BallToken> balls = new ArrayList<>();
 	private ArrayList<RowOfBlocks> blocks = new ArrayList<>();
-	private ArrayList<Rectangle> burst = new ArrayList<>();
+	private transient ArrayList<Rectangle> burst = new ArrayList<>();
 	private double speedScale = 1;
-	private Snake s = new Snake(250, 450, 8, root, 0);
+	private Snake s = new Snake(250, 450, 8, root, gameMode);
 	private double last = 0;
 	private int score = 0;
 	private double t = 0;
@@ -60,7 +62,19 @@ public class Main extends Application implements Serializable
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
 	transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
-	
+
+	public void setGameMode(int gameMode) {
+		if(gameMode == 0){
+			sizeLabel.setVisible(true);
+			sizeLabel2.setVisible(false);
+		}
+		else{
+			sizeLabel2.setVisible(true);
+			sizeLabel.setVisible(false);
+		}
+		this.gameMode = gameMode;
+	}
+
 	public void serialize()
 	{
 		try
@@ -115,6 +129,7 @@ public class Main extends Application implements Serializable
 				m1 = (Main) in.readObject();
 				m1.root = new Pane();
 				m1.GameOn = true;
+				m1.burst = new ArrayList<>();
 				for (BallToken b : m1.balls)
 				{
 					b.deserialize();
@@ -144,6 +159,7 @@ public class Main extends Application implements Serializable
 				m1.scoreLabel.setText(String.valueOf(m1.score));
 				m1.dropdown = new ComboBox<>();
 				m1.s.deserialize(m1.root);
+				m1.setGameMode(m1.gameMode);
 			}
 			catch (IOException e)
 			{
@@ -173,11 +189,14 @@ public class Main extends Application implements Serializable
 		sizeLabel.setTextFill(Color.DEEPPINK);
 		sizeLabel.setStyle("-fx-font-weight: bold;");
 		root.getChildren().add(sizeLabel);
+		sizeLabel2.setTextFill(Color.DEEPPINK);
+		sizeLabel2.setStyle("-fx-font-weight: bold;");
+		root.getChildren().add(sizeLabel2);
 		HBox a = new HBox();
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(130);
+		a.setSpacing(60);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
@@ -186,6 +205,7 @@ public class Main extends Application implements Serializable
 		Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
 		shield.setFill(new ImagePattern(mag2));
 		a.getChildren().add(shield);
+		a.getChildren().add(sizeLabel2);
 		dropdown.getItems().add("Pause");
 		dropdown.getItems().add("Resume");
 		dropdown.getItems().add("Restart");
@@ -194,6 +214,8 @@ public class Main extends Application implements Serializable
 		dropdown.setOnAction(e -> getChoice(dropdown, e));
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
+		setGameMode(gameMode);
+
 		timer = new AnimationTimer()
 		{
 			@Override
@@ -240,7 +262,7 @@ public class Main extends Application implements Serializable
 	public void restart()
 	{
 		root.getChildren().clear();
-		s = new Snake(250, 450, 8, root, 0);
+		s = new Snake(250, 450, 8, root, gameMode);
 		blocks.clear();
 		walls.clear();
 		burst.clear();
@@ -258,11 +280,14 @@ public class Main extends Application implements Serializable
 		sizeLabel.setTextFill(Color.DEEPPINK);
 		sizeLabel.setStyle("-fx-font-weight: bold;");
 		root.getChildren().add(sizeLabel);
+		sizeLabel2.setTextFill(Color.DEEPPINK);
+		sizeLabel2.setStyle("-fx-font-weight: bold;");
+		root.getChildren().add(sizeLabel2);
 		HBox a = new HBox();
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(130);
+		a.setSpacing(60);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
@@ -271,6 +296,7 @@ public class Main extends Application implements Serializable
 		Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
 		shield.setFill(new ImagePattern(mag2));
 		a.getChildren().add(shield);
+		a.getChildren().add(sizeLabel2);
 		dropdown.getItems().add("Pause");
 		dropdown.getItems().add("Resume");
 		dropdown.getItems().add("Restart");
@@ -279,6 +305,7 @@ public class Main extends Application implements Serializable
 		dropdown.setOnAction(e -> getChoice(dropdown, e));
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
+		setGameMode(gameMode);
 	}
 	
 	public boolean addBallToken(double x, double y, int value)
@@ -941,7 +968,7 @@ public class Main extends Application implements Serializable
 		}
 		if (ColorCheck == 180)
 		{
-			s.animate(0);
+			s.animate(gameMode);
 			ColorCheck = 0;
 		}
 		if (ShieldCheck == 301)
@@ -962,9 +989,12 @@ public class Main extends Application implements Serializable
 		removeItems();
 		scoreLabel.setText("Score " + Integer.toString(score));
 		sizeLabel.setText(Integer.toString(s.getSize()));
+		sizeLabel2.setText("Size " + Integer.toString(s.getSize()));
+
 		if (s.getSize() < 10)
 		{
 			sizeLabel.setTranslateX(s.getx() - 4);
+
 		}
 		else
 		{

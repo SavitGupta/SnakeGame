@@ -1,12 +1,16 @@
 
 //@formatter:on
-import static java.lang.Integer.min;
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
 import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Random;
@@ -55,98 +59,111 @@ public class Main extends Application implements Serializable
 	private boolean ShieldOn = false;
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
-    transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
-
-	public void serialize() {
-
-        try {
-            ObjectOutputStream out	=	null;
-            try {
-                for(BallToken b: balls){
-                    b.prepareSerialize();
-                    System.out.println(" needs to deserialize" + String.valueOf(b.getTranslateX()) + " " + String.valueOf(b.getCenterX()));
-                }
-                for(Token t1: tokens){
-                    t1.prepareSerilize();
-                }
-
-                for(Wall w: walls){
-                    w.prepareSerialize();
-                }
-
-				for(RowOfBlocks r: blocks){
+	transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
+	
+	public void serialize()
+	{
+		try
+		{
+			ObjectOutputStream out = null;
+			try
+			{
+				for (BallToken b : balls)
+				{
+					b.prepareSerialize();
+					// System.out.println(" needs to deserialize" +
+					// String.valueOf(b.getTranslateX()) + " "
+					// + String.valueOf(b.getCenterX()));
+				}
+				for (Token t1 : tokens)
+				{
+					t1.prepareSerilize();
+				}
+				for (Wall w : walls)
+				{
+					w.prepareSerialize();
+				}
+				for (RowOfBlocks r : blocks)
+				{
 					r.prepareSerialize();
 					System.out.println("serialized");
 				}
-                s.prepareSerialize();
-                out = new ObjectOutputStream(
-                        new FileOutputStream("game.txt"));
-                out.writeObject(this);
-
-            } finally {
-                out.close();
-            }
-        }
-        catch (IOException e){
-            System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
-        }
-    }
-    public static Main deserialize() {
-        ObjectInputStream in	=	null;
-        Main m1 = null;
-        try {
-            try {
-                in = new ObjectInputStream(new FileInputStream("game.txt"));
-                m1 = (Main) in.readObject();
-                m1.root = new Pane();
-                for (BallToken b : m1.balls) {
-                    b.deserialize();
-                    m1.root.getChildren().add(b);
-
-                    m1.root.getChildren().add(b.getA());
-                }
-
-                for(Token t1: m1.tokens){
-                    t1.deserialize();
-
-                }
-
-                for(Wall w: m1.walls){
-                    w.deserialize();
-                }
-                for(RowOfBlocks r: m1.blocks){
-                	r.deserialize(m1.root);
+				s.prepareSerialize();
+				out = new ObjectOutputStream(new FileOutputStream("game.txt"));
+				out.writeObject(this);
+			}
+			finally
+			{
+				out.close();
+			}
+		}
+		catch (IOException e)
+		{
+			System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
+		}
+	}
+	
+	public static Main deserialize()
+	{
+		ObjectInputStream in = null;
+		Main m1 = null;
+		try
+		{
+			try
+			{
+				in = new ObjectInputStream(new FileInputStream("game.txt"));
+				m1 = (Main) in.readObject();
+				m1.root = new Pane();
+				for (BallToken b : m1.balls)
+				{
+					b.deserialize();
+					m1.root.getChildren().add(b);
+					m1.root.getChildren().add(b.getA());
+				}
+				for (Token t1 : m1.tokens)
+				{
+					t1.deserialize();
+				}
+				for (Wall w : m1.walls)
+				{
+					w.deserialize();
+				}
+				for (RowOfBlocks r : m1.blocks)
+				{
+					r.deserialize(m1.root);
 					System.out.println("deserialized");
 				}
-
-                m1.root.getChildren().addAll(m1.tokens);
-                m1.root.getChildren().addAll(m1.walls);
-
-                m1.sizeLabel = new Label();
-                m1.sizeLabel.setText(String.valueOf(m1.s.getSize()));
-                m1.sizeLabel.setTranslateY(m1.s.gety());
-                m1.sizeLabel.setTranslateY(m1.s.getx());
-                m1.scoreLabel = new Label();
-                m1.scoreLabel.setText(String.valueOf(m1.score));
-                m1.dropdown = new ComboBox<>();
-                m1.s.deserialize(m1.root);
-
-
-            } catch (IOException e) {
-                System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
-            } catch (ClassNotFoundException e) {
-                System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
-            } finally {
-                in.close();
-            }
-        }
-        catch (IOException e){
-            System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
-        }
-        return m1;
-    }
-
-
+				m1.root.getChildren().addAll(m1.tokens);
+				m1.root.getChildren().addAll(m1.walls);
+				m1.sizeLabel = new Label();
+				m1.sizeLabel.setText(String.valueOf(m1.s.getSize()));
+				m1.sizeLabel.setTranslateY(m1.s.gety());
+				m1.sizeLabel.setTranslateY(m1.s.getx());
+				m1.scoreLabel = new Label();
+				m1.scoreLabel.setText(String.valueOf(m1.score));
+				m1.dropdown = new ComboBox<>();
+				m1.s.deserialize(m1.root);
+			}
+			catch (IOException e)
+			{
+				System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
+			}
+			catch (ClassNotFoundException e)
+			{
+				System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
+			}
+			finally
+			{
+				in.close();
+			}
+		}
+		catch (IOException e)
+		{
+			System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
+		}
+		return m1;
+	}
+	
 	private Parent createContent()
 	{
 		explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
@@ -214,11 +231,13 @@ public class Main extends Application implements Serializable
 		}
 		else if (dropdown.getValue().equals("Exit"))
 		{
-		    serialize();
+			serialize();
 			System.exit(0);
 		}
 	}
-	public void restart(){
+	
+	public void restart()
+	{
 		root.getChildren().clear();
 		s = new Snake(250, 450, 8, root, 0);
 		blocks.clear();
@@ -260,7 +279,7 @@ public class Main extends Application implements Serializable
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
 	}
-
+	
 	public boolean addBallToken(double x, double y, int value)
 	{
 		if (value <= 0)
@@ -352,7 +371,7 @@ public class Main extends Application implements Serializable
 	{
 		Random random = new Random();
 		int guess = random.nextInt(150);
-		if (distSinceBlock > 350 && distSinceBlock + guess > 500 )
+		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
 		{
 			t = 0;
 			guess = random.nextInt(7) + 1;
@@ -665,7 +684,7 @@ public class Main extends Application implements Serializable
 				System.out.println("Value of circle " + String.valueOf(value));
 				System.out.println("Value of snake " + String.valueOf(s.getSize()));
 				s.incLenghtBy(value);
-				Rectangle r2 = new Rectangle(w.getCenterX() - 10, w.getTranslateY()-40, 10, 10);
+				Rectangle r2 = new Rectangle(w.getTranslateX() + 10, w.getTranslateY() + 20, 10, 10);
 				Image mag2 = new Image(getClass().getResourceAsStream("expcoin.png"));
 				r2.setFill(new ImagePattern(mag2));
 				burst.add(r2);
@@ -940,15 +959,14 @@ public class Main extends Application implements Serializable
 		}
 		sizeLabel.setTranslateY(420);
 	}
-
-
+	
 	@Override
 	public void start(Stage stage) throws Exception
 	{
 		createContent();
 		Scene scene = new Scene(root);
 		scene.setOnKeyPressed(e -> {
-		    switch (e.getCode())
+			switch (e.getCode())
 			{
 				case A:
 					if (GameOn == true)

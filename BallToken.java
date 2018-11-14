@@ -4,43 +4,59 @@ import java.io.Serializable;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 
-public class BallToken extends Circle implements Serializable
+public class BallToken extends Rectangle implements Serializable
 {
-	private String value;
+	private int value;
 	private transient Label a;
-	private double x,y;
-
+	private double x, y;
+	
 	public BallToken(double x, double y, String value)
 	{
-		super(x, y, 12);
-		this.value = value;
-		this.setFill(Color.YELLOW);
+		super(0, 0, 25, 25);
+		this.setTranslateX(x);
+		this.setTranslateY(y);
+		this.value = Integer.parseInt(value);
+		Image mag;
+		mag = new Image(getClass().getResourceAsStream("yellowball.png"));
+		this.setFill(new ImagePattern(mag));
 		a = new Label(value);
-		a.setLayoutX(x - 5);
-		a.setLayoutY(y - 11);
+		a.setPrefHeight(25);
+		a.setPrefWidth(25);
+		a.setTranslateX(x);
+		a.setTranslateY(y);
 		a.setAlignment(Pos.CENTER);
+		a.setTextFill(Color.BLACK);
 	}
-
-	public void prepareSerialize(){
-		x = this.getCenterX();
-		y = this.getCenterY();
-		System.out.println("in prepare Serialize " + String.valueOf(x)  + " " + String.valueOf(y));
+	
+	public void prepareSerialize()
+	{
+		x = this.getTranslateX();
+		y = this.getTranslateY();
 	}
-	public void deserialize(){
-		this.setCenterX(x);
-		this.setCenterY(y);
-		this.setRadius(12);
-		this.setFill(Color.YELLOW);
-		a = new Label(value);
-		System.out.println("in deserialize BallToken" + String.valueOf(this.x) + " " + String.valueOf(y));
-		a.setLayoutX(x - 5);
-		a.setLayoutY(y - 11);
+	
+	public void deserialize()
+	{
+		this.setTranslateX(x);
+		this.setTranslateY(y);
+		this.setWidth(25);
+		this.setHeight(25);
+		Image mag;
+		mag = new Image(getClass().getResourceAsStream("yellowball.png"));
+		this.setFill(new ImagePattern(mag));
+		a = new Label(String.valueOf(value));
+		a.setPrefHeight(25);
+		a.setPrefWidth(25);
+		a.setTranslateX(x);
+		a.setTranslateY(y);
 		a.setAlignment(Pos.CENTER);
+		a.setTextFill(Color.BLACK);
 	}
-
+	
 	public Label getA()
 	{
 		return a;
@@ -48,6 +64,6 @@ public class BallToken extends Circle implements Serializable
 	
 	public String getValue()
 	{
-		return value;
+		return String.valueOf(value);
 	}
 }

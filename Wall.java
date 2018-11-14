@@ -1,9 +1,9 @@
 
 //@formatter:on
+import java.io.Serializable;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-import java.io.Serializable;
 
 public class Wall extends Rectangle implements Serializable
 {

@@ -1,16 +1,11 @@
 
 //@formatter:on
+import static java.lang.Integer.min;
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
 import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Random;
@@ -36,100 +31,30 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-public class Main extends Application implements Serializable
+public class MainBlind extends Application
 {
-	private transient Pane root = new Pane();
-	private transient Label scoreLabel = new Label();
-	private transient Label sizeLabel = new Label();
-	private transient ComboBox<String> dropdown = new ComboBox<>();
+	private Pane root = new Pane();
+	private Label scoreLabel = new Label();
+	private Label sizeLabel = new Label();
+	private ComboBox<String> dropdown = new ComboBox<>();
 	private Rectangle shield;
 	private ArrayList<Wall> walls = new ArrayList<>();
 	private ArrayList<Token> tokens = new ArrayList<>();
 	private ArrayList<BallToken> balls = new ArrayList<>();
-	private ArrayList<RowOfBlocks> blocks = new ArrayList<>();
+	private ArrayList<Block> blocks = new ArrayList<>();
 	private ArrayList<Rectangle> burst = new ArrayList<>();
 	private double speedScale = 1;
-	private Snake s = new Snake(250, 450, 8, root, 0);
+	private Snake s = new Snake(250, 450, 8, root, 1);
 	private double last = 0;
 	private int score = 0;
 	private double t = 0;
-	private transient AnimationTimer timer;
+	private AnimationTimer timer;
 	private int ColorCheck = 0;
 	private boolean GameOn = true;
 	private boolean ShieldOn = false;
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
-	transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
-	
-	public void serialize()
-	{
-		try
-		{
-			ObjectOutputStream out = null;
-			try
-			{
-				for (BallToken b : balls)
-				{
-					System.out.println(" needs to deserialize" + String.valueOf(b.getTranslateX()) + " "
-							+ String.valueOf(b.getCenterX()));
-				}
-				out = new ObjectOutputStream(new FileOutputStream("game.txt"));
-				out.writeObject(this);
-			}
-			finally
-			{
-				out.close();
-			}
-		}
-		catch (IOException e)
-		{
-			System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
-		}
-	}
-	
-	public static Main deserialize()
-	{
-		ObjectInputStream in = null;
-		Main m1 = null;
-		try
-		{
-			try
-			{
-				in = new ObjectInputStream(new FileInputStream("game.txt"));
-				m1 = (Main) in.readObject();
-				for (BallToken b : m1.balls)
-				{
-					b.deserialize();
-					System.out.println(" trying to desrialize balls " + String.valueOf(b.getCenterX()));
-				}
-				m1.root = new Pane();
-				m1.root.getChildren().addAll(m1.balls);
-				m1.sizeLabel = new Label();
-				m1.sizeLabel.setText(String.valueOf(m1.s.getSize()));
-				m1.scoreLabel = new Label();
-				m1.scoreLabel.setText(String.valueOf(m1.score));
-				m1.dropdown = new ComboBox<>();
-				m1.s.deserialize(m1.root);
-			}
-			catch (IOException e)
-			{
-				System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
-			}
-			catch (ClassNotFoundException e)
-			{
-				System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
-			}
-			finally
-			{
-				in.close();
-			}
-		}
-		catch (IOException e)
-		{
-			System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
-		}
-		return m1;
-	}
+	ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
 	
 	private Parent createContent()
 	{
@@ -142,11 +67,12 @@ public class Main extends Application implements Serializable
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(130);
+		a.setSpacing(60);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
 		a.getChildren().add(scoreLabel);
+		a.getChildren().add(sizeLabel);
 		shield = new Rectangle(20, 20);
 		Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
 		shield.setFill(new ImagePattern(mag2));
@@ -197,7 +123,6 @@ public class Main extends Application implements Serializable
 		}
 		else if (dropdown.getValue().equals("Exit"))
 		{
-			serialize();
 			System.exit(0);
 		}
 	}
@@ -205,7 +130,7 @@ public class Main extends Application implements Serializable
 	public void restart()
 	{
 		root.getChildren().clear();
-		s = new Snake(250, 450, 8, root, 0);
+		s = new Snake(250, 450, 8, root, 1);
 		blocks.clear();
 		walls.clear();
 		burst.clear();
@@ -227,15 +152,11 @@ public class Main extends Application implements Serializable
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(130);
+		a.setSpacing(60);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
 		a.getChildren().add(scoreLabel);
-		shield = new Rectangle(20, 20);
-		Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
-		shield.setFill(new ImagePattern(mag2));
-		a.getChildren().add(shield);
 		dropdown.getItems().add("Pause");
 		dropdown.getItems().add("Resume");
 		dropdown.getItems().add("Restart");
@@ -315,10 +236,32 @@ public class Main extends Application implements Serializable
 		return true;
 	}
 	
-	public void addBlocks()
+	public void addBlocks(ArrayList<Integer> locs, ArrayList<Integer> vals)
 	{
-		RowOfBlocks rBlocks = new RowOfBlocks(s.getSize(), root);
-		blocks.add(rBlocks);
+		for (int i = 0; i < locs.size(); i++)
+		{
+			int loc = locs.get(i);
+			int val = vals.get(i);
+			Block b1;
+			if (val <= s.getSize() / 3)
+			{
+				b1 = new Block(loc * 500 / 8, 45, String.valueOf(val), 1);
+			}
+			else if (val > s.getSize() / 3 && val <= (s.getSize() - s.getSize() / 3))
+			{
+				b1 = new Block(loc * 500 / 8, 45, String.valueOf(val), 2);
+			}
+			else if (val > s.getSize())
+			{
+				b1 = new Block(loc * 500 / 8, 45, String.valueOf(val), 4);
+			}
+			else
+			{
+				b1 = new Block(loc * 500 / 8, 45, String.valueOf(val), 3);
+			}
+			root.getChildren().addAll(b1, b1.getA());
+			blocks.add(b1);
+		}
 	}
 	
 	public boolean addWall(int x, double y, double height)
@@ -333,129 +276,6 @@ public class Main extends Application implements Serializable
 		return true;
 	}
 	
-	// public void generateContent()
-	// {
-	// Random random = new Random();
-	// int guess = random.nextInt(150);
-	// if (distSinceBlock > 350 && distSinceBlock + guess > 500)
-	// {
-	// t = 0;
-	// guess = random.nextInt(7) + 1;
-	// distSinceBlock = 0;
-	// ArrayList<Integer> locs = new ArrayList<>();
-	// if (guess < 8)
-	// {
-	// for (int i = 0; i < guess; i++)
-	// {
-	// int num = random.nextInt(8);
-	// if (locs.contains(num))
-	// {
-	// i -= 1;
-	// }
-	// else
-	// {
-	// locs.add(num);
-	// }
-	// }
-	// }
-	// else
-	// {
-	// locs.clear();
-	// for (int i = 1; i <= 8; i++)
-	// {
-	// locs.add(i);
-	// }
-	// }
-	// int min1 = 100000;
-	// int sum1 = 0;
-	// ArrayList<Integer> vals = new ArrayList<>();
-	// for (int i = 0; i < guess; i++)
-	// {
-	// int num = (int) (random.nextInt(s.getSize() + s.getSize() / 3)) + 1;
-	// if (num <= 0)
-	// {
-	// i -= 1;
-	// continue;
-	// }
-	// min1 = min(min1, num);
-	// sum1 += num;
-	// vals.add(num);
-	// }
-	// addBlocks(locs, vals);
-	// if (min1 >= s.getSize())
-	// {
-	// vals.remove(0);
-	// vals.add(s.getSize() - 1);
-	// }
-	// last -= sum1 * 0.3;
-	// }
-	// guess = random.nextInt(81);
-	// if (guess >= 75 + last)
-	// {
-	// t = 0;
-	// last = 0;
-	// guess = random.nextInt(82);
-	// int numofwalls = guess / 40;
-	// int cnt = 0;
-	// for (int i = 0; i < numofwalls; i++)
-	// {
-	// int guessx = random.nextInt(6) + 1;
-	// cnt++;
-	// int guessHeight = random.nextInt(50) + 40;
-	// if (!addWall(guessx, 60, guessHeight))
-	// {
-	// i -= 1;
-	// }
-	// if (cnt > 15)
-	// {
-	// break;
-	// }
-	// }
-	// // last -= numofwalls*0.01;
-	// guess = random.nextInt(40);
-	// int numoftokens = guess / 19;
-	// for (int i = 0; i < numoftokens; i++)
-	// {
-	// guess = random.nextInt(100);
-	// int guessx = random.nextInt(440) + 30;
-	// int guessy = random.nextInt(30) + 60;
-	// if (guess < 60)
-	// {
-	// if (!addToken(guessx, guessy, "coin"))
-	// i -= 1;
-	// }
-	// else if (guess < 80)
-	// {
-	// int guessval = (int) floor(random.nextGaussian());
-	// if (!addBallToken(guessx, guessy, guessval + 3))
-	// i -= 1;
-	// else
-	// last += 0.1 * guessval;
-	// }
-	// else if (guess < 87)
-	// {
-	// if (!addToken(guessx, guessy, "magnet"))
-	// i -= 1;
-	// else
-	// last += 0.2;
-	// }
-	// else if (guess < 94)
-	// {
-	// if (!addToken(guessx, guessy, "brickbuster"))
-	// i -= 1;
-	// else
-	// last += 1;
-	// }
-	// else
-	// {
-	// if (!addToken(guessx, guessy, "shield"))
-	// i -= 1;
-	// else
-	// last += 1;
-	// }
-	// }
-	// }
-	// }
 	public void generateContent()
 	{
 		Random random = new Random();
@@ -463,8 +283,54 @@ public class Main extends Application implements Serializable
 		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
 		{
 			t = 0;
+			guess = random.nextInt(7) + 1;
 			distSinceBlock = 0;
-			addBlocks();
+			ArrayList<Integer> locs = new ArrayList<>();
+			if (guess < 8)
+			{
+				for (int i = 0; i < guess; i++)
+				{
+					int num = random.nextInt(8);
+					if (locs.contains(num))
+					{
+						i -= 1;
+					}
+					else
+					{
+						locs.add(num);
+					}
+				}
+			}
+			else
+			{
+				locs.clear();
+				for (int i = 1; i <= 8; i++)
+				{
+					locs.add(i);
+				}
+			}
+			int min1 = 100000;
+			int sum1 = 0;
+			ArrayList<Integer> vals = new ArrayList<>();
+			for (int i = 0; i < guess; i++)
+			{
+				int num = (int) (random.nextInt(s.getSize() + s.getSize() / 3)) + 1;
+				if (num <= 0)
+				{
+					i -= 1;
+					continue;
+				}
+				min1 = min(min1, num);
+				sum1 += num;
+				vals.add(num);
+			}
+			addBlocks(locs, vals);
+			if (min1 >= s.getSize())
+			{
+				vals.remove(0);
+				vals.add(s.getSize() - 1);
+			}
+			last -= sum1 * 0.3;
 		}
 		guess = random.nextInt(81);
 		if (guess >= 75 + last)
@@ -554,26 +420,19 @@ public class Main extends Application implements Serializable
 			s.moveRight(dist);
 			return;
 		}
-		for (RowOfBlocks b1 : blocks)
+		for (Block b : blocks)
 		{
-			for (Block b : b1.getBlockrow())
+			flag |= s.intersection(b);
+			if (flag)
 			{
-				flag |= s.intersection(b);
-				if (flag)
-				{
-					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : "
-							+ String.valueOf(b.getTranslateX()));
-					dist = abs(s.getx() - b.getTranslateX() - 53); // width of
-																	// block
-																	// - radius
-																	// ( as
-																	// translatex
-																	// is
-																	// measured
-																	// form
-																	// top-l
-					break;
-				}
+				System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : "
+						+ String.valueOf(b.getTranslateX()));
+				dist = abs(s.getx() - b.getTranslateX() - 53); // width of block
+																// - radius ( as
+																// translatex is
+																// measured form
+																// top-l
+				break;
 			}
 		}
 		if (flag)
@@ -602,20 +461,16 @@ public class Main extends Application implements Serializable
 			s.moveLeft(dist);
 			return;
 		}
-		for (RowOfBlocks b1 : blocks)
+		for (Block b : blocks)
 		{
-			for (Block b : b1.getBlockrow())
+			flag |= s.intersection(b);
+			if (flag)
 			{
-				flag |= s.intersection(b);
-				if (flag)
-				{
-					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : "
-							+ String.valueOf(b.getTranslateX()));
-					dist = abs(s.getx() + 7 - b.getTranslateX()); // 7 is radius
-																	// of
-																	// snake
-					break;
-				}
+				System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : "
+						+ String.valueOf(b.getTranslateX()));
+				dist = abs(s.getx() + 7 - b.getTranslateX()); // 7 is radius of
+																// snake
+				break;
 			}
 		}
 		if (flag)
@@ -639,12 +494,9 @@ public class Main extends Application implements Serializable
 		{
 			flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
 		}
-		for (RowOfBlocks b2 : blocks)
+		for (Block b1 : blocks)
 		{
-			for (Block b1 : b2.getBlockrow())
-			{
-				flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
-			}
+			flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
 		}
 		if (flag)
 		{
@@ -678,79 +530,79 @@ public class Main extends Application implements Serializable
 	
 	public void deflectFromBlocks()
 	{
-		for (RowOfBlocks w1 : blocks)
+		for (Block w : blocks)
 		{
-			for (Block w : w1.getBlockrow())
+			if (s.intersection(w))
 			{
-				if (s.intersection(w))
+				if (w.getTranslateY() < 390)
 				{
-					if (w.getTranslateY() < 390)
+					System.out.println("location of block is " + String.valueOf(w.getTranslateY()));
+					System.out.println("LOL");
+					Block hitter = w;
+					int value = hitter.getValue();
+					int value2 = hitter.getInitialValue();
+					System.out.println("Value of block " + String.valueOf(value));
+					System.out.println("Value of snake " + String.valueOf(s.getSize()));
+					if (ShieldOn == false)
 					{
-						System.out.println("location of block is " + String.valueOf(w.getTranslateY()));
-						Block hitter = w;
-						int value = hitter.getValue();
-						int value2 = hitter.getInitialValue();
-						System.out.println("Value of block " + String.valueOf(value));
-						System.out.println("Value of snake " + String.valueOf(s.getSize()));
-						if (ShieldOn == false)
+						if (s.getSize() > 0)
 						{
-							if (s.getSize() > 0)
+							s.decLenghtBy(1);
+							if (value2 > 5)
 							{
-								s.decLenghtBy(1);
-								if (value2 > 5)
-								{
-									moveUp();
-								}
-								score += 1;
-								scoreLabel.setText(Integer.toString(score));
-								value = value - 1;
-								hitter.getA().setText(Integer.toString(value));
-								hitter.setValue(value);
-								if (value == 0)
-								{
-									System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
-									System.out.println("hitter is removed " + String.valueOf(hitter));
-									Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15,
-											hitter.getTranslateY() + 30, 20, 20);
-									root.getChildren().remove(hitter);
-									root.getChildren().remove(hitter.getA());
-									w1.getBlockrow().remove(hitter);
-									Image mag = new Image(getClass().getResourceAsStream("exp.png"));
-									r1.setFill(new ImagePattern(mag));
-									burst.add(r1);
-									root.getChildren().add(r1);
-									ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
-									scale1.setToX(5);
-									scale1.setToY(5);
-									scale1.setOnFinished((ActionEvent event) -> {
-										burst.remove(r1);
-										root.getChildren().remove(r1);
-									});
-									scale1.play();
-								}
+								moveUp();
+							}
+							score += 1;
+							scoreLabel.setText(Integer.toString(score));
+							value = value - 1;
+							hitter.getA().setText(Integer.toString(value));
+							hitter.setValue(value);
+							if (value == 0)
+							{
+								System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
+								System.out.println("hitter is removed " + String.valueOf(hitter));
+								Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30,
+										20, 20);
+								root.getChildren().remove(hitter);
+								root.getChildren().remove(hitter.getA());
+								blocks.remove(hitter);
+								Image mag = new Image(getClass().getResourceAsStream("exp.png"));
+								r1.setFill(new ImagePattern(mag));
+								burst.add(r1);
+								root.getChildren().add(r1);
+								ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
+								scale1.setToX(5);
+								scale1.setToY(5);
+								scale1.setOnFinished((ActionEvent event) -> {
+									burst.remove(r1);
+									root.getChildren().remove(r1);
+								});
+								scale1.play();
 							}
 						}
-						else
-						{
-							score += value;
-							Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20,
-									20);
-							root.getChildren().remove(hitter);
-							root.getChildren().remove(hitter.getA());
-							w1.getBlockrow().remove(hitter);
-							r1.setFill(explosionImage);
-							burst.add(r1);
-							root.getChildren().add(r1);
-							ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
-							scale1.setToX(5);
-							scale1.setToY(5);
-							scale1.setOnFinished((ActionEvent event) -> {
-								burst.remove(r1);
-								root.getChildren().remove(r1);
-							});
-							scale1.play();
-						}
 					}
+					else
+					{
+						score += value;
+						Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
+						root.getChildren().remove(hitter);
+						root.getChildren().remove(hitter.getA());
+						blocks.remove(hitter);
+						r1.setFill(explosionImage);
+						burst.add(r1);
+						root.getChildren().add(r1);
+						ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
+						scale1.setToX(5);
+						scale1.setToY(5);
+						scale1.setOnFinished((ActionEvent event) -> {
+							burst.remove(r1);
+							root.getChildren().remove(r1);
+						});
+						scale1.play();
+					}
+				}
+				else
+				{
 				}
 			}
 		}
@@ -845,35 +697,29 @@ public class Main extends Application implements Serializable
 					int j = 0;
 					while (blocks.size() > 0)
 					{
-						int m = 0;
-						while (blocks.get(j).getBlockrow().size() > 0)
-						{
-							score += blocks.get(j).getBlockrow().get(m).getValue();
-							Rectangle r1 = new Rectangle(blocks.get(j).getBlockrow().get(m).getTranslateX() + 15,
-									blocks.get(j).getBlockrow().get(m).getTranslateY() + 30, 20, 20);
-							root.getChildren().remove(blocks.get(j).getBlockrow().get(m));
-							root.getChildren().remove(blocks.get(j).getBlockrow().get(m).getA());
-							blocks.get(j).getBlockrow().remove(blocks.get(j).getBlockrow().get(m));
-							r1.setFill(explosionImage);
-							burst.add(r1);
-							root.getChildren().add(r1);
-							ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
-							scale1.setToX(5);
-							scale1.setToY(5);
-							scale1.setOnFinished((ActionEvent event) -> {
-								burst.remove(r1);
-								root.getChildren().remove(r1);
-							});
-							scale1.play();
-						}
+						score += blocks.get(j).getValue();
+						Rectangle r1 = new Rectangle(blocks.get(j).getTranslateX() + 15,
+								blocks.get(j).getTranslateY() + 30, 20, 20);
+						root.getChildren().remove(blocks.get(j));
+						root.getChildren().remove(blocks.get(j).getA());
 						blocks.remove(blocks.get(j));
+						r1.setFill(explosionImage);
+						burst.add(r1);
+						root.getChildren().add(r1);
+						ScaleTransition scale1 = new ScaleTransition(Duration.seconds(1), r1);
+						scale1.setToX(5);
+						scale1.setToY(5);
+						scale1.setOnFinished((ActionEvent event) -> {
+							burst.remove(r1);
+							root.getChildren().remove(r1);
+						});
+						scale1.play();
 					}
 					root.getChildren().remove(t1);
 					tokens.remove(t1);
 				}
 				else if (t1.getType().equals("Shield"))
 				{
-					ShieldCheck = 0;
 					Rectangle r2 = new Rectangle(t1.getTranslateX(), t1.getTranslateY(), 10, 10);
 					Image mag2 = new Image(getClass().getResourceAsStream("expshield.png"));
 					r2.setFill(new ImagePattern(mag2));
@@ -903,25 +749,42 @@ public class Main extends Application implements Serializable
 		{
 			Wall w = walls.get(i);
 			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
+			if (w.getTranslateY() > 800)
+			{
+				root.getChildren().remove(w);
+				walls.remove(w);
+			}
 		}
 		for (int i = 0; i < balls.size(); i++)
 		{
 			BallToken w = balls.get(i);
 			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
 			w.getA().setTranslateY(w.getTranslateY() - 3 * speedScale);
+			if (w.getTranslateY() > 800)
+			{
+				root.getChildren().remove(w);
+				balls.remove(w);
+			}
 		}
 		for (int i = 0; i < tokens.size(); i++)
 		{
 			Token t1 = tokens.get(i);
 			t1.moveDown(-(3 * speedScale));
+			if (t1.getTranslateY() > 800)
+			{
+				root.getChildren().remove(t1);
+				tokens.remove(t1);
+			}
 		}
 		for (int i = 0; i < blocks.size(); i++)
 		{
-			for (int j = 0; j < blocks.get(i).getBlockrow().size(); j++)
+			Block w = blocks.get(i);
+			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
+			w.getA().setTranslateY(w.getTranslateY() - 3 * speedScale);
+			if (w.getTranslateY() > 800)
 			{
-				Block w = blocks.get(i).getBlockrow().get(j);
-				w.setTranslateY(w.getTranslateY() - 3 * speedScale);
-				w.getA().setTranslateY(w.getTranslateY() - 3 * speedScale);
+				root.getChildren().remove(w);
+				blocks.remove(w);
 			}
 		}
 	}
@@ -961,30 +824,14 @@ public class Main extends Application implements Serializable
 		}
 		for (int i = 0; i < blocks.size(); i++)
 		{
-			for (int j = 0; j < blocks.get(i).getBlockrow().size(); j++)
-			{
-				Block w = blocks.get(i).getBlockrow().get(j);
-				w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-				w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-				if (w.getTranslateY() > 750)
-				{
-					root.getChildren().remove(w);
-					blocks.get(i).getBlockrow().remove(w);
-				}
-			}
-			if (blocks.get(i).getBlockrow().size() == 0)
-			{
-				blocks.remove(i);
-			}
-		}
-		for (int i = 0; i < burst.size(); i++)
-		{
-			Rectangle w = burst.get(i);
+			Block w = blocks.get(i);
 			w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+			w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
 			if (w.getTranslateY() > 750)
 			{
 				root.getChildren().remove(w);
-				burst.remove(w);
+				root.getChildren().remove(w.getA());
+				blocks.remove(w);
 			}
 		}
 	}
@@ -992,7 +839,7 @@ public class Main extends Application implements Serializable
 	private void update() throws ConcurrentModificationException
 	{
 		distSinceBlock += 0.5 * speedScale;
-		speedScale = max(2 * sqrt(s.getSize()) / sqrt(4), 2);
+		speedScale = max(2 * sqrt(s.getSize()) / sqrt(3), 2.5);
 		t += 0.05;
 		ColorCheck += 1;
 		if (ShieldOn == true)
@@ -1001,7 +848,7 @@ public class Main extends Application implements Serializable
 		}
 		if (ColorCheck == 180)
 		{
-			s.animate(0);
+			s.animate(1);
 			ColorCheck = 0;
 		}
 		if (ShieldCheck == 301)
@@ -1011,7 +858,7 @@ public class Main extends Application implements Serializable
 			Image mag = new Image(getClass().getResourceAsStream("shieldoff.png"));
 			shield.setFill(new ImagePattern(mag));
 		}
-		if (t > 2)
+		if (t > 1.5)
 		{
 			generateContent();
 		}
@@ -1021,16 +868,7 @@ public class Main extends Application implements Serializable
 		deflectFromBalls();
 		removeItems();
 		scoreLabel.setText("Score " + Integer.toString(score));
-		sizeLabel.setText(Integer.toString(s.getSize()));
-		if (s.getSize() < 10)
-		{
-			sizeLabel.setTranslateX(s.getx() - 4);
-		}
-		else
-		{
-			sizeLabel.setTranslateX(s.getx() - 8);
-		}
-		sizeLabel.setTranslateY(420);
+		sizeLabel.setText("Size " + Integer.toString(s.getSize()));
 	}
 	
 	@Override

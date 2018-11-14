@@ -1,8 +1,8 @@
 
 //@formatter:on
-import javafx.scene.shape.Circle;
-
 import java.io.Serializable;
+
+import javafx.scene.shape.Circle;
 
 public class Token extends Circle implements Serializable
 {

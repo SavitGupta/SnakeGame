@@ -1,5 +1,7 @@
 
 //@formatter:on
+import java.io.Serializable;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -7,13 +9,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-import java.io.Serializable;
-
 public class Block extends Rectangle implements Serializable
 {
 	private int value;
 	private transient Label a;
-	private  int InitialValue;
+	private int InitialValue;
+	
 	public Block(double x, double y, String value, int type)
 	{
 		super(0, 0, 60, 60);
@@ -52,11 +53,12 @@ public class Block extends Rectangle implements Serializable
 		a.setTextFill(Color.WHITE);
 		a.setStyle("-fx-font-weight: bold;");
 	}
-
-	public int getInitialValue() {
+	
+	public int getInitialValue()
+	{
 		return InitialValue;
 	}
-
+	
 	public int getValue()
 	{
 		return value;

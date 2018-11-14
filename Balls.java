@@ -1,5 +1,7 @@
 
 //@formatter:on
+import java.io.Serializable;
+
 import javafx.animation.Animation;
 import javafx.animation.FillTransition;
 import javafx.scene.paint.Color;

@@ -1,16 +1,17 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.layout.Pane;
 
 //@formatter:on
-public class RowOfBlocks
+public class RowOfBlocks implements Serializable
 {
 	private ArrayList<Block> blockrow;
 	private ArrayList<Integer> values;
 	private ArrayList<Boolean> pos;
-	private Pane root;
-	
+	private transient Pane root;
+	double y;
 	public RowOfBlocks(int size, Pane root)
 	{
 		this.values = new ArrayList<Integer>();
@@ -79,7 +80,26 @@ public class RowOfBlocks
 			}
 		}
 	}
-	
+
+	public void prepareSerialize(){
+		for(int i = 0;i<blockrow.size(); i++){
+			blockrow.get(i).prepareSerialize();
+		}
+	}
+
+
+	public void deserialize(Pane root){
+		this.root = root;
+		System.out.println(" the size of blockrow is " + String.valueOf(blockrow.size()));
+		for(int i = 0;i<blockrow.size(); i++){
+			blockrow.get(i).deserialize();
+			root.getChildren().addAll(blockrow.get(i),blockrow.get(i).getA());
+		}
+
+
+	}
+
+
 	public ArrayList<Block> getBlockrow()
 	{
 		return blockrow;

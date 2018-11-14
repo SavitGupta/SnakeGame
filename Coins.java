@@ -7,7 +7,7 @@ public class Coins extends Token
 {
 	public Coins(double x, double y)
 	{
-		super(x, y, "Coin");
+		super(x, y, "Coin","coin.png");
 		Image mag = new Image(getClass().getResourceAsStream("coin.png"));
 		this.setFill(new ImagePattern(mag));
 	}

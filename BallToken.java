@@ -11,7 +11,8 @@ public class BallToken extends Circle implements Serializable
 {
 	private String value;
 	private transient Label a;
-	
+	private double x,y;
+
 	public BallToken(double x, double y, String value)
 	{
 		super(x, y, 12);
@@ -22,16 +23,24 @@ public class BallToken extends Circle implements Serializable
 		a.setLayoutY(y - 11);
 		a.setAlignment(Pos.CENTER);
 	}
-	
-	public void deserialize()
-	{
+
+	public void prepareSerialize(){
+		x = this.getCenterX();
+		y = this.getCenterY();
+		System.out.println("in prepare Serialize " + String.valueOf(x)  + " " + String.valueOf(y));
+	}
+	public void deserialize(){
+		this.setCenterX(x);
+		this.setCenterY(y);
+		this.setRadius(12);
+		this.setFill(Color.YELLOW);
 		a = new Label(value);
-		System.out.println("in deserialize BallToken" + String.valueOf(this.getTranslateX()));
-		a.setLayoutX(this.getTranslateX() - 5);
-		a.setLayoutY(this.getTranslateY() - 11);
+		System.out.println("in deserialize BallToken" + String.valueOf(this.x) + " " + String.valueOf(y));
+		a.setLayoutX(x - 5);
+		a.setLayoutY(y - 11);
 		a.setAlignment(Pos.CENTER);
 	}
-	
+
 	public Label getA()
 	{
 		return a;

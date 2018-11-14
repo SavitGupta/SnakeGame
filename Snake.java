@@ -1,6 +1,6 @@
 
 //@formatter:on
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 
 import javafx.scene.Node;
@@ -9,13 +9,13 @@ import javafx.scene.layout.Pane;
 public class Snake implements Serializable
 {
 	private int size;
-	private Pane root;
+	private transient Pane root;
 	private ArrayList<Balls> l1 = new ArrayList<>();
 	private double x;
 	private double y;
 	private int type;
-	
-	public Snake(double x, double y, int size, Pane root, int j)
+
+	public Snake(double x, double y, int size, Pane root,int j)
 	{
 		this.x = x;
 		this.y = y;
@@ -34,19 +34,19 @@ public class Snake implements Serializable
 		System.out.println("Size2 is " + String.valueOf(l1.size()));
 		assert (size == l1.size());
 	}
-	
-	public void deserialize(Pane root)
-	{
+	public void deserialize(Pane root){
 		this.root = root;
+		l1.clear();
+		double tempy = y;
 		for (int i = 0; i < size; i++)
 		{
-			Balls b = new Balls(x, y, type);
+			Balls b = new Balls(x, tempy, type);
 			root.getChildren().add(b);
 			l1.add(b);
-			y += 13;
+			tempy += 13;
 		}
 	}
-	
+
 	public void incLenghtBy(int amt)
 	{
 		for (int i = 0; i < amt; i++)
@@ -69,7 +69,13 @@ public class Snake implements Serializable
 		}
 		assert (size == l1.size());
 	}
-	
+
+	public void prepareSerialize(){
+		x = l1.get(size -1).getTranslateX();
+
+	}
+
+
 	public void moveLeft(double amt)
 	{
 		System.out.println(l1.size());
@@ -83,6 +89,7 @@ public class Snake implements Serializable
 	{
 		if (l1.size() == 0)
 		{
+			System.out.println("Snake size is zero");
 			return false;
 		}
 		return l1.get(0).getBoundsInParent().intersects(other.getBoundsInParent());

@@ -1,16 +1,12 @@
 
 //@formatter:on
+import static java.lang.Integer.min;
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
 import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Random;
@@ -42,7 +38,7 @@ public class Main extends Application implements Serializable
 	private transient Label scoreLabel = new Label();
 	private transient Label sizeLabel = new Label();
 	private transient ComboBox<String> dropdown = new ComboBox<>();
-	private Rectangle shield;
+	private transient Rectangle shield;
 	private ArrayList<Wall> walls = new ArrayList<>();
 	private ArrayList<Token> tokens = new ArrayList<>();
 	private ArrayList<BallToken> balls = new ArrayList<>();
@@ -59,80 +55,101 @@ public class Main extends Application implements Serializable
 	private boolean ShieldOn = false;
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
-	transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
-	
-	public void serialize()
-	{
-		try
-		{
-			ObjectOutputStream out = null;
-			try
-			{
-				for (BallToken b : balls)
-				{
-					System.out.println(" needs to deserialize" + String.valueOf(b.getTranslateX()) + " "
-							+ String.valueOf(b.getCenterX()));
+    transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
+
+	public void serialize() {
+
+        try {
+            ObjectOutputStream out	=	null;
+            try {
+                for(BallToken b: balls){
+                    b.prepareSerialize();
+                    System.out.println(" needs to deserialize" + String.valueOf(b.getTranslateX()) + " " + String.valueOf(b.getCenterX()));
+                }
+                for(Token t1: tokens){
+                    t1.prepareSerilize();
+                }
+
+                for(Wall w: walls){
+                    w.prepareSerialize();
+                }
+
+				for(RowOfBlocks r: blocks){
+					r.prepareSerialize();
+					System.out.println("serialized");
 				}
-				out = new ObjectOutputStream(new FileOutputStream("game.txt"));
-				out.writeObject(this);
-			}
-			finally
-			{
-				out.close();
-			}
-		}
-		catch (IOException e)
-		{
-			System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
-		}
-	}
-	
-	public static Main deserialize()
-	{
-		ObjectInputStream in = null;
-		Main m1 = null;
-		try
-		{
-			try
-			{
-				in = new ObjectInputStream(new FileInputStream("game.txt"));
-				m1 = (Main) in.readObject();
-				for (BallToken b : m1.balls)
-				{
-					b.deserialize();
-					System.out.println(" trying to desrialize balls " + String.valueOf(b.getCenterX()));
+                s.prepareSerialize();
+                out = new ObjectOutputStream(
+                        new FileOutputStream("game.txt"));
+                out.writeObject(this);
+
+            } finally {
+                out.close();
+            }
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
+        }
+    }
+    public static Main deserialize() {
+        ObjectInputStream in	=	null;
+        Main m1 = null;
+        try {
+            try {
+                in = new ObjectInputStream(new FileInputStream("game.txt"));
+                m1 = (Main) in.readObject();
+                m1.root = new Pane();
+                for (BallToken b : m1.balls) {
+                    b.deserialize();
+                    m1.root.getChildren().add(b);
+
+                    m1.root.getChildren().add(b.getA());
+                }
+
+                for(Token t1: m1.tokens){
+                    t1.deserialize();
+
+                }
+
+                for(Wall w: m1.walls){
+                    w.deserialize();
+                }
+                for(RowOfBlocks r: m1.blocks){
+                	r.deserialize(m1.root);
+					System.out.println("deserialized");
 				}
-				m1.root = new Pane();
-				m1.root.getChildren().addAll(m1.balls);
-				m1.sizeLabel = new Label();
-				m1.sizeLabel.setText(String.valueOf(m1.s.getSize()));
-				m1.scoreLabel = new Label();
-				m1.scoreLabel.setText(String.valueOf(m1.score));
-				m1.dropdown = new ComboBox<>();
-				m1.s.deserialize(m1.root);
-			}
-			catch (IOException e)
-			{
-				System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
-			}
-			catch (ClassNotFoundException e)
-			{
-				System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
-			}
-			finally
-			{
-				in.close();
-			}
-		}
-		catch (IOException e)
-		{
-			System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
-		}
-		return m1;
-	}
-	
+
+                m1.root.getChildren().addAll(m1.tokens);
+                m1.root.getChildren().addAll(m1.walls);
+
+                m1.sizeLabel = new Label();
+                m1.sizeLabel.setText(String.valueOf(m1.s.getSize()));
+                m1.sizeLabel.setTranslateY(m1.s.gety());
+                m1.sizeLabel.setTranslateY(m1.s.getx());
+                m1.scoreLabel = new Label();
+                m1.scoreLabel.setText(String.valueOf(m1.score));
+                m1.dropdown = new ComboBox<>();
+                m1.s.deserialize(m1.root);
+
+
+            } catch (IOException e) {
+                System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
+            } catch (ClassNotFoundException e) {
+                System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
+            } finally {
+                in.close();
+            }
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
+        }
+        return m1;
+    }
+
+
 	private Parent createContent()
 	{
+		explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
 		root.setPrefSize(500, 700);
 		root.setStyle("-fx-background-color: #000000;");
 		sizeLabel.setTextFill(Color.DEEPPINK);
@@ -197,13 +214,11 @@ public class Main extends Application implements Serializable
 		}
 		else if (dropdown.getValue().equals("Exit"))
 		{
-			serialize();
+		    serialize();
 			System.exit(0);
 		}
 	}
-	
-	public void restart()
-	{
+	public void restart(){
 		root.getChildren().clear();
 		s = new Snake(250, 450, 8, root, 0);
 		blocks.clear();
@@ -245,7 +260,7 @@ public class Main extends Application implements Serializable
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
 	}
-	
+
 	public boolean addBallToken(double x, double y, int value)
 	{
 		if (value <= 0)
@@ -333,136 +348,14 @@ public class Main extends Application implements Serializable
 		return true;
 	}
 	
-	// public void generateContent()
-	// {
-	// Random random = new Random();
-	// int guess = random.nextInt(150);
-	// if (distSinceBlock > 350 && distSinceBlock + guess > 500)
-	// {
-	// t = 0;
-	// guess = random.nextInt(7) + 1;
-	// distSinceBlock = 0;
-	// ArrayList<Integer> locs = new ArrayList<>();
-	// if (guess < 8)
-	// {
-	// for (int i = 0; i < guess; i++)
-	// {
-	// int num = random.nextInt(8);
-	// if (locs.contains(num))
-	// {
-	// i -= 1;
-	// }
-	// else
-	// {
-	// locs.add(num);
-	// }
-	// }
-	// }
-	// else
-	// {
-	// locs.clear();
-	// for (int i = 1; i <= 8; i++)
-	// {
-	// locs.add(i);
-	// }
-	// }
-	// int min1 = 100000;
-	// int sum1 = 0;
-	// ArrayList<Integer> vals = new ArrayList<>();
-	// for (int i = 0; i < guess; i++)
-	// {
-	// int num = (int) (random.nextInt(s.getSize() + s.getSize() / 3)) + 1;
-	// if (num <= 0)
-	// {
-	// i -= 1;
-	// continue;
-	// }
-	// min1 = min(min1, num);
-	// sum1 += num;
-	// vals.add(num);
-	// }
-	// addBlocks(locs, vals);
-	// if (min1 >= s.getSize())
-	// {
-	// vals.remove(0);
-	// vals.add(s.getSize() - 1);
-	// }
-	// last -= sum1 * 0.3;
-	// }
-	// guess = random.nextInt(81);
-	// if (guess >= 75 + last)
-	// {
-	// t = 0;
-	// last = 0;
-	// guess = random.nextInt(82);
-	// int numofwalls = guess / 40;
-	// int cnt = 0;
-	// for (int i = 0; i < numofwalls; i++)
-	// {
-	// int guessx = random.nextInt(6) + 1;
-	// cnt++;
-	// int guessHeight = random.nextInt(50) + 40;
-	// if (!addWall(guessx, 60, guessHeight))
-	// {
-	// i -= 1;
-	// }
-	// if (cnt > 15)
-	// {
-	// break;
-	// }
-	// }
-	// // last -= numofwalls*0.01;
-	// guess = random.nextInt(40);
-	// int numoftokens = guess / 19;
-	// for (int i = 0; i < numoftokens; i++)
-	// {
-	// guess = random.nextInt(100);
-	// int guessx = random.nextInt(440) + 30;
-	// int guessy = random.nextInt(30) + 60;
-	// if (guess < 60)
-	// {
-	// if (!addToken(guessx, guessy, "coin"))
-	// i -= 1;
-	// }
-	// else if (guess < 80)
-	// {
-	// int guessval = (int) floor(random.nextGaussian());
-	// if (!addBallToken(guessx, guessy, guessval + 3))
-	// i -= 1;
-	// else
-	// last += 0.1 * guessval;
-	// }
-	// else if (guess < 87)
-	// {
-	// if (!addToken(guessx, guessy, "magnet"))
-	// i -= 1;
-	// else
-	// last += 0.2;
-	// }
-	// else if (guess < 94)
-	// {
-	// if (!addToken(guessx, guessy, "brickbuster"))
-	// i -= 1;
-	// else
-	// last += 1;
-	// }
-	// else
-	// {
-	// if (!addToken(guessx, guessy, "shield"))
-	// i -= 1;
-	// else
-	// last += 1;
-	// }
-	// }
-	// }
-	// }
 	public void generateContent()
 	{
 		Random random = new Random();
 		int guess = random.nextInt(150);
-		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
+		if (distSinceBlock > 350 && distSinceBlock + guess > 500 )
 		{
 			t = 0;
+			guess = random.nextInt(7) + 1;
 			distSinceBlock = 0;
 			addBlocks();
 		}
@@ -772,6 +665,19 @@ public class Main extends Application implements Serializable
 				System.out.println("Value of circle " + String.valueOf(value));
 				System.out.println("Value of snake " + String.valueOf(s.getSize()));
 				s.incLenghtBy(value);
+				Rectangle r2 = new Rectangle(w.getCenterX() - 10, w.getTranslateY()-40, 10, 10);
+				Image mag2 = new Image(getClass().getResourceAsStream("expcoin.png"));
+				r2.setFill(new ImagePattern(mag2));
+				burst.add(r2);
+				root.getChildren().add(r2);
+				ScaleTransition scale2 = new ScaleTransition(Duration.seconds(1), r2);
+				scale2.setToX(5);
+				scale2.setToY(5);
+				scale2.setOnFinished((ActionEvent event) -> {
+					burst.remove(r2);
+					root.getChildren().remove(r2);
+				});
+				scale2.play();
 				root.getChildren().remove(hitter);
 				root.getChildren().remove(hitter.getA());
 				balls.remove(hitter);
@@ -790,19 +696,6 @@ public class Main extends Application implements Serializable
 				if (t1.getType().equals("Coin"))
 				{
 					score += 2;
-					Rectangle r2 = new Rectangle(t1.getTranslateX() - 10, t1.getTranslateY(), 10, 10);
-					Image mag2 = new Image(getClass().getResourceAsStream("expcoin.png"));
-					r2.setFill(new ImagePattern(mag2));
-					burst.add(r2);
-					root.getChildren().add(r2);
-					ScaleTransition scale2 = new ScaleTransition(Duration.seconds(1), r2);
-					scale2.setToX(5);
-					scale2.setToY(5);
-					scale2.setOnFinished((ActionEvent event) -> {
-						burst.remove(r2);
-						root.getChildren().remove(r2);
-					});
-					scale2.play();
 					root.getChildren().remove(t1);
 					tokens.remove(t1);
 				}
@@ -903,17 +796,32 @@ public class Main extends Application implements Serializable
 		{
 			Wall w = walls.get(i);
 			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
+			if (w.getTranslateY() > 800)
+			{
+				root.getChildren().remove(w);
+				walls.remove(w);
+			}
 		}
 		for (int i = 0; i < balls.size(); i++)
 		{
 			BallToken w = balls.get(i);
 			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
 			w.getA().setTranslateY(w.getTranslateY() - 3 * speedScale);
+			if (w.getTranslateY() > 800)
+			{
+				root.getChildren().remove(w);
+				balls.remove(w);
+			}
 		}
 		for (int i = 0; i < tokens.size(); i++)
 		{
 			Token t1 = tokens.get(i);
 			t1.moveDown(-(3 * speedScale));
+			if (t1.getTranslateY() > 800)
+			{
+				root.getChildren().remove(t1);
+				tokens.remove(t1);
+			}
 		}
 		for (int i = 0; i < blocks.size(); i++)
 		{
@@ -1032,14 +940,15 @@ public class Main extends Application implements Serializable
 		}
 		sizeLabel.setTranslateY(420);
 	}
-	
+
+
 	@Override
 	public void start(Stage stage) throws Exception
 	{
 		createContent();
 		Scene scene = new Scene(root);
 		scene.setOnKeyPressed(e -> {
-			switch (e.getCode())
+		    switch (e.getCode())
 			{
 				case A:
 					if (GameOn == true)

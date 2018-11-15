@@ -16,10 +16,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -27,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -62,19 +65,22 @@ public class Main extends Application implements Serializable
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
 	transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
-
-	public void setGameMode(int gameMode) {
-		if(gameMode == 0){
+	
+	public void setGameMode(int gameMode)
+	{
+		if (gameMode == 0)
+		{
 			sizeLabel.setVisible(true);
 			sizeLabel2.setVisible(false);
 		}
-		else{
+		else
+		{
 			sizeLabel2.setVisible(true);
 			sizeLabel.setVisible(false);
 		}
 		this.gameMode = gameMode;
 	}
-
+	
 	public void serialize()
 	{
 		try
@@ -153,6 +159,8 @@ public class Main extends Application implements Serializable
 				m1.root.getChildren().addAll(m1.walls);
 				m1.sizeLabel = new Label();
 				m1.sizeLabel.setText(String.valueOf(m1.s.getSize()));
+				m1.sizeLabel2 = new Label();
+				m1.sizeLabel2.setText(String.valueOf(m1.s.getSize()));
 				m1.sizeLabel.setTranslateY(m1.s.gety());
 				m1.sizeLabel.setTranslateY(m1.s.getx());
 				m1.scoreLabel = new Label();
@@ -215,7 +223,6 @@ public class Main extends Application implements Serializable
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
 		setGameMode(gameMode);
-
 		timer = new AnimationTimer()
 		{
 			@Override
@@ -254,8 +261,29 @@ public class Main extends Application implements Serializable
 		}
 		else if (dropdown.getValue().equals("Exit"))
 		{
+			timer.stop();
+			GameOn = false;
 			serialize();
-			System.exit(0);
+			FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
+			fadeTransition.setNode(root);
+			fadeTransition.setFromValue(1);
+			fadeTransition.setToValue(0);
+			fadeTransition.setOnFinished((ActionEvent event) -> {
+				Parent newParent;
+				try
+				{
+					newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("PlayvsResume.fxml"));
+					Scene newScene = new Scene(newParent);
+					newScene.getStylesheets().add(getClass().getResource("PlayvsResume.css").toExternalForm());
+					Stage primaryStage = (Stage) root.getScene().getWindow();
+					primaryStage.setScene(newScene);
+				}
+				catch (IOException e1)
+				{
+					e1.printStackTrace();
+				}
+			});
+			fadeTransition.play();
 		}
 	}
 	
@@ -433,15 +461,15 @@ public class Main extends Application implements Serializable
 			int numoftokens = guess / 19;
 			for (int i = 0; i < numoftokens; i++)
 			{
-				guess = random.nextInt(100000);
+				guess = random.nextInt(1000);
 				int guessx = random.nextInt(440) + 30;
 				int guessy = random.nextInt(30) + 60;
-				if (guess < 60)
+				if (guess < 600)
 				{
 					if (!addToken(guessx, guessy, "coin"))
 						i -= 1;
 				}
-				else if (true)
+				else if (guess < 700)
 				{
 					int guessval = (int) floor(random.nextGaussian());
 					if (!addBallToken(guessx, guessy, guessval + 3))
@@ -449,14 +477,14 @@ public class Main extends Application implements Serializable
 					else
 						last += 0.1 * guessval;
 				}
-				else if (guess < 87)
+				else if (guess < 800)
 				{
 					if (!addToken(guessx, guessy, "magnet"))
 						i -= 1;
 					else
 						last += 0.2;
 				}
-				else if (guess < 94)
+				else if (guess < 900)
 				{
 					if (!addToken(guessx, guessy, "brickbuster"))
 						i -= 1;
@@ -990,11 +1018,9 @@ public class Main extends Application implements Serializable
 		scoreLabel.setText("Score " + Integer.toString(score));
 		sizeLabel.setText(Integer.toString(s.getSize()));
 		sizeLabel2.setText("Size " + Integer.toString(s.getSize()));
-
 		if (s.getSize() < 10)
 		{
 			sizeLabel.setTranslateX(s.getx() - 4);
-
 		}
 		else
 		{

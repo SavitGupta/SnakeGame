@@ -7,7 +7,7 @@ public class Magnet extends Token
 {
 	public Magnet(double x, double y)
 	{
-		super(x, y, "Magnet","magnet.jpg");
+		super(x, y, "Magnet", "magnet.jpg");
 		Image mag = new Image(getClass().getResourceAsStream("magnet.jpg"));
 		this.setFill(new ImagePattern(mag));
 	}

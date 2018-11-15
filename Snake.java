@@ -1,6 +1,6 @@
 
 //@formatter:on
-import java.io.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javafx.scene.Node;
@@ -14,8 +14,8 @@ public class Snake implements Serializable
 	private double x;
 	private double y;
 	private int type;
-
-	public Snake(double x, double y, int size, Pane root,int j)
+	
+	public Snake(double x, double y, int size, Pane root, int j)
 	{
 		this.x = x;
 		this.y = y;
@@ -34,7 +34,9 @@ public class Snake implements Serializable
 		System.out.println("Size2 is " + String.valueOf(l1.size()));
 		assert (size == l1.size());
 	}
-	public void deserialize(Pane root){
+	
+	public void deserialize(Pane root)
+	{
 		this.root = root;
 		l1.clear();
 		double tempy = y;
@@ -46,7 +48,7 @@ public class Snake implements Serializable
 			tempy += 13;
 		}
 	}
-
+	
 	public void incLenghtBy(int amt)
 	{
 		for (int i = 0; i < amt; i++)
@@ -69,13 +71,12 @@ public class Snake implements Serializable
 		}
 		assert (size == l1.size());
 	}
-
-	public void prepareSerialize(){
-		x = l1.get(size -1).getTranslateX();
-
+	
+	public void prepareSerialize()
+	{
+		x = l1.get(size - 1).getTranslateX();
 	}
-
-
+	
 	public void moveLeft(double amt)
 	{
 		System.out.println(l1.size());

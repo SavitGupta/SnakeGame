@@ -1,5 +1,8 @@
-public class NoSuchPlayerException extends Exception{
-    public NoSuchPlayerException(String message){
-        super(message);
-    }
+//@formatter:on
+public class NoSuchPlayerException extends Exception
+{
+	public NoSuchPlayerException(String message)
+	{
+		super(message);
+	}
 }

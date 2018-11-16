@@ -21,10 +21,22 @@ public class RowOfBlocks implements Serializable
 		this.pos = new ArrayList<Boolean>();
 		this.root = root;
 		Random random = new Random();
-		while (values.size() < 8)
+		for (int i = 0; i < 8; i++)
 		{
-			int num = random.nextInt(size) + random.nextInt(size) + 1;
+			int num = random.nextInt(2 * size) + 1;
 			values.add(num);
+		}
+		for (int i = 0; i < values.size(); i++)
+		{
+			int guess = random.nextInt(10);
+			if (guess < 7)
+			{
+				pos.add(true);
+			}
+			else
+			{
+				pos.add(false);
+			}
 		}
 		boolean check = false;
 		for (int i = 0; i < values.size(); i++)
@@ -37,18 +49,13 @@ public class RowOfBlocks implements Serializable
 		}
 		if (check == false)
 		{
-			values.set(random.nextInt(8), random.nextInt(size - 1) + 1);
-		}
-		for (int i = 0; i < values.size(); i++)
-		{
-			int guess = random.nextInt(10);
-			if (guess < 7)
+			if (size != 1)
 			{
-				pos.add(true);
+				values.set(random.nextInt(8), random.nextInt(size - 1) + 1);
 			}
 			else
 			{
-				pos.add(false);
+				pos.add(random.nextInt(8), false);
 			}
 		}
 		for (int i = 0; i < pos.size(); i++)

@@ -5,6 +5,7 @@ import static java.lang.Math.floor;
 import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -423,6 +424,7 @@ public class Main extends Application implements Serializable
 	
 	public void addBlocks()
 	{
+		System.out.println("block generating 213");
 		RowOfBlocks rBlocks = new RowOfBlocks(s.getSize(), root);
 		blocks.add(rBlocks);
 	}
@@ -446,7 +448,7 @@ public class Main extends Application implements Serializable
 		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
 		{
 			t = 0;
-			guess = random.nextInt(7) + 1;
+			System.out.println("generating blocks");
 			distSinceBlock = 0;
 			addBlocks();
 		}
@@ -925,15 +927,21 @@ public class Main extends Application implements Serializable
 	
 	public void gameover()
 	{
-		// System.out.println("Inside game over 1");
 		player.addScore(score);
-		// System.out.println("Inside game over 2");
 		for (int i = 0; i < player.getScores().size(); i++)
 		{
 			System.out.println("Score " + String.valueOf(i) + " is " + String.valueOf(player.getScores().get(i).getValue()));
 		}
-		// System.out.println("Inside game over 3");
 		player.serialize();
+		File file = new File(player.getName() + "_game.txt");
+		if (file.delete())
+		{
+			System.out.println("File deleted successfully");
+		}
+		else
+		{
+			System.out.println("Failed to delete the file");
+		}
 		System.exit(0);
 	}
 	

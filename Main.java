@@ -424,9 +424,29 @@ public class Main extends Application implements Serializable
 	
 	public void addBlocks()
 	{
-		System.out.println("block generating 213");
+
 		RowOfBlocks rBlocks = new RowOfBlocks(s.getSize(), root);
 		blocks.add(rBlocks);
+		for(Token t1:tokens){
+		    if(rBlocks.intersection(t1.getBoundsInParent())){
+		        tokens.remove(t1);
+		        root.getChildren().remove(t1);
+            }
+        }
+        for(BallToken b1: balls){
+            if(rBlocks.intersection(b1.getBoundsInParent())){
+                balls.remove(b1);
+                root.getChildren().remove(b1);
+            }
+
+        }
+        for(Wall w:walls){
+            if(rBlocks.intersection(w.getBoundsInParent())){
+                walls.remove(w);
+                root.getChildren().remove(w);
+            }
+
+        }
 	}
 	
 	public boolean addWall(int x, double y, double height)
@@ -462,10 +482,13 @@ public class Main extends Application implements Serializable
 			int cnt = 0;
 			for (int i = 0; i < numofwalls; i++)
 			{
+			    if(distSinceBlock < 40){
+			        break;
+                }
 				int guessx = random.nextInt(6) + 1;
 				cnt++;
-				int guessHeight = random.nextInt(150) + 40;
-				if (!addWall(guessx, 60, guessHeight))
+				double guessHeight = Math.min(random.nextInt(150) + 40,floor(distSinceBlock));
+				if (!addWall(guessx, 45, guessHeight))
 				{
 					i -= 1;
 				}
@@ -475,7 +498,7 @@ public class Main extends Application implements Serializable
 				}
 			}
 			// last -= numofwalls*0.01;
-			guess = random.nextInt(40);
+			guess = random.nextInt(60);
 			int numoftokens = guess / 19;
 			int cnt1 = 0;
 			for (int i = 0; i < numoftokens; i++)
@@ -493,7 +516,7 @@ public class Main extends Application implements Serializable
 					if (!addToken(guessx, guessy, "coin"))
 						i -= 1;
 				}
-				else if (guess < 850)
+				else if (guess < 800)
 				{
 					int guessval = -1;
 					while (guessval <= 0)
@@ -505,7 +528,7 @@ public class Main extends Application implements Serializable
 					else
 						last += guessval;
 				}
-				else if (guess < 920)
+				else if (guess < 900)
 				{
 					if (!addToken(guessx, guessy, "magnet"))
 						i -= 1;
@@ -606,7 +629,6 @@ public class Main extends Application implements Serializable
 			int cnt1 = 0;
 			for (Block b : b1.getBlockrow())
 			{
-				System.out.println("cnt is " + String.valueOf(cnt1));
 				flag |= s.intersection(b);
 				cnt1++;
 				if (flag)
@@ -662,15 +684,14 @@ public class Main extends Application implements Serializable
 		}
 		for (RowOfBlocks b2 : blocks)
 		{
-			for (Block b1 : b2.getBlockrow())
-			{
-				flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
-				if (flag)
-				{
-					System.out.println("SKIPPED " + first.getClass() + " " + b1.getClass() + " " + b1.getBoundsInParent());
-					return true;
-				}
-			}
+
+            flag |= b2.intersection(first.getBoundsInParent());
+            if (flag)
+            {
+                System.out.println("SKIPPED " + first.getClass() + " " + b2.getClass());
+                return true;
+            }
+
 		}
 		if (flag)
 		{
@@ -1112,28 +1133,28 @@ public class Main extends Application implements Serializable
 					{
 						moveLeft(10);
 					}
-					System.out.println("left");
+
 					break;
 				case LEFT:
 					if (GameOn == true)
 					{
 						moveLeft(10);
 					}
-					System.out.println("left");
+
 					break;
 				case D:
 					if (GameOn == true)
 					{
 						moveRight(10);
 					}
-					System.out.println("Right");
+
 					break;
 				case RIGHT:
 					if (GameOn == true)
 					{
 						moveRight(10);
 					}
-					System.out.println("Right");
+
 					break;
 				case ENTER:
 					if (GameOn == true)

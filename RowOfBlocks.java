@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 public class RowOfBlocks implements Serializable
@@ -47,7 +49,7 @@ public class RowOfBlocks implements Serializable
 				break;
 			}
 		}
-		if (check == false)
+		if (check)
 		{
 			if (size != 1)
 			{
@@ -60,7 +62,7 @@ public class RowOfBlocks implements Serializable
 		}
 		for (int i = 0; i < pos.size(); i++)
 		{
-			if (pos.get(i) == true)
+			if (pos.get(i))
 			{
 				Block b1;
 				int val = values.get(i);
@@ -104,6 +106,20 @@ public class RowOfBlocks implements Serializable
 			root.getChildren().addAll(blockrow.get(i), blockrow.get(i).getA());
 		}
 	}
+    public boolean intersection(Bounds other)
+    {
+        if(blockrow.isEmpty()){
+            return false;
+        }
+        double topy = blockrow.get(0).getBoundsInParent().getMinY();
+        double boty = topy + blockrow.get(0).getHeight();
+        if(!(other.getMaxY() < topy || other.getMinY() > boty)){
+			System.out.println("blocks " + blockrow.get(0).getBoundsInParent());
+			System.out.println("skipped due to blocks" + other);
+            return true;
+        }
+        return false;
+    }
 	
 	public ArrayList<Block> getBlockrow()
 	{

@@ -22,7 +22,6 @@ public class Snake implements Serializable
 		this.size = size;
 		this.root = root;
 		this.type = j;
-		System.out.println("x is " + String.valueOf(x));
 		for (int i = 0; i < size; i++)
 		{
 			Balls b = new Balls(x, y, type);

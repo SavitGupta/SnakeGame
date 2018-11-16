@@ -68,7 +68,7 @@ public class Main extends Application implements Serializable
 	private boolean ShieldOn = false;
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
-	transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
+	private transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
 	private Player player;
 	
 	public void setPlayer(Player player)
@@ -91,7 +91,7 @@ public class Main extends Application implements Serializable
 		this.gameMode = gameMode;
 	}
 	
-	public void serialize()
+	private void serialize()
 	{
 		try
 		{
@@ -121,7 +121,9 @@ public class Main extends Application implements Serializable
 			}
 			finally
 			{
-				out.close();
+				if(out != null) {
+					out.close();
+				}
 			}
 		}
 		catch (IOException e)
@@ -206,7 +208,7 @@ public class Main extends Application implements Serializable
 		return m1;
 	}
 	
-	private Parent createContent()
+	private void createContent()
 	{
 		explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
 		root.setPrefSize(500, 700);
@@ -255,7 +257,7 @@ public class Main extends Application implements Serializable
 			}
 		};
 		timer.start();
-		return root;
+
 	}
 	
 	public void getChoice(ComboBox<String> dropdown, ActionEvent e)
@@ -560,7 +562,7 @@ public class Main extends Application implements Serializable
 		double dist = 0;
 		for (Wall w : walls)
 		{
-			flag |= s.intersection(w);
+			flag = s.intersection(w);
 			if (flag)
 			{
 				System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
@@ -577,7 +579,7 @@ public class Main extends Application implements Serializable
 		{
 			for (Block b : b1.getBlockrow())
 			{
-				flag |= s.intersection(b);
+				flag = s.intersection(b);
 				if (flag)
 				{
 					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
@@ -626,11 +628,9 @@ public class Main extends Application implements Serializable
 		}
 		for (RowOfBlocks b1 : blocks)
 		{
-			int cnt1 = 0;
 			for (Block b : b1.getBlockrow())
 			{
-				flag |= s.intersection(b);
-				cnt1++;
+				flag = s.intersection(b);
 				if (flag)
 				{
 					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
@@ -657,7 +657,7 @@ public class Main extends Application implements Serializable
 		boolean flag = false;
 		for (Wall w : walls)
 		{
-			flag |= w.getBoundsInParent().intersects(first.getBoundsInParent());
+			flag = w.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
 				System.out.println("SKIPPED " + first.getClass() + " " + w.getClass() + " " + w.getBoundsInParent());
@@ -666,7 +666,7 @@ public class Main extends Application implements Serializable
 		}
 		for (Token t1 : tokens)
 		{
-			flag |= t1.getBoundsInParent().intersects(first.getBoundsInParent());
+			flag = t1.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
 				System.out.println("SKIPPED " + first.getClass() + " " + t1.getClass() + " " + t1.getBoundsInParent());
@@ -675,7 +675,7 @@ public class Main extends Application implements Serializable
 		}
 		for (BallToken b1 : balls)
 		{
-			flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
+			flag = b1.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
 				System.out.println("SKIPPED " + first.getClass() + " " + b1.getClass() + " " + b1.getBoundsInParent());
@@ -685,7 +685,7 @@ public class Main extends Application implements Serializable
 		for (RowOfBlocks b2 : blocks)
 		{
 
-            flag |= b2.intersection(first.getBoundsInParent());
+            flag = b2.intersection(first.getBoundsInParent());
             if (flag)
             {
                 System.out.println("SKIPPED " + first.getClass() + " " + b2.getClass());
@@ -693,11 +693,7 @@ public class Main extends Application implements Serializable
             }
 
 		}
-		if (flag)
-		{
-			System.out.println("SKIPPED " + first.getClass());
-		}
-		return flag;
+		return false;
 	}
 	
 	public void deflectFromWalls()
@@ -739,7 +735,7 @@ public class Main extends Application implements Serializable
 						int value2 = hitter.getInitialValue();
 						System.out.println("Value of block " + String.valueOf(value));
 						System.out.println("Value of snake " + String.valueOf(s.getSize()));
-						if (ShieldOn == false)
+						if (!ShieldOn)
 						{
 							if (s.getSize() > 0)
 							{
@@ -1081,7 +1077,7 @@ public class Main extends Application implements Serializable
 		speedScale = max(2 * sqrt(s.getSize()), 5);
 		t += 0.05;
 		ColorCheck += 1;
-		if (ShieldOn == true)
+		if (ShieldOn)
 		{
 			ShieldCheck += 1;
 		}
@@ -1129,35 +1125,35 @@ public class Main extends Application implements Serializable
 			switch (e.getCode())
 			{
 				case A:
-					if (GameOn == true)
+					if (GameOn)
 					{
 						moveLeft(10);
 					}
 
 					break;
 				case LEFT:
-					if (GameOn == true)
+					if (GameOn)
 					{
 						moveLeft(10);
 					}
 
 					break;
 				case D:
-					if (GameOn == true)
+					if (GameOn)
 					{
 						moveRight(10);
 					}
 
 					break;
 				case RIGHT:
-					if (GameOn == true)
+					if (GameOn)
 					{
 						moveRight(10);
 					}
 
 					break;
 				case ENTER:
-					if (GameOn == true)
+					if (GameOn)
 					{
 						timer.stop();
 						GameOn = false;

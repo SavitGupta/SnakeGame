@@ -55,16 +55,14 @@ public class Balls extends Circle implements Serializable
 	{
 		if (i == 0)
 		{
-			FillTransition fillTransition = new FillTransition(Duration.seconds(1.5), this, Color.BLUEVIOLET,
-					Color.DEEPPINK);
+			FillTransition fillTransition = new FillTransition(Duration.seconds(1.5), this, Color.BLUEVIOLET, Color.DEEPPINK);
 			fillTransition.setCycleCount(Animation.INDEFINITE);
 			fillTransition.setAutoReverse(true);
 			fillTransition.play();
 		}
 		else if (i == 1)
 		{
-			FillTransition fillTransition = new FillTransition(Duration.seconds(1.5), this, Color.BLACK,
-					Color.DEEPPINK);
+			FillTransition fillTransition = new FillTransition(Duration.seconds(1.5), this, Color.BLACK, Color.DEEPPINK);
 			fillTransition.setCycleCount(Animation.INDEFINITE);
 			fillTransition.setAutoReverse(true);
 			fillTransition.play();

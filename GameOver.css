@@ -1,0 +1,16 @@
+.root{
+    -fx-background-image: url("scorepg.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 500 700;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
+
+#MainPage
+{
+	-fx-font-size: 20px;
+	-fx-text-fill: #320456;
+	-fx-padding: 6,6,6,6;
+	-fx-border-radius: 8;
+	-fx-font-weight: bold;
+}

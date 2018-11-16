@@ -121,7 +121,8 @@ public class Main extends Application implements Serializable
 			}
 			finally
 			{
-				if(out != null) {
+				if (out != null)
+				{
 					out.close();
 				}
 			}
@@ -257,7 +258,6 @@ public class Main extends Application implements Serializable
 			}
 		};
 		timer.start();
-
 	}
 	
 	public void getChoice(ComboBox<String> dropdown, ActionEvent e)
@@ -291,9 +291,12 @@ public class Main extends Application implements Serializable
 				Parent newParent;
 				try
 				{
-					newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("PlayvsResume.fxml"));
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
+					newParent = (AnchorPane) loader.load();
+					MainScreenController cnt = loader.getController();
+					cnt.setPlayer(player);
 					Scene newScene = new Scene(newParent);
-					newScene.getStylesheets().add(getClass().getResource("PlayvsResume.css").toExternalForm());
+					newScene.getStylesheets().add(getClass().getResource("MainScreen.css").toExternalForm());
 					Stage primaryStage = (Stage) root.getScene().getWindow();
 					primaryStage.setScene(newScene);
 				}
@@ -426,29 +429,32 @@ public class Main extends Application implements Serializable
 	
 	public void addBlocks()
 	{
-
 		RowOfBlocks rBlocks = new RowOfBlocks(s.getSize(), root);
 		blocks.add(rBlocks);
-		for(Token t1:tokens){
-		    if(rBlocks.intersection(t1.getBoundsInParent())){
-		        tokens.remove(t1);
-		        root.getChildren().remove(t1);
-            }
-        }
-        for(BallToken b1: balls){
-            if(rBlocks.intersection(b1.getBoundsInParent())){
-                balls.remove(b1);
-                root.getChildren().remove(b1);
-            }
-
-        }
-        for(Wall w:walls){
-            if(rBlocks.intersection(w.getBoundsInParent())){
-                walls.remove(w);
-                root.getChildren().remove(w);
-            }
-
-        }
+		for (Token t1 : tokens)
+		{
+			if (rBlocks.intersection(t1.getBoundsInParent()))
+			{
+				tokens.remove(t1);
+				root.getChildren().remove(t1);
+			}
+		}
+		for (BallToken b1 : balls)
+		{
+			if (rBlocks.intersection(b1.getBoundsInParent()))
+			{
+				balls.remove(b1);
+				root.getChildren().remove(b1);
+			}
+		}
+		for (Wall w : walls)
+		{
+			if (rBlocks.intersection(w.getBoundsInParent()))
+			{
+				walls.remove(w);
+				root.getChildren().remove(w);
+			}
+		}
 	}
 	
 	public boolean addWall(int x, double y, double height)
@@ -470,7 +476,7 @@ public class Main extends Application implements Serializable
 		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
 		{
 			t = 0;
-			//System.out.println("generating blocks");
+			// System.out.println("generating blocks");
 			distSinceBlock = 0;
 			addBlocks();
 		}
@@ -484,12 +490,13 @@ public class Main extends Application implements Serializable
 			int cnt = 0;
 			for (int i = 0; i < numofwalls; i++)
 			{
-			    if(distSinceBlock < 40){
-			        break;
-                }
+				if (distSinceBlock < 40)
+				{
+					break;
+				}
 				int guessx = random.nextInt(6) + 1;
 				cnt++;
-				double guessHeight = Math.min(random.nextInt(150) + 40,floor(distSinceBlock));
+				double guessHeight = Math.min(random.nextInt(150) + 40, floor(distSinceBlock));
 				if (!addWall(guessx, 45, guessHeight))
 				{
 					i -= 1;
@@ -684,14 +691,12 @@ public class Main extends Application implements Serializable
 		}
 		for (RowOfBlocks b2 : blocks)
 		{
-
-            flag = b2.intersection(first.getBoundsInParent());
-            if (flag)
-            {
-                System.out.println("SKIPPED " + first.getClass() + " " + b2.getClass());
-                return true;
-            }
-
+			flag = b2.intersection(first.getBoundsInParent());
+			if (flag)
+			{
+				System.out.println("SKIPPED " + first.getClass() + " " + b2.getClass());
+				return true;
+			}
 		}
 		return false;
 	}
@@ -959,7 +964,32 @@ public class Main extends Application implements Serializable
 		{
 			System.out.println("Failed to delete the file");
 		}
-		System.exit(0);
+		timer.stop();
+		GameOn = false;
+		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
+		fadeTransition.setNode(root);
+		fadeTransition.setFromValue(1);
+		fadeTransition.setToValue(0);
+		fadeTransition.setOnFinished((ActionEvent event) -> {
+			Parent newParent;
+			try
+			{
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("GameOver.fxml"));
+				newParent = (AnchorPane) loader.load();
+				GameOverController cnt = loader.getController();
+				cnt.setScore(score, player);
+				Scene newScene = new Scene(newParent);
+				newScene.getStylesheets().add(getClass().getResource("GameOver.css").toExternalForm());
+				Stage primaryStage = (Stage) root.getScene().getWindow();
+				primaryStage.setScene(newScene);
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		});
+		fadeTransition.play();
+		// System.exit(0);
 	}
 	
 	public void moveUp()
@@ -1129,28 +1159,24 @@ public class Main extends Application implements Serializable
 					{
 						moveLeft(10);
 					}
-
 					break;
 				case LEFT:
 					if (GameOn)
 					{
 						moveLeft(10);
 					}
-
 					break;
 				case D:
 					if (GameOn)
 					{
 						moveRight(10);
 					}
-
 					break;
 				case RIGHT:
 					if (GameOn)
 					{
 						moveRight(10);
 					}
-
 					break;
 				case ENTER:
 					if (GameOn)

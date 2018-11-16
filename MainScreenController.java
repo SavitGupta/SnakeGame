@@ -28,8 +28,6 @@ public class MainScreenController
 	private Button nx;
 	@FXML
 	private AnchorPane rootLol;
-	private CreateAccountController lol;
-	private LoginController lol2;
 	private Main game;
 	private Player player;
 	

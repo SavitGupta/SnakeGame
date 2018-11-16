@@ -14,8 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.print.DocFlavor;
-
 public class LoginController
 {
 	@FXML
@@ -28,13 +26,9 @@ public class LoginController
 	private AnchorPane rootLol;
 	private String name;
 	private Player player;
-
-
-
-
+	
 	public void createAccount(ActionEvent e) throws IOException
 	{
-
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
 		fadeTransition.setNode(rootLol);
 		fadeTransition.setFromValue(1);
@@ -64,7 +58,8 @@ public class LoginController
 			this.name = username.getText();
 		}
 		player = deserialize();
-		if(player == null){
+		if (player == null)
+		{
 			return;
 		}
 		System.out.println(" in login controller name is" + player.getName());
@@ -78,7 +73,7 @@ public class LoginController
 			{
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
 				newParent = (AnchorPane) loader.load();
-				MainScreenController cnt= loader.getController();
+				MainScreenController cnt = loader.getController();
 				cnt.setPlayer(player);
 				Scene newScene = new Scene(newParent);
 				newScene.getStylesheets().add(getClass().getResource("MainScreen.css").toExternalForm());
@@ -92,16 +87,21 @@ public class LoginController
 		});
 		fadeTransition.play();
 	}
-	public Player deserialize(){
+	
+	public Player deserialize()
+	{
 		String filename = new String(name + ".txt");
-		try {
+		try
+		{
 			return Player.deserialize(filename);
 		}
-		catch (NoSuchPlayerException e){
+		catch (NoSuchPlayerException e)
+		{
 			System.out.println(e.getMessage());
 		}
 		return null;
 	}
+	
 	public String getName()
 	{
 		return name;

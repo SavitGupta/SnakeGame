@@ -23,11 +23,7 @@ public class RowOfBlocks implements Serializable
 		Random random = new Random();
 		while (values.size() < 8)
 		{
-			int num = random.nextInt(size) + random.nextInt(size) / 2;
-			if (num == 0)
-			{
-				num = 1;
-			}
+			int num = random.nextInt(size) + random.nextInt(size) + 1;
 			values.add(num);
 		}
 		boolean check = false;
@@ -41,12 +37,12 @@ public class RowOfBlocks implements Serializable
 		}
 		if (check == false)
 		{
-			values.set(random.nextInt(8), size - 1);
+			values.set(random.nextInt(8), random.nextInt(size - 1) + 1);
 		}
 		for (int i = 0; i < values.size(); i++)
 		{
 			int guess = random.nextInt(10);
-			if (guess < 5)
+			if (guess < 7)
 			{
 				pos.add(true);
 			}

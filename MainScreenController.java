@@ -32,18 +32,19 @@ public class MainScreenController
 	private LoginController lol2;
 	private Main game;
 	private Player player;
-
-	public void setPlayer(Player player) {
+	
+	public void setPlayer(Player player)
+	{
 		username.setText(player.getName());
 		this.player = player;
 	}
-	public void deserialize(){
-
-		String filename = new String(player.getName()  + "_game.txt");
+	
+	public void deserialize()
+	{
+		String filename = new String(player.getName() + "_game.txt");
 		game = Main.deserialize(filename);
-
 	}
-
+	
 	public void startGame(ActionEvent e) throws Exception
 	{
 		deserialize();
@@ -57,9 +58,10 @@ public class MainScreenController
 			{
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("PlayvsResume.fxml"));
 				newParent = (AnchorPane) loader.load();
-				PlayvsResumeController cnt= loader.getController();
+				PlayvsResumeController cnt = loader.getController();
 				cnt.setPlayer(player);
-				if(game != null){
+				if (game != null)
+				{
 					cnt.setGame(game);
 				}
 				Scene newScene = new Scene(newParent);
@@ -73,30 +75,30 @@ public class MainScreenController
 			}
 		});
 		fadeTransition.play();
-//		}
-//		else
-//		{
-//
-//			FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
-//			fadeTransition.setNode(rootLol);
-//			fadeTransition.setFromValue(1);
-//			fadeTransition.setToValue(0);
-//			fadeTransition.setOnFinished((ActionEvent event) -> {
-//				try
-//				{
-//					game = new Main();
-//					game.setPlayer(player);
-//					((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-//					Stage primaryStage = new Stage();
-//					game.startNormal(primaryStage);
-//				}
-//				catch (Exception e1)
-//				{
-//					e1.printStackTrace();
-//				}
-//			});
-//			fadeTransition.play();
-//		}
+		// }
+		// else
+		// {
+		//
+		// FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
+		// fadeTransition.setNode(rootLol);
+		// fadeTransition.setFromValue(1);
+		// fadeTransition.setToValue(0);
+		// fadeTransition.setOnFinished((ActionEvent event) -> {
+		// try
+		// {
+		// game = new Main();
+		// game.setPlayer(player);
+		// ((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
+		// Stage primaryStage = new Stage();
+		// game.startNormal(primaryStage);
+		// }
+		// catch (Exception e1)
+		// {
+		// e1.printStackTrace();
+		// }
+		// });
+		// fadeTransition.play();
+		// }
 	}
 	
 	public void ILeader(ActionEvent e) throws IOException
@@ -175,5 +177,4 @@ public class MainScreenController
 	{
 		return player.getName();
 	}
-
 }

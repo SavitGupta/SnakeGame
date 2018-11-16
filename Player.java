@@ -1,8 +1,15 @@
-import java.io.*;
+
+//@formatter:on
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-//@formatter:on
 public class Player implements Serializable
 {
 	private String username;
@@ -13,51 +20,86 @@ public class Player implements Serializable
 		this.username = name;
 		this.scores = new ArrayList<>();
 	}
-	public void addScore(Integer value){
+	
+	public void addScore(Integer value)
+	{
 		scores.add(new Score(value, username));
-		Collections.sort(scores,new ScoreComparator());
+		Collections.sort(scores, new ScoreComparator());
 	}
-	public static Player deserialize(String fileName) throws NoSuchPlayerException{
+	
+	public static Player deserialize(String fileName) throws NoSuchPlayerException
+	{
 		FileInputStream fil1 = null;
-		try{
+		try
+		{
 			fil1 = new FileInputStream(fileName);
 		}
-		catch (FileNotFoundException e){
+		catch (FileNotFoundException e)
+		{
 			throw new NoSuchPlayerException("No player Exists");
 		}
-
 		ObjectInputStream in = null;
 		Player p1 = null;
-		try {
+		try
+		{
 			in = new ObjectInputStream(fil1);
 			p1 = (Player) in.readObject();
 		}
-		catch (Exception e){
+		catch (Exception e)
+		{
 			System.out.println("File has been corrupted");
 		}
 		return p1;
 	}
-	public void serialize(){
+	
+	public void serialize()
+	{
 		String fileName = username + ".txt";
 		ObjectOutputStream out = null;
-		try{
+		try
+		{
 			try
 			{
 				out = new ObjectOutputStream(new FileOutputStream(fileName));
 				out.writeObject(this);
 			}
-			catch (IOException e){
-				System.out.println("exception while serializing player " + fileName + "\n in " +  e.getMessage());
+			catch (IOException e)
+			{
+				System.out.println("exception while serializing player " + fileName + "\n in " + e.getMessage());
 			}
-			finally {
+			finally
+			{
 				out.close();
 			}
 		}
-		catch (IOException e){
-			System.out.println("exception while closing out in player " + fileName + "\n in " +  e.getMessage());
+		catch (IOException e)
+		{
+			System.out.println("exception while closing out in player " + fileName + "\n in " + e.getMessage());
 		}
 	}
-	public String getName() {
+	
+	public String getName()
+	{
 		return username;
+	}
+	
+	public String getUsername()
+	{
+		return username;
+	}
+	
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
+	
+	public ArrayList<Score> getScores()
+	{
+		return scores;
+	}
+	
+	public void setScores(ArrayList<Score> scores)
+	{
+		this.scores = scores;
 	}
 }

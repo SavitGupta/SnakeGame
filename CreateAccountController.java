@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class CreateAccountController
@@ -17,7 +18,7 @@ public class CreateAccountController
 	private TextField username;
 	@FXML
 	private Button Login;
-	private static String name;
+	private String name;
 	
 	public void createLogin(ActionEvent e) throws IOException
 	{
@@ -26,15 +27,23 @@ public class CreateAccountController
 			this.name = username.getText();
 		}
 		System.out.println(this.name);
+
+
 		((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
 		Stage primaryStage = new Stage();
-		Parent root = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+		Parent root;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
+		root = loader.load();
+		MainScreenController cnt= loader.getController();
+		Player player = new Player(this.name);
+		player.serialize();
+		cnt.setPlayer(player);
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("MainScreen.css").toExternalForm());
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
+
 	public String getName()
 	{
 		return name;

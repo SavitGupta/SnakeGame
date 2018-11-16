@@ -6,7 +6,15 @@
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
 
-#start
+#startNormal
+{
+	-fx-font-size: 20px;
+	-fx-text-fill: #320456;
+	-fx-padding: 6,6,6,6;
+	-fx-border-radius: 8;
+	-fx-font-weight: bold;
+}
+#startBlind
 {
 	-fx-font-size: 20px;
 	-fx-text-fill: #320456;

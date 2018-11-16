@@ -14,6 +14,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.print.DocFlavor;
+
 public class LoginController
 {
 	@FXML
@@ -24,18 +26,15 @@ public class LoginController
 	private Button CreateAccount;
 	@FXML
 	private AnchorPane rootLol;
-	private static String name;
-	
+	private String name;
+	private Player player;
+
+
+
+
 	public void createAccount(ActionEvent e) throws IOException
 	{
-		// ((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-		// Stage primaryStage = new Stage();
-		// Parent root =
-		// FXMLLoader.load(getClass().getResource("CreateAccount.fxml"));
-		// Scene scene = new Scene(root);
-		// scene.getStylesheets().add(getClass().getResource("CreateAccount.css").toExternalForm());
-		// primaryStage.setScene(scene);
-		// primaryStage.show();
+
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
 		fadeTransition.setNode(rootLol);
 		fadeTransition.setFromValue(1);
@@ -64,14 +63,11 @@ public class LoginController
 		{
 			this.name = username.getText();
 		}
-		// ((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-		// Stage primaryStage = new Stage();
-		// Parent root =
-		// FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
-		// Scene scene = new Scene(root);
-		// scene.getStylesheets().add(getClass().getResource("MainScreen.css").toExternalForm());
-		// primaryStage.setScene(scene);
-		// primaryStage.show();
+		player = deserialize();
+		if(player == null){
+			return;
+		}
+		System.out.println(" in login controller name is" + player.getName());
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
 		fadeTransition.setNode(rootLol);
 		fadeTransition.setFromValue(1);
@@ -80,7 +76,10 @@ public class LoginController
 			Parent newParent;
 			try
 			{
-				newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
+				newParent = (AnchorPane) loader.load();
+				MainScreenController cnt= loader.getController();
+				cnt.setPlayer(player);
 				Scene newScene = new Scene(newParent);
 				newScene.getStylesheets().add(getClass().getResource("MainScreen.css").toExternalForm());
 				Stage primaryStage = (Stage) rootLol.getScene().getWindow();
@@ -93,7 +92,16 @@ public class LoginController
 		});
 		fadeTransition.play();
 	}
-	
+	public Player deserialize(){
+		String filename = new String(name + ".txt");
+		try {
+			return Player.deserialize(filename);
+		}
+		catch (NoSuchPlayerException e){
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 	public String getName()
 	{
 		return name;

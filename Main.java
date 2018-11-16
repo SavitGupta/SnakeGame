@@ -5,16 +5,12 @@ import static java.lang.Math.floor;
 import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Random;
 
+import com.sun.istack.internal.Nullable;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
@@ -65,7 +61,13 @@ public class Main extends Application implements Serializable
 	private int ShieldCheck = 0;
 	private double distSinceBlock = 0;
 	transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
-	
+	private Player player;
+
+	public void setPlayer(Player player){
+		this.player = player;
+	}
+
+
 	public void setGameMode(int gameMode)
 	{
 		if (gameMode == 0)
@@ -91,9 +93,7 @@ public class Main extends Application implements Serializable
 				for (BallToken b : balls)
 				{
 					b.prepareSerialize();
-					// System.out.println(" needs to deserialize" +
-					// String.valueOf(b.getTranslateX()) + " "
-					// + String.valueOf(b.getCenterX()));
+
 				}
 				for (Token t1 : tokens)
 				{
@@ -109,7 +109,7 @@ public class Main extends Application implements Serializable
 					System.out.println("serialized");
 				}
 				s.prepareSerialize();
-				out = new ObjectOutputStream(new FileOutputStream("game.txt"));
+				out = new ObjectOutputStream(new FileOutputStream(player.getName() + "_game.txt"));
 				out.writeObject(this);
 			}
 			finally
@@ -122,8 +122,9 @@ public class Main extends Application implements Serializable
 			System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
 		}
 	}
-	
-	public static Main deserialize()
+
+	@Nullable
+	public static Main deserialize(String filename)
 	{
 		ObjectInputStream in = null;
 		Main m1 = null;
@@ -131,7 +132,7 @@ public class Main extends Application implements Serializable
 		{
 			try
 			{
-				in = new ObjectInputStream(new FileInputStream("game.txt"));
+				in = new ObjectInputStream(new FileInputStream(filename));
 				m1 = (Main) in.readObject();
 				m1.root = new Pane();
 				m1.GameOn = true;
@@ -172,6 +173,9 @@ public class Main extends Application implements Serializable
 				m1.s.deserialize(m1.root);
 				m1.setGameMode(m1.gameMode);
 			}
+			catch (FileNotFoundException e){
+				return null;
+			}
 			catch (IOException e)
 			{
 				System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
@@ -182,7 +186,10 @@ public class Main extends Application implements Serializable
 			}
 			finally
 			{
-				in.close();
+				if(in!=null)
+				{
+					in.close();
+				}
 			}
 		}
 		catch (IOException e)
@@ -739,7 +746,7 @@ public class Main extends Application implements Serializable
 		}
 		if (s.getSize() == 0)
 		{
-			System.exit(0);
+			gameover();
 		}
 	}
 	
@@ -878,6 +885,14 @@ public class Main extends Application implements Serializable
 				}
 			}
 		}
+	}
+
+
+
+
+	public void gameover(){
+		player.addScore(score);
+
 	}
 	
 	public void moveUp()

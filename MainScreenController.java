@@ -1,7 +1,6 @@
 
 //@formatter:on
 import java.io.IOException;
-import java.util.Random;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -29,110 +28,79 @@ public class MainScreenController
 	private Button nx;
 	@FXML
 	private AnchorPane rootLol;
-	private String name;
 	private CreateAccountController lol;
 	private LoginController lol2;
-	private Main Game;
-	
-	public void printName()
-	{
-		lol = new CreateAccountController();
-		if (lol.getName() != null)
-		{
-			this.username.setText(lol.getName());
-		}
+	private Main game;
+	private Player player;
+
+	public void setPlayer(Player player) {
+		username.setText(player.getName());
+		this.player = player;
 	}
-	
-	public void printName2()
-	{
-		lol2 = new LoginController();
-		if (lol2.getName() != null)
-		{
-			this.username.setText(lol2.getName());
-		}
+	public void deserialize(){
+
+		String filename = new String(player.getName()  + "_game.txt");
+		game = Main.deserialize(filename);
+
 	}
-	
-	@FXML
-	public void initialize()
-	{
-		printName();
-		printName2();
-	}
-	
+
 	public void startGame(ActionEvent e) throws Exception
 	{
-		Random random = new Random();
-		int guess = random.nextInt(12);
-		if (true)
-		{
-			// ((javafx.scene.Node)
-			// e.getSource()).getScene().getWindow().hide();
-			// Stage primaryStage = new Stage();
-			// Parent root =
-			// FXMLLoader.load(getClass().getResource("PlayvsResume.fxml"));
-			// Scene scene = new Scene(root);
-			// scene.getStylesheets().add(getClass().getResource("PlayvsResume.css").toExternalForm());
-			// primaryStage.setScene(scene);
-			// primaryStage.show();
-			FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
-			fadeTransition.setNode(rootLol);
-			fadeTransition.setFromValue(1);
-			fadeTransition.setToValue(0);
-			fadeTransition.setOnFinished((ActionEvent event) -> {
-				Parent newParent;
-				try
-				{
-					newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("PlayvsResume.fxml"));
-					Scene newScene = new Scene(newParent);
-					newScene.getStylesheets().add(getClass().getResource("PlayvsResume.css").toExternalForm());
-					Stage primaryStage = (Stage) rootLol.getScene().getWindow();
-					primaryStage.setScene(newScene);
+		deserialize();
+		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
+		fadeTransition.setNode(rootLol);
+		fadeTransition.setFromValue(1);
+		fadeTransition.setToValue(0);
+		fadeTransition.setOnFinished((ActionEvent event) -> {
+			Parent newParent;
+			try
+			{
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("PlayvsResume.fxml"));
+				newParent = (AnchorPane) loader.load();
+				PlayvsResumeController cnt= loader.getController();
+				cnt.setPlayer(player);
+				if(game != null){
+					cnt.setGame(game);
 				}
-				catch (IOException e1)
-				{
-					e1.printStackTrace();
-				}
-			});
-			fadeTransition.play();
-		}
-		else
-		{
-			// ((javafx.scene.Node)
-			// e.getSource()).getScene().getWindow().hide();
-			// Game = new Main();
-			// Stage primaryStage = new Stage();
-			// Game.start(primaryStage);
-			FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
-			fadeTransition.setNode(rootLol);
-			fadeTransition.setFromValue(1);
-			fadeTransition.setToValue(0);
-			fadeTransition.setOnFinished((ActionEvent event) -> {
-				try
-				{
-					((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-					Game = new Main();
-					Stage primaryStage = new Stage();
-					Game.start(primaryStage);
-				}
-				catch (Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			});
-			fadeTransition.play();
-		}
+				Scene newScene = new Scene(newParent);
+				newScene.getStylesheets().add(getClass().getResource("PlayvsResume.css").toExternalForm());
+				Stage primaryStage = (Stage) rootLol.getScene().getWindow();
+				primaryStage.setScene(newScene);
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		});
+		fadeTransition.play();
+//		}
+//		else
+//		{
+//
+//			FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
+//			fadeTransition.setNode(rootLol);
+//			fadeTransition.setFromValue(1);
+//			fadeTransition.setToValue(0);
+//			fadeTransition.setOnFinished((ActionEvent event) -> {
+//				try
+//				{
+//					game = new Main();
+//					game.setPlayer(player);
+//					((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
+//					Stage primaryStage = new Stage();
+//					game.startNormal(primaryStage);
+//				}
+//				catch (Exception e1)
+//				{
+//					e1.printStackTrace();
+//				}
+//			});
+//			fadeTransition.play();
+//		}
 	}
 	
 	public void ILeader(ActionEvent e) throws IOException
 	{
-		// ((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-		// Stage primaryStage = new Stage();
-		// Parent root =
-		// FXMLLoader.load(getClass().getResource("LeaderboardInd.fxml"));
-		// Scene scene = new Scene(root);
-		// scene.getStylesheets().add(getClass().getResource("LeaderboardInd.css").toExternalForm());
-		// primaryStage.setScene(scene);
-		// primaryStage.show();
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
 		fadeTransition.setNode(rootLol);
 		fadeTransition.setFromValue(1);
@@ -157,14 +125,6 @@ public class MainScreenController
 	
 	public void GLeader(ActionEvent e) throws IOException
 	{
-		// ((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-		// Stage primaryStage = new Stage();
-		// Parent root =
-		// FXMLLoader.load(getClass().getResource("LeaderboardGrp.fxml"));
-		// Scene scene = new Scene(root);
-		// scene.getStylesheets().add(getClass().getResource("LeaderboardGrp.css").toExternalForm());
-		// primaryStage.setScene(scene);
-		// primaryStage.show();
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
 		fadeTransition.setNode(rootLol);
 		fadeTransition.setFromValue(1);
@@ -213,11 +173,7 @@ public class MainScreenController
 	
 	public String getName()
 	{
-		return name;
+		return player.getName();
 	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+
 }

@@ -449,19 +449,19 @@ public class Main extends Application implements Serializable
 		{
 			t = 0;
 			last = 0;
-			guess = random.nextInt(82);
+			guess = random.nextInt(100);
 			int numofwalls = guess / 40;
 			int cnt = 0;
 			for (int i = 0; i < numofwalls; i++)
 			{
 				int guessx = random.nextInt(6) + 1;
 				cnt++;
-				int guessHeight = random.nextInt(100) + 40;
+				int guessHeight = random.nextInt(150) + 40;
 				if (!addWall(guessx, 60, guessHeight))
 				{
 					i -= 1;
 				}
-				if (cnt > 20)
+				if (cnt > 25)
 				{
 					break;
 				}
@@ -714,16 +714,21 @@ public class Main extends Application implements Serializable
 						{
 							if (s.getSize() > 0)
 							{
-								s.decLenghtBy(1);
 								if (value2 > 5)
 								{
+									s.decLenghtBy(1);
 									moveUp();
+									score += 1;
+									scoreLabel.setText(Integer.toString(score));
+									value = value - 1;
+									hitter.getA().setText(Integer.toString(value));
+									hitter.setValue(value);
 								}
-								score += 1;
-								scoreLabel.setText(Integer.toString(score));
-								value = value - 1;
-								hitter.getA().setText(Integer.toString(value));
-								hitter.setValue(value);
+								else {
+									s.decLenghtBy(value);
+									score += value;
+									value = 0;
+								}
 								if (value == 0)
 								{
 									System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
@@ -839,7 +844,6 @@ public class Main extends Application implements Serializable
 						root.getChildren().remove(r2);
 					});
 					scale2.play();
-					ShieldOn = true;
 					root.getChildren().remove(t1);
 					tokens.remove(t1);
 					for (int j = 0; j < tokens.size(); j++)
@@ -1034,8 +1038,8 @@ public class Main extends Application implements Serializable
 	private void update() throws ConcurrentModificationException
 	{
 		distSinceBlock += 0.5 * speedScale;
-		last -= 0.8;
-		speedScale = max(2 * sqrt(s.getSize()) / sqrt(4), 2);
+		last -= 0.4 * speedScale;
+		speedScale = max(2 * sqrt(s.getSize()), 5);
 		t += 0.05;
 		ColorCheck += 1;
 		if (ShieldOn == true)

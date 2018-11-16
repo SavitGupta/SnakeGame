@@ -468,7 +468,7 @@ public class Main extends Application implements Serializable
 		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
 		{
 			t = 0;
-			System.out.println("generating blocks");
+			//System.out.println("generating blocks");
 			distSinceBlock = 0;
 			addBlocks();
 		}

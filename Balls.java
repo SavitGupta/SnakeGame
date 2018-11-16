@@ -28,7 +28,6 @@ public class Balls extends Circle implements Serializable
 	public void moveRight(double amt)
 	{
 		double x = this.getTranslateX();
-		System.out.println("x is " + String.valueOf(x));
 		if (x > 500 - amt)
 		{
 			this.setTranslateX(500);

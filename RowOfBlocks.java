@@ -114,8 +114,8 @@ public class RowOfBlocks implements Serializable
         double topy = blockrow.get(0).getBoundsInParent().getMinY();
         double boty = topy + blockrow.get(0).getHeight();
         if(!(other.getMaxY() < topy || other.getMinY() > boty)){
-			System.out.println("blocks " + blockrow.get(0).getBoundsInParent());
-			System.out.println("skipped due to blocks" + other);
+			//System.out.println("blocks " + blockrow.get(0).getBoundsInParent());
+			//System.out.println("skipped due to blocks" + other);
             return true;
         }
         return false;

@@ -456,12 +456,12 @@ public class Main extends Application implements Serializable
 			{
 				int guessx = random.nextInt(6) + 1;
 				cnt++;
-				int guessHeight = random.nextInt(50) + 40;
+				int guessHeight = random.nextInt(100) + 40;
 				if (!addWall(guessx, 60, guessHeight))
 				{
 					i -= 1;
 				}
-				if (cnt > 15)
+				if (cnt > 20)
 				{
 					break;
 				}
@@ -469,8 +469,13 @@ public class Main extends Application implements Serializable
 			// last -= numofwalls*0.01;
 			guess = random.nextInt(40);
 			int numoftokens = guess / 19;
+			int cnt1 = 0;
 			for (int i = 0; i < numoftokens; i++)
 			{
+				cnt1++;
+				if(cnt1 > 30){
+					break;
+				}
 				guess = random.nextInt(1000);
 				int guessx = random.nextInt(440) + 30;
 				int guessy = random.nextInt(30) + 60;
@@ -479,34 +484,37 @@ public class Main extends Application implements Serializable
 					if (!addToken(guessx, guessy, "coin"))
 						i -= 1;
 				}
-				else if (guess < 700)
+				else if (guess < 850)
 				{
-					int guessval = (int) floor(random.nextGaussian());
-					if (!addBallToken(guessx, guessy, guessval + 3))
+					int guessval = -1;
+					while(guessval <= 0) {
+						guessval = (int) floor(random.nextGaussian() + s.getSize() / 4);
+					}
+					if (!addBallToken(guessx, guessy, guessval ))
 						i -= 1;
 					else
-						last += 0.1 * guessval;
+						last += guessval;
 				}
-				else if (guess < 800)
+				else if (guess < 920)
 				{
 					if (!addToken(guessx, guessy, "magnet"))
 						i -= 1;
 					else
-						last += 0.2;
+						last += 2;
 				}
-				else if (guess < 900)
+				else if (guess < 950)
 				{
 					if (!addToken(guessx, guessy, "brickbuster"))
 						i -= 1;
 					else
-						last += 1;
+						last += 10;
 				}
 				else
 				{
 					if (!addToken(guessx, guessy, "shield"))
 						i -= 1;
 					else
-						last += 1;
+						last += 5;
 				}
 			}
 		}
@@ -620,25 +628,45 @@ public class Main extends Application implements Serializable
 		for (Wall w : walls)
 		{
 			flag |= w.getBoundsInParent().intersects(first.getBoundsInParent());
+			if (flag)
+			{
+				System.out.println("SKIPPED " + first.getClass() + " "  + w.getClass() + " " + w.getBoundsInParent());
+				return true;
+			}
 		}
 		for (Token t1 : tokens)
 		{
 			flag |= t1.getBoundsInParent().intersects(first.getBoundsInParent());
+			if (flag)
+			{
+				System.out.println("SKIPPED " + first.getClass() + " "  + t1.getClass() + " " + t1.getBoundsInParent());
+				return true;
+			}
 		}
 		for (BallToken b1 : balls)
 		{
 			flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
+			if (flag)
+			{
+				System.out.println("SKIPPED " + first.getClass() + " "  + b1.getClass() + " " + b1.getBoundsInParent());
+				return true;
+			}
 		}
 		for (RowOfBlocks b2 : blocks)
 		{
 			for (Block b1 : b2.getBlockrow())
 			{
 				flag |= b1.getBoundsInParent().intersects(first.getBoundsInParent());
+				if (flag)
+				{
+					System.out.println("SKIPPED " + first.getClass() + " "  + b1.getClass() + " " + b1.getBoundsInParent());
+					return true;
+				}
 			}
 		}
 		if (flag)
 		{
-			System.out.println("SKIPPED");
+			System.out.println("SKIPPED " + first.getClass());
 		}
 		return flag;
 	}
@@ -897,6 +925,7 @@ public class Main extends Application implements Serializable
 	
 	public void moveUp()
 	{
+		distSinceBlock -= 3*speedScale;
 		for (int i = 0; i < walls.size(); i++)
 		{
 			Wall w = walls.get(i);
@@ -1005,6 +1034,7 @@ public class Main extends Application implements Serializable
 	private void update() throws ConcurrentModificationException
 	{
 		distSinceBlock += 0.5 * speedScale;
+		last -= 0.8;
 		speedScale = max(2 * sqrt(s.getSize()) / sqrt(4), 2);
 		t += 0.05;
 		ColorCheck += 1;

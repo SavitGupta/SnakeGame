@@ -163,6 +163,9 @@ public class Main extends Application implements Serializable
 				m1.sizeLabel2.setText(String.valueOf(m1.s.getSize()));
 				m1.sizeLabel.setTranslateY(m1.s.gety());
 				m1.sizeLabel.setTranslateY(m1.s.getx());
+                m1.sizeLabel2 = new Label();
+                m1.sizeLabel2.setText(String.valueOf(m1.s.getSize()));
+
 				m1.scoreLabel = new Label();
 				m1.scoreLabel.setText(String.valueOf(m1.score));
 				m1.dropdown = new ComboBox<>();

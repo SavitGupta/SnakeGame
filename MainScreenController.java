@@ -1,6 +1,8 @@
 
 //@formatter:on
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -30,7 +32,7 @@ public class MainScreenController
 	private AnchorPane rootLol;
 	private Main game;
 	private Player player;
-	
+
 	public void setPlayer(Player player)
 	{
 		username.setText(player.getName());
@@ -39,7 +41,7 @@ public class MainScreenController
 	
 	public void deserialize()
 	{
-		String filename = new String(player.getName() + "_game.txt");
+		String filename = player.getName() + "_game.txt";
 		game = Main.deserialize(filename);
 	}
 	
@@ -112,7 +114,10 @@ public class MainScreenController
 			Parent newParent;
 			try
 			{
-				newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("LeaderboardGrp.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("LeaderboardGrp.fxml"));
+				newParent = (AnchorPane) loader.load();
+				LeaderboardControllerGlobal leaderBoard = loader.getController();
+				leaderBoard.setPlayer(player);
 				Scene newScene = new Scene(newParent);
 				newScene.getStylesheets().add(getClass().getResource("LeaderboardGrp.css").toExternalForm());
 				Stage primaryStage = (Stage) rootLol.getScene().getWindow();

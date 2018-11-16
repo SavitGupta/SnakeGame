@@ -1,6 +1,8 @@
 
 //@formatter:on
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -24,9 +26,9 @@ public class GameOverController
 	private Button MainPage;
 	@FXML
 	private AnchorPane rootLol;
-	private int score;
 	private Player player;
-	
+	private ArrayList<Score> scores;
+
 	public void gotoMain(ActionEvent e) throws IOException
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -53,15 +55,24 @@ public class GameOverController
 		});
 		fadeTransition.play();
 	}
-	
+	public void addScore(Integer value)
+	{
+
+		scores = LeaderboardControllerGlobal.deserialize();
+		scores.add(new Score(value,player.getName()));
+		Collections.sort(scores, new ScoreComparator());
+		LeaderboardControllerGlobal.serialize(scores);
+	}
 	public void setScore(int score, Player player)
 	{
-		this.score = score;
+
 		this.player = player;
+		addScore(score);
 		this.Score.setText(String.valueOf(score));
 		if (player.getScores().size() == 1 || player.getScores().get(1).getValue() < score)
 		{
 			this.ScoreMsg.setVisible(true);
 		}
+
 	}
 }

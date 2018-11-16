@@ -73,30 +73,6 @@ public class MainScreenController
 			}
 		});
 		fadeTransition.play();
-		// }
-		// else
-		// {
-		//
-		// FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
-		// fadeTransition.setNode(rootLol);
-		// fadeTransition.setFromValue(1);
-		// fadeTransition.setToValue(0);
-		// fadeTransition.setOnFinished((ActionEvent event) -> {
-		// try
-		// {
-		// game = new Main();
-		// game.setPlayer(player);
-		// ((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-		// Stage primaryStage = new Stage();
-		// game.startNormal(primaryStage);
-		// }
-		// catch (Exception e1)
-		// {
-		// e1.printStackTrace();
-		// }
-		// });
-		// fadeTransition.play();
-		// }
 	}
 	
 	public void ILeader(ActionEvent e) throws IOException
@@ -109,7 +85,10 @@ public class MainScreenController
 			Parent newParent;
 			try
 			{
-				newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("LeaderboardInd.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("LeaderboardInd.fxml"));
+				newParent = (AnchorPane) loader.load();
+				LeaderboardControllerIndividual leaderBoard = loader.getController();
+				leaderBoard.setPlayer(player);
 				Scene newScene = new Scene(newParent);
 				newScene.getStylesheets().add(getClass().getResource("LeaderboardInd.css").toExternalForm());
 				Stage primaryStage = (Stage) rootLol.getScene().getWindow();
@@ -157,7 +136,10 @@ public class MainScreenController
 			Parent newParent;
 			try
 			{
-				newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("MainScreen2.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen2.fxml"));
+				newParent = (AnchorPane) loader.load();
+				MainScreen2Controller cnt = loader.getController();
+				cnt.setPlayer(player);
 				Scene newScene = new Scene(newParent);
 				newScene.getStylesheets().add(getClass().getResource("MainScreen2.css").toExternalForm());
 				Stage primaryStage = (Stage) rootLol.getScene().getWindow();

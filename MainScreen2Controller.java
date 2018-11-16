@@ -29,33 +29,13 @@ public class MainScreen2Controller
 	@FXML
 	private AnchorPane rootLol;
 	private String name;
-	private CreateAccountController lol;
-	private LoginController lol2;
+	private Player player;
 	private Main Game;
 	
-	public void printName()
+	public void setPlayer(Player player)
 	{
-		lol = new CreateAccountController();
-		if (lol.getName() != null)
-		{
-			this.username.setText(lol.getName());
-		}
-	}
-	
-	public void printName2()
-	{
-		lol2 = new LoginController();
-		if (lol2.getName() != null)
-		{
-			this.username.setText(lol2.getName());
-		}
-	}
-	
-	@FXML
-	public void initialize()
-	{
-		printName();
-		printName2();
+		this.player = player;
+		this.username.setText(player.getName());
 	}
 	
 	public void openCredits(ActionEvent e) throws Exception
@@ -92,7 +72,10 @@ public class MainScreen2Controller
 			Parent newParent;
 			try
 			{
-				newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
+				newParent = (AnchorPane) loader.load();
+				MainScreenController cnt = loader.getController();
+				cnt.setPlayer(player);
 				Scene newScene = new Scene(newParent);
 				newScene.getStylesheets().add(getClass().getResource("MainScreen.css").toExternalForm());
 				Stage primaryStage = (Stage) rootLol.getScene().getWindow();

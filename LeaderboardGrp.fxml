@@ -18,144 +18,32 @@
          <children>
             <HBox prefHeight="48.5" prefWidth="372.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
+                  <Label alignment="CENTER" prefHeight="48.0" prefWidth="177.0" text="Name of Player" textFill="WHITE">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="20.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
+                  <Label alignment="CENTER" prefHeight="48.0" prefWidth="91.0" text="Score" textFill="WHITE">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="20.0" />
                      </font>
                   </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
+                  <Label alignment="CENTER" prefHeight="48.0" prefWidth="121.0" text="Date" textFill="WHITE">
                      <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
+                        <Font size="20.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="48.5" prefWidth="372.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="265.0" text="Name of Player" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="48.5" prefWidth="106.0" text="Score" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
+            <HBox prefHeight="48.5" prefWidth="372.0" />
+            <HBox prefHeight="48.5" prefWidth="372.0" />
+            <HBox prefHeight="48.5" prefWidth="372.0" />
+            <HBox prefHeight="48.5" prefWidth="372.0" />
+            <HBox prefHeight="48.5" prefWidth="372.0" />
+            <HBox prefHeight="48.5" prefWidth="372.0" />
+            <HBox prefHeight="48.5" prefWidth="372.0" />
+            <HBox prefHeight="48.5" prefWidth="372.0" />
+            <HBox prefHeight="48.5" prefWidth="372.0" />
          </children>
       </VBox>
    </children>

@@ -1,6 +1,11 @@
 
 //@formatter:on
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javafx.animation.FadeTransition;
@@ -27,48 +32,60 @@ public class LeaderboardControllerGlobal
 	@FXML
 	private VBox vbox;
 	private Player player;
-	public static ArrayList<Score> deserialize(){
-
+	
+	public static ArrayList<Score> deserialize()
+	{
 		ObjectInputStream in = null;
-		try {
-			try {
+		try
+		{
+			try
+			{
 				in = new ObjectInputStream(new FileInputStream("globalLeaderBoard.txt"));
 				ArrayList<Score> scores = (ArrayList<Score>) in.readObject();
 				System.out.println("size is global LeaderBoard is " + scores.size());
 				return scores;
-			} catch (FileNotFoundException e) {
+			}
+			catch (FileNotFoundException e)
+			{
 				System.out.println("LeaderBoard not Found, New leaderBoard created.");
 				return new ArrayList<>();
-			} catch (IOException | ClassNotFoundException e) {
+			}
+			catch (IOException | ClassNotFoundException e)
+			{
 				System.out.println("LeaderBoard corrupted New leaderBoard created.");
 				return new ArrayList<>();
-			} finally {
-				if(in != null) {
+			}
+			finally
+			{
+				if (in != null)
+				{
 					in.close();
 				}
 			}
 		}
-		catch (IOException e){
+		catch (IOException e)
+		{
 			return new ArrayList<>();
 		}
-
 	}
-	public static void serialize(ArrayList<Score> toSerialize){
+	
+	public static void serialize(ArrayList<Score> toSerialize)
+	{
 		ObjectOutputStream out = null;
-		try{
+		try
+		{
 			out = new ObjectOutputStream(new FileOutputStream("globalLeaderBoard.txt"));
 			out.writeObject(toSerialize);
 		}
-		catch (IOException e){
+		catch (IOException e)
+		{
 			System.out.println("Serialization of LeaderBoard Failed");
-
 		}
 	}
-
+	
 	public void initialize()
 	{
 		ArrayList<Score> scores = deserialize();
-
 		for (Score score : scores)
 		{
 			if (vbox.getChildren().size() > 10)
@@ -95,7 +112,7 @@ public class LeaderboardControllerGlobal
 			vbox.getChildren().add(h1);
 		}
 	}
-
+	
 	public void returnToMain(ActionEvent e) throws IOException
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -122,8 +139,9 @@ public class LeaderboardControllerGlobal
 		});
 		fadeTransition.play();
 	}
-
-	public void setPlayer(Player player) {
+	
+	public void setPlayer(Player player)
+	{
 		this.player = player;
 	}
 }

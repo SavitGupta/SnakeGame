@@ -28,7 +28,7 @@ public class GameOverController
 	private AnchorPane rootLol;
 	private Player player;
 	private ArrayList<Score> scores;
-
+	
 	public void gotoMain(ActionEvent e) throws IOException
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -55,17 +55,17 @@ public class GameOverController
 		});
 		fadeTransition.play();
 	}
+	
 	public void addScore(Integer value)
 	{
-
 		scores = LeaderboardControllerGlobal.deserialize();
-		scores.add(new Score(value,player.getName()));
+		scores.add(new Score(value, player.getName()));
 		Collections.sort(scores, new ScoreComparator());
 		LeaderboardControllerGlobal.serialize(scores);
 	}
+	
 	public void setScore(int score, Player player)
 	{
-
 		this.player = player;
 		addScore(score);
 		this.Score.setText(String.valueOf(score));
@@ -73,6 +73,5 @@ public class GameOverController
 		{
 			this.ScoreMsg.setVisible(true);
 		}
-
 	}
 }

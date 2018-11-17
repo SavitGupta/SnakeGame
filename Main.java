@@ -66,7 +66,9 @@ public class Main extends Application implements Serializable
 	private int ColorCheck = 0;
 	private boolean GameOn = true;
 	private boolean ShieldOn = false;
+	private boolean MagnetOn = false;
 	private int ShieldCheck = 0;
+	private int MagnetCheck = 0;
 	private double distSinceBlock = 0;
 	private transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
 	private Player player;
@@ -873,21 +875,21 @@ public class Main extends Application implements Serializable
 						root.getChildren().remove(r2);
 					});
 					scale2.play();
-					root.getChildren().remove(t1);
-					tokens.remove(t1);
-					for (int j = 0; j < tokens.size(); j++)
-					{
-						if (tokens.get(j).getType().equals("Coin"))
-						{
-							TranslateTransition transition = new TranslateTransition();
-							transition.setDuration(Duration.millis(500));
-							transition.setToX(250);
-							transition.setToY(710);
-							transition.setNode(tokens.get(j));
-							score += 2;
-							transition.play();
-						}
-					}
+					// for (int j = 0; j < tokens.size(); j++)
+					// {
+					// if (tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250)
+					// {
+					// TranslateTransition transition = new TranslateTransition();
+					// transition.setDuration(Duration.millis(500));
+					// transition.setToX(250);
+					// transition.setToY(710);
+					// transition.setNode(tokens.get(j));
+					// score += 2;
+					// transition.play();
+					// }
+					// }
+					MagnetOn = true;
+					MagnetCheck = 0;
 					root.getChildren().remove(t1);
 					tokens.remove(t1);
 				}
@@ -1107,6 +1109,29 @@ public class Main extends Application implements Serializable
 		speedScale = max(2 * sqrt(s.getSize()), 5);
 		t += 0.05;
 		ColorCheck += 1;
+		if (MagnetOn)
+		{
+			for (int j = 0; j < tokens.size(); j++)
+			{
+				if (tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250 && !tokens.get(j).isEnabled())
+				{
+					tokens.get(j).setEnabled(true);
+					TranslateTransition transition = new TranslateTransition();
+					transition.setDuration(Duration.millis(500));
+					transition.setToX(250);
+					transition.setToY(710);
+					transition.setNode(tokens.get(j));
+					score += 2;
+					transition.play();
+				}
+			}
+			MagnetCheck += 1;
+		}
+		if (MagnetCheck == 301)
+		{
+			MagnetCheck = 0;
+			MagnetOn = false;
+		}
 		if (ShieldOn)
 		{
 			ShieldCheck += 1;

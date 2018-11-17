@@ -59,7 +59,7 @@ public class LeaderboardControllerIndividual
 		this.player = player;
 		for (Score score : player.getScores())
 		{
-			if (vbox.getChildren().size() > 10)
+			if (vbox.getChildren().size() == 10)
 			{
 				break;
 			}

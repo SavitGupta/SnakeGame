@@ -8,8 +8,7 @@ public class Score implements Serializable
 	private Date date;
 	private Integer value;
 	private String name;
-
-
+	
 	public Score(Integer value, String name)
 	{
 		date = new Date();

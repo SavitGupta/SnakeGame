@@ -11,6 +11,7 @@ public class Token extends Circle implements Serializable
 	private String type;
 	private double x, y;
 	private String imageName;
+	private boolean enabled;
 	
 	public Token(double x, double y, String type, String imageName)
 	{
@@ -19,6 +20,7 @@ public class Token extends Circle implements Serializable
 		this.setTranslateY(y);
 		this.type = type;
 		this.imageName = imageName;
+		this.enabled = false;
 	}
 	
 	public void moveDown(double amt)
@@ -45,5 +47,15 @@ public class Token extends Circle implements Serializable
 	public String getType()
 	{
 		return type;
+	}
+	
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
 	}
 }

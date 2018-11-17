@@ -13,7 +13,7 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Label fx:id="ScoreMsg" layoutX="63.0" layoutY="518.0" text="Congratulations! You made a new high score" textFill="#ffe200">
+      <Label fx:id="ScoreMsg" layoutX="63.0" layoutY="518.0" text="Congratulations! You made a new high score" textFill="#ffe200" visible="false">
          <font>
             <Font name="Monotype Corsiva" size="24.0" />
          </font>

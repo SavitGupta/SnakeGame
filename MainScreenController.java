@@ -1,8 +1,6 @@
 
 //@formatter:on
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -32,7 +30,7 @@ public class MainScreenController
 	private AnchorPane rootLol;
 	private Main game;
 	private Player player;
-
+	
 	public void setPlayer(Player player)
 	{
 		username.setText(player.getName());

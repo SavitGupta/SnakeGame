@@ -64,6 +64,10 @@ public class Snake implements Serializable
 	
 	public void decLenghtBy(int amt)
 	{
+		if(amt > l1.size()){
+			System.out.println("amt is greater 83401");
+			amt = l1.size();
+		}
 		for (int i = 0; i < amt; i++)
 		{
 			root.getChildren().remove(l1.get(size - 1));

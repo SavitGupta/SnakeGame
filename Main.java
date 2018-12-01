@@ -317,26 +317,6 @@ public class Main extends Application implements Serializable
 		fadeTransition.setNode(root);
 		fadeTransition.setFromValue(1);
 		fadeTransition.setToValue(0);
-		// fadeTransition.setOnFinished((ActionEvent e) -> {
-		// try
-		// {
-		// ((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
-		// Stage primaryStage = new Stage();
-		// FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
-		// AnchorPane root = loader.load();
-		// Scene scene = new Scene(root);
-		// MainScreenController cnt = loader.getController();
-		// cnt.setPlayer(player);
-		// scene.getStylesheets().add(getClass().getResource("MainScreen.css").toExternalForm());
-		// primaryStage.setScene(scene);
-		// primaryStage.show();
-		// }
-		// catch (Exception e1)
-		// {
-		// e1.printStackTrace();
-		// }
-		// });
-		// fadeTransition.play();
 		fadeTransition.setOnFinished((ActionEvent event) -> {
 			Parent newParent;
 			try
@@ -809,7 +789,9 @@ public class Main extends Application implements Serializable
 								}
 								else
 								{
+									System.out.println(" attempt to decrease snake size 89212");
 									s.decLenghtBy(value);
+									System.out.println("successful attempt to decrease snake size 1723");
 									score += value;
 									value = 0;
 								}
@@ -991,6 +973,8 @@ public class Main extends Application implements Serializable
 	
 	public void gameover()
 	{
+		timer.stop();
+		System.out.println("in dgameover function 97123");
 		player.addScore(score);
 		for (int i = 0; i < player.getScores().size(); i++)
 		{
@@ -1006,7 +990,6 @@ public class Main extends Application implements Serializable
 		{
 			System.out.println("Failed to delete the file");
 		}
-		timer.stop();
 		GameOn = false;
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
 		fadeTransition.setNode(root);
@@ -1144,6 +1127,9 @@ public class Main extends Application implements Serializable
 	
 	private void update() throws ConcurrentModificationException
 	{
+		if(s.getSize() <= 0){
+			gameover();
+		}
 		distSinceBlock += 0.5 * speedScale;
 		last -= 0.4 * speedScale;
 		speedScale = max(2 * sqrt(s.getSize()), 5);
@@ -1153,6 +1139,13 @@ public class Main extends Application implements Serializable
 		{
 			for (int j = 0; j < tokens.size(); j++)
 			{
+				if(s.getSize() <= 0){
+					System.out.println("about to check movement 12356");
+					double bullshit = s.getx();
+					System.out.println("int got 7y23");
+					boolean temp = tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250 && !tokens.get(j).isEnabled();
+					System.out.println("checked the condition successfully 23e87" );
+				}
 				if (tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250 && !tokens.get(j).isEnabled())
 				{
 					tokens.get(j).setEnabled(true);
@@ -1197,6 +1190,9 @@ public class Main extends Application implements Serializable
 		deflectFromTokens();
 		deflectFromWalls();
 		deflectFromBlocks();
+		if(s.getSize() <= 0){
+			System.out.println("exited deflect from blocks 98230");
+		}
 		deflectFromBalls();
 		removeItems();
 		scoreLabel.setText("Score " + Integer.toString(score));

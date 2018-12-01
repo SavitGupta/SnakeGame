@@ -67,7 +67,7 @@ public class MainScreen2Controller
 	{
 		URL fxmlfile = getClass().getResource("MainScreen.fxml");
 		URL cssfile = getClass().getResource("MainScreen.css");
-		ScreenLoader.loadScreen(fxmlfile,cssfile,player,rootLol);
+		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
 	
 	public void LoginAgain(ActionEvent e) throws IOException

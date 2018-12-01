@@ -5,17 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class GameOverController
 {
@@ -34,7 +28,7 @@ public class GameOverController
 	{
 		URL fxmlfile = getClass().getResource("MainScreen.fxml");
 		URL cssfile = getClass().getResource("MainScreen.css");
-		ScreenLoader.loadScreen(fxmlfile,cssfile,player,rootLol);
+		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
 	
 	public void addScore(Integer value)

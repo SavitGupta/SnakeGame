@@ -11,6 +11,7 @@ import javafx.util.Duration;
 public class Balls extends Circle implements Serializable
 {
 	private static long serialVersionUID = 107L;
+	
 	public Balls(double x, double y, int i)
 	{
 		super(0, 0, 7);

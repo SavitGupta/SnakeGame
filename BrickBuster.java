@@ -7,8 +7,8 @@ public class BrickBuster extends Token
 {
 	public BrickBuster(double x, double y)
 	{
-		super(x, y, "BrickBuster", "bomb.jpg");
-		Image mag = new Image(getClass().getResourceAsStream("bomb.jpg"));
+		super(x, y, "BrickBuster", "bomb.png");
+		Image mag = new Image(getClass().getResourceAsStream("bomb.png"));
 		this.setFill(new ImagePattern(mag));
 	}
 }

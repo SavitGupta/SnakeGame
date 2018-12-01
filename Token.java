@@ -9,7 +9,6 @@ import javafx.scene.shape.Circle;
 public class Token extends Circle implements Serializable
 {
 	private static long serialVersionUID = 105L;
-
 	private String type;
 	private double x, y;
 	private String imageName;

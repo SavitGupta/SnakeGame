@@ -9,6 +9,7 @@ public class Wall extends Rectangle implements Serializable
 {
 	double x, y, h;
 	private static long serialVersionUID = 106L;
+	
 	public Wall(double x, double y, double h)
 	{
 		super(0, 0, 4, h);

@@ -3,20 +3,14 @@
 import java.io.IOException;
 import java.net.URL;
 
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class LeaderboardControllerIndividual
 {
@@ -32,7 +26,7 @@ public class LeaderboardControllerIndividual
 	{
 		URL fxmlfile = getClass().getResource("MainScreen.fxml");
 		URL cssfile = getClass().getResource("MainScreen.css");
-		ScreenLoader.loadScreen(fxmlfile,cssfile,player,rootLol);
+		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
 	
 	public void setPlayer(Player player)

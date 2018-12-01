@@ -21,6 +21,11 @@ public class CreateAccountController
 	
 	public void createLogin(ActionEvent e) throws IOException
 	{
+		if (username.getText().equals(""))
+		{
+			AlertBox.display("WARNING", "ENTER A NON EMPTY USERNAME");
+			return;
+		}
 		if (username.getText() != null)
 		{
 			this.name = username.getText();

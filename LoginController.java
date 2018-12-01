@@ -60,6 +60,7 @@ public class LoginController
 		player = deserialize();
 		if (player == null)
 		{
+			AlertBox.display("WARNING", "ENTER A VALID USERNAME");
 			return;
 		}
 		System.out.println(" in login controller name is" + player.getName());

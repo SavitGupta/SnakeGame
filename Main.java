@@ -45,6 +45,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class Main extends Application implements Serializable {
+    private static long serialVersionUID = 101L;
     private transient Pane root = new Pane();
     private int gameMode = 0;
     private transient Label scoreLabel = new Label();

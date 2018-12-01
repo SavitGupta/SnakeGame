@@ -11,7 +11,8 @@ import javafx.scene.shape.Rectangle;
 
 public class Block extends Rectangle implements Serializable
 {
-	private int value;
+    private static long serialVersionUID = 103L;
+    private int value;
 	private transient Label a;
 	private int InitialValue;
 	private double x, y;
@@ -90,22 +91,11 @@ public class Block extends Rectangle implements Serializable
 		this.setWidth(60);
 		this.setHeight(60);
 		Image mag;
-		if (type == 1)
-		{
-			mag = new Image(getClass().getResourceAsStream("square1.png"));
-		}
-		else if (type == 2)
-		{
-			mag = new Image(getClass().getResourceAsStream("square2.png"));
-		}
-		else if (type == 3)
-		{
-			mag = new Image(getClass().getResourceAsStream("square3.png"));
-		}
-		else
-		{
-			mag = new Image(getClass().getResourceAsStream("square4.png"));
-		}
+        if(blockImages == null){
+            instantiateImages();
+            System.out.println("Images instatiated in block");
+        }
+        mag = blockImages[type-1];
 		this.setFill(new ImagePattern(mag));
 		a = new Label(String.valueOf(value));
 		a.setPrefHeight(60);

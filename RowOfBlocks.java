@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 
 public class RowOfBlocks implements Serializable
 {
+	private static long serialVersionUID = 102L;
 	private ArrayList<Block> blockrow;
 	private ArrayList<Integer> values;
 	private ArrayList<Boolean> pos;

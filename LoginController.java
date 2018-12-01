@@ -1,6 +1,7 @@
 
 //@formatter:on
 import java.io.IOException;
+import java.net.URL;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -29,26 +30,9 @@ public class LoginController
 	
 	public void createAccount(ActionEvent e) throws IOException
 	{
-		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
-		fadeTransition.setNode(rootLol);
-		fadeTransition.setFromValue(1);
-		fadeTransition.setToValue(0);
-		fadeTransition.setOnFinished((ActionEvent event) -> {
-			Parent newParent;
-			try
-			{
-				newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("CreateAccount.fxml"));
-				Scene newScene = new Scene(newParent);
-				newScene.getStylesheets().add(getClass().getResource("CreateAccount.css").toExternalForm());
-				Stage primaryStage = (Stage) rootLol.getScene().getWindow();
-				primaryStage.setScene(newScene);
-			}
-			catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
-		});
-		fadeTransition.play();
+		URL fxmlfile = getClass().getResource("CreateAccount.fxml");
+		URL cssfile = getClass().getResource("CreateAccount.css");
+		ScreenLoader.loadScreen(fxmlfile,cssfile,player,rootLol);
 	}
 	
 	public void createLogin(ActionEvent e) throws IOException
@@ -62,30 +46,10 @@ public class LoginController
 		{
 			return;
 		}
-		System.out.println(" in login controller name is" + player.getName());
-		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
-		fadeTransition.setNode(rootLol);
-		fadeTransition.setFromValue(1);
-		fadeTransition.setToValue(0);
-		fadeTransition.setOnFinished((ActionEvent event) -> {
-			Parent newParent;
-			try
-			{
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
-				newParent = (AnchorPane) loader.load();
-				MainScreenController cnt = loader.getController();
-				cnt.setPlayer(player);
-				Scene newScene = new Scene(newParent);
-				newScene.getStylesheets().add(getClass().getResource("MainScreen.css").toExternalForm());
-				Stage primaryStage = (Stage) rootLol.getScene().getWindow();
-				primaryStage.setScene(newScene);
-			}
-			catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
-		});
-		fadeTransition.play();
+		System.out.println(" in login controller name is " + player.getName());
+		URL fxmlfile = getClass().getResource("MainScreen.fxml");
+		URL cssfile = getClass().getResource("MainScreen.css");
+		ScreenLoader.loadScreen(fxmlfile,cssfile,player,rootLol);
 	}
 	
 	public Player deserialize()

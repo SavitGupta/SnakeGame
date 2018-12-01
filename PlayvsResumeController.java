@@ -1,5 +1,8 @@
 
 //@formatter:on
+import java.io.IOException;
+import java.net.URL;
+
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +19,8 @@ public class PlayvsResumeController
 	private Button startBlind;
 	@FXML
 	private Button resume;
+	@FXML
+	private Button Main;
 	@FXML
 	private AnchorPane rootLol;
 	private Main Game;
@@ -104,5 +109,12 @@ public class PlayvsResumeController
 			}
 		});
 		fadeTransition.play();
+	}
+	
+	public void returnToMain(ActionEvent e) throws IOException
+	{
+		URL fxmlfile = getClass().getResource("MainScreen.fxml");
+		URL cssfile = getClass().getResource("MainScreen.css");
+		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
 }

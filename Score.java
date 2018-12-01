@@ -46,10 +46,4 @@ public class Score implements Serializable
 	{
 		this.value = value;
 	}
-
-	public  String concatenatedDate(){
-		String x = date.toString();
-		return x.substring(0,x.lastIndexOf("IST"));
-//		x = date.getMinutes() + ":" + date.getHours()  + " " +  date.getDate() + " " + String.valueOf(date.getMonth()) + " " + date.getYear()
-	}
 }

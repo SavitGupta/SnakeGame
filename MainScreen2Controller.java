@@ -39,7 +39,7 @@ public class MainScreen2Controller
 		this.username.setText(player.getName());
 	}
 	
-	public void openCredits(ActionEvent e) throws Exception
+	public void openInstruction(ActionEvent e) throws Exception
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
 		fadeTransition.setNode(rootLol);
@@ -49,9 +49,12 @@ public class MainScreen2Controller
 			Parent newParent;
 			try
 			{
-				newParent = (AnchorPane) FXMLLoader.load(getClass().getResource("PlayvsResume.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("Instructions.fxml"));
+				newParent = (AnchorPane) loader.load();
+				InstructionsController instructionBoard = loader.getController();
+				instructionBoard.setPlayer(player);
 				Scene newScene = new Scene(newParent);
-				newScene.getStylesheets().add(getClass().getResource("PlayvsResume.css").toExternalForm());
+				newScene.getStylesheets().add(getClass().getResource("Instructions.css").toExternalForm());
 				Stage primaryStage = (Stage) rootLol.getScene().getWindow();
 				primaryStage.setScene(newScene);
 			}

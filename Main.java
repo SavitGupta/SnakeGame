@@ -1127,7 +1127,8 @@ public class Main extends Application implements Serializable
 	
 	private void update() throws ConcurrentModificationException
 	{
-		if(s.getSize() <= 0){
+		if (s.getSize() <= 0)
+		{
 			gameover();
 		}
 		distSinceBlock += 0.5 * speedScale;
@@ -1139,12 +1140,14 @@ public class Main extends Application implements Serializable
 		{
 			for (int j = 0; j < tokens.size(); j++)
 			{
-				if(s.getSize() <= 0){
+				if (s.getSize() <= 0)
+				{
 					System.out.println("about to check movement 12356");
 					double bullshit = s.getx();
 					System.out.println("int got 7y23");
-					boolean temp = tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250 && !tokens.get(j).isEnabled();
-					System.out.println("checked the condition successfully 23e87" );
+					boolean temp = tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250
+							&& !tokens.get(j).isEnabled();
+					System.out.println("checked the condition successfully 23e87");
 				}
 				if (tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250 && !tokens.get(j).isEnabled())
 				{
@@ -1190,7 +1193,8 @@ public class Main extends Application implements Serializable
 		deflectFromTokens();
 		deflectFromWalls();
 		deflectFromBlocks();
-		if(s.getSize() <= 0){
+		if (s.getSize() <= 0)
+		{
 			System.out.println("exited deflect from blocks 98230");
 		}
 		deflectFromBalls();

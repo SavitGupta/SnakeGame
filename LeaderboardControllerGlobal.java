@@ -94,7 +94,7 @@ public class LeaderboardControllerGlobal
 			Label l2 = new Label(score.getValue().toString());
 			l2.setPrefHeight(51);
 			l2.setPrefWidth(90);
-			Label l3 = new Label(score.getDate().toString());
+			Label l3 = new Label(score.concatenatedDate());
 			l3.setPrefHeight(51);
 			l3.setPrefWidth(140);
 			l1.setTextFill(Color.WHITE);

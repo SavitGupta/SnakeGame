@@ -16,7 +16,17 @@ public class Block extends Rectangle implements Serializable
 	private int InitialValue;
 	private double x, y;
 	private int type;
-	
+	private static Image[] blockImages;
+	private void instantiateImages(){
+		blockImages = new Image[4];
+		blockImages[0] = new Image(getClass().getResourceAsStream("square1.png"));
+		blockImages[1] = new Image(getClass().getResourceAsStream("square2.png"));
+		blockImages[2] = new Image(getClass().getResourceAsStream("square3.png"));
+		blockImages[3] = new Image(getClass().getResourceAsStream("square4.png"));
+	}
+
+
+
 	public Block(double x, double y, String value, int type)
 	{
 		super(0, 0, 60, 60);
@@ -26,22 +36,12 @@ public class Block extends Rectangle implements Serializable
 		this.InitialValue = Integer.parseInt(value);
 		this.type = type;
 		Image mag;
-		if (type == 1)
-		{
-			mag = new Image(getClass().getResourceAsStream("square1.png"));
+		if(blockImages == null){
+			instantiateImages();
+			System.out.println("Images instatiated in block");
 		}
-		else if (type == 2)
-		{
-			mag = new Image(getClass().getResourceAsStream("square2.png"));
-		}
-		else if (type == 3)
-		{
-			mag = new Image(getClass().getResourceAsStream("square3.png"));
-		}
-		else
-		{
-			mag = new Image(getClass().getResourceAsStream("square4.png"));
-		}
+
+		mag = blockImages[type-1];
 		this.setFill(new ImagePattern(mag));
 		if (this.value - 10 < 0)
 		{

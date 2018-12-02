@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+/**
+ * starting Launching class, creates the first stage, and displays it.
+ */
 public class Login extends Application
 {
 	@Override
@@ -18,8 +21,6 @@ public class Login extends Application
 			Scene scene = new Scene(root, Color.BLACK);
 			scene.getStylesheets().add(getClass().getResource("login.css").toExternalForm());
 			primaryStage.setScene(scene);
-			// primaryStage.initStyle(StageStyle.TRANSPARENT);
-			// primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.show();
 		}
 		catch (Exception e)

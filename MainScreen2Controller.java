@@ -15,6 +15,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Controller for Second page of main menu
+ */
 public class MainScreen2Controller
 {
 	@FXML
@@ -32,13 +35,22 @@ public class MainScreen2Controller
 	private String name;
 	private Player player;
 	private Main Game;
-	
+
+	/**
+	 * standard setter
+	 * @param player
+	 */
 	public void setPlayer(Player player)
 	{
 		this.player = player;
 		this.username.setText(player.getName());
 	}
-	
+
+	/**
+	 * Opens instruction page.
+	 * @param e An action event to know when the Instruction Button is pressed.
+	 * @throws Exception
+	 */
 	public void openInstruction(ActionEvent e) throws Exception
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -65,14 +77,24 @@ public class MainScreen2Controller
 		});
 		fadeTransition.play();
 	}
-	
+
+	/**
+	 * open MainScreen page.
+	 * @param e An action event to know when the Main Screen button is pressed.
+	 * @throws IOException
+	 */
 	public void Previous(ActionEvent e) throws IOException
 	{
 		URL fxmlfile = getClass().getResource("MainScreen.fxml");
 		URL cssfile = getClass().getResource("MainScreen.css");
 		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
-	
+
+	/**
+	 *  Shift to Login Page
+	 * @param e An action event to know when the Login Page button is pressed.
+	 * @throws IOException
+	 */
 	public void LoginAgain(ActionEvent e) throws IOException
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -96,7 +118,12 @@ public class MainScreen2Controller
 		});
 		fadeTransition.play();
 	}
-	
+
+	/**
+	 *  Close the application
+	 * @param e An action event to know when the Exit Page button is pressed.
+	 * @throws IOException
+	 */
 	public void Exit(ActionEvent e)
 	{
 		System.exit(0);

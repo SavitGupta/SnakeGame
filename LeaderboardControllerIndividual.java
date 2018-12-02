@@ -21,14 +21,23 @@ public class LeaderboardControllerIndividual
 	@FXML
 	private AnchorPane rootLol;
 	private Player player;
-	
+
+	/**
+	 * method for Handling event for Main Screen button, and returning to main menu
+	 * @param e An action event to know when the Main Screen button is pressed.
+	 * @throws IOException
+	 */
 	public void returnToMain(ActionEvent e) throws IOException
 	{
 		URL fxmlfile = getClass().getResource("MainScreen.fxml");
 		URL cssfile = getClass().getResource("MainScreen.css");
 		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
-	
+
+	/**
+	 * Displays the top 10 scores of the palyer
+	 * @param player Player whose scores are to be displayed.
+	 */
 	public void setPlayer(Player player)
 	{
 		this.player = player;

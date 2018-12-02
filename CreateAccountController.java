@@ -27,8 +27,7 @@ public class CreateAccountController
 	
 	/**
 	 *
-	 * @param e
-	 *            An action event to know when the login button is pressed and to login as the player. Only allows new users to create accounts.
+	 * @param e An action event to know when the login button is pressed and to login as the player. Only allows new users to create accounts.
 	 * @throws IOException
 	 */
 	public void createLogin(ActionEvent e) throws IOException
@@ -57,12 +56,20 @@ public class CreateAccountController
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
+
+	/**
+	 * Standard getter
+	 * @return player name
+	 */
 	public String getName()
 	{
 		return name;
 	}
-	
+
+	/**
+	 * standard setter
+	 * @param name sets name attribute
+	 */
 	public void setName(String name)
 	{
 		this.name = name;

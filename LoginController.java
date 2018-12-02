@@ -27,7 +27,12 @@ public class LoginController
 	private AnchorPane rootLol;
 	private String name;
 	private Player player;
-	
+
+	/**
+	 * Shift screen to create Account screen
+	 * @param e An action event to know when the Create Account button is pressed.
+	 * @throws IOException
+	 */
 	public void createAccount(ActionEvent e) throws IOException
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -51,7 +56,12 @@ public class LoginController
 		});
 		fadeTransition.play();
 	}
-	
+
+	/**
+	 * Shift screen to create Account screen
+	 * @param e An action event to know when the Login button is pressed.
+	 * @throws IOException
+	 */
 	public void createLogin(ActionEvent e) throws IOException
 	{
 		if (username.getText() != null)
@@ -69,7 +79,11 @@ public class LoginController
 		URL cssfile = getClass().getResource("MainScreen.css");
 		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
-	
+
+	/**
+	 * deserializes the player on the basis of name attribute
+	 * @return player object of the current user.
+	 */
 	public Player deserialize()
 	{
 		String filename = new String(name + ".txt");

@@ -27,7 +27,11 @@ public class LeaderboardControllerGlobal
 	@FXML
 	private VBox vbox;
 	private Player player;
-	
+
+	/**
+	 * Deserializes the Leaderborad from file "gLeaderBoard.txt"
+	 * @return An ArrayList, containing the list of best scores by players.
+	 */
 	public static ArrayList<Score> deserialize()
 	{
 		ObjectInputStream in = null;
@@ -63,7 +67,11 @@ public class LeaderboardControllerGlobal
 			return new ArrayList<>();
 		}
 	}
-	
+
+	/**
+	 * Serializes given ArrayList of Scores
+	 * @param toSerialize ArrayList to be Serialized
+	 */
 	public static void serialize(ArrayList<Score> toSerialize)
 	{
 		ObjectOutputStream out = null;
@@ -77,7 +85,10 @@ public class LeaderboardControllerGlobal
 			System.out.println("Serialization of LeaderBoard Failed");
 		}
 	}
-	
+
+	/**
+	 * Initialize the GUI components of the screen
+	 */
 	public void initialize()
 	{
 		ArrayList<Score> scores = deserialize();
@@ -107,14 +118,23 @@ public class LeaderboardControllerGlobal
 			vbox.getChildren().add(h1);
 		}
 	}
-	
+
+	/**
+	 * method for Handling event for Main Screen button, and returning to main menu
+	 * @param e An action event to know when the Main Screen button is pressed.
+	 * @throws IOException
+	 */
 	public void returnToMain(ActionEvent e) throws IOException
 	{
 		URL fxmlfile = getClass().getResource("MainScreen.fxml");
 		URL cssfile = getClass().getResource("MainScreen.css");
 		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
-	
+
+	/**
+	 * Standard setter for the player.
+	 * @param player
+	 */
 	public void setPlayer(Player player)
 	{
 		this.player = player;

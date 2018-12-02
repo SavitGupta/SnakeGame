@@ -89,7 +89,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * Standard setter
 	 * @param gameMode 0,1 value. 0 for Normal Mode, 1 for Blind Mode
 	 */
-	public void setGameMode(int gameMode)
+	private void setGameMode(int gameMode)
 	{
 		if (gameMode == 0)
 		{
@@ -310,7 +310,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * Method for taking action on the basis on option selected in the dropdown menu on the game screen.
 	 * @param dropdown ComboBox whose options are to be evaluated
 	 */
-	public void getChoice(ComboBox<String> dropdown, ActionEvent e)
+	private void getChoice(ComboBox<String> dropdown, ActionEvent e)
 	{
 		if (dropdown.getValue().equals("Pause"))
 		{
@@ -374,7 +374,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Restarts the game, resetting all state variables.
 	 */
-	public void restart()
+	private void restart()
 	{
 		root.getChildren().clear();
 		s = new Snake(250, 450, 8, root, gameMode);
@@ -400,7 +400,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * @param value point value
 	 * @return True if the BallToken was successfully added, false otherwise
 	 */
-	public boolean addBallToken(double x, double y, int value)
+	private boolean addBallToken(double x, double y, int value)
 	{
 		if (value <= 0)
 		{
@@ -427,7 +427,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * @param y y-co-ordinate of the Enemy
 	 * @return True if the Enemy was successfully added, false otherwise
 	 */
-	public boolean addEnemy(double x, double y)
+	private boolean addEnemy(double x, double y)
 	{
 		Enemy b1 = new Enemy(x, y);
 		if (checkAlreadyOccupied(b1))
@@ -446,7 +446,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * @param type Type of Token to be added
 	 * @return True if the Token was successfully added, false otherwise
 	 */
-	public boolean addToken(double x, double y, String type)
+	private boolean addToken(double x, double y, String type)
 	{
 		if (type.equalsIgnoreCase("Shield"))
 		{
@@ -498,7 +498,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Adds a RowOfBlock at the top of screen.
 	 */
-	public void addBlocks()
+	private void addBlocks()
 	{
 		RowOfBlocks rBlocks = new RowOfBlocks(s.getSize(), root);
 		blocks.add(rBlocks);
@@ -543,7 +543,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * @param height height of wall to be added
 	 * @return True if the wall was successfully added, false otherwise
 	 */
-	public boolean addWall(int x, double y, double height)
+	private boolean addWall(int x, double y, double height)
 	{
 		Wall w1 = new Wall(x * 500 / 8, y, height);
 		if (checkAlreadyOccupied(w1))
@@ -559,7 +559,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * Generates content on the basis, probabilistic models that depend upon the time since an object of same type was added, as well as snake size
 	 * Increasing the chances of objects that haven't occurred recently
 	 */
-	public void generateContent()
+	private void generateContent()
 	{
 		Random random = new Random();
 		int guess = random.nextInt(150);
@@ -752,7 +752,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * @param first The Node whose collision is to be checked
 	 * @return true, if there is an intersection, false otherwise
 	 */
-	public boolean checkAlreadyOccupied(Node first)
+	private boolean checkAlreadyOccupied(Node first)
 	{
 		boolean flag = false;
 		for (Wall w : walls)
@@ -806,7 +806,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Checks collision of snake with walls, and shifts it if required.
 	 */
-	public void deflectFromWalls()
+	private void deflectFromWalls()
 	{
 		Wall hitter;
 		for (Wall w : walls)
@@ -832,7 +832,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Checks collision of snake with Blocks, shifting it or reducing its size and removing the Block from the Main Pane of the game
 	 */
-	public void deflectFromBlocks()
+	private void deflectFromBlocks()
 	{
 		for (RowOfBlocks w1 : blocks)
 		{
@@ -923,7 +923,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Checks collision of snake with BallTokens, collecting and then removing them.
 	 */
-	public void deflectFromBalls()
+	private void deflectFromBalls()
 	{
 		BallToken hitter;
 		for (BallToken w : balls)
@@ -958,7 +958,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Checks collision of snake with Tokens, collecting and then removing them.
 	 */
-	public void deflectFromTokens()
+	private void deflectFromTokens()
 	{
 		for (int i = 0; i < tokens.size(); i++)
 		{
@@ -1031,7 +1031,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Checks collision of snake with Enemy, set snake size to zero in case of collision
 	 */
-	public void deflectFromEnemy()
+	private void deflectFromEnemy()
 	{
 		for (int i = 0; i < enemies.size(); i++)
 		{
@@ -1063,7 +1063,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Checks collision of Bullets with Enemy, removing them incase of collision
 	 */
-	public void deflectFromEnemyBullet()
+	private void deflectFromEnemyBullet()
 	{
 		for (int i = 0; i < enemies.size(); i++)
 		{
@@ -1098,7 +1098,7 @@ public class Main_Aliens extends Application implements Serializable
 	/**
 	 * Method for adding score to player score, changing screen to gameOverScreen.
 	 */
-	public void gameover()
+	private void gameover()
 	{
 		timer.stop();
 		if (alreadyGameover)
@@ -1156,7 +1156,7 @@ public class Main_Aliens extends Application implements Serializable
 	 * Method for moving walls, BallTokens, Tokens, Blocks,Enemies upwards
 	 * to simulate the effect of the snake being pushed back from collsion with row of block
 	 */
-	public void moveUp()
+	private void moveUp()
 	{
 		double movUpAmt = 1.2 * speedScale;
 		distSinceBlock -= movUpAmt;

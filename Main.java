@@ -299,7 +299,7 @@ public class Main extends Application implements Serializable
 	 * Method for taking action on the basis on option selected in the dropdown menu on the game screen.
 	 * @param dropdown ComboBox whose options are to be evaluated
 	 */
-	public void getChoice(ComboBox<String> dropdown)
+	private void getChoice(ComboBox<String> dropdown)
 	{
 		if (dropdown.getValue().equals("Pause"))
 		{
@@ -391,7 +391,7 @@ public class Main extends Application implements Serializable
 	 * @param value point value
 	 * @return True if the BallToken was successfully added, false otherwise
 	 */
-	public boolean addBallToken(double x, double y, int value)
+	private boolean addBallToken(double x, double y, int value)
 	{
 		if (value <= 0)
 		{
@@ -419,7 +419,7 @@ public class Main extends Application implements Serializable
 	 * @param type Type of Token to be added
 	 * @return True if the Token was successfully added, false otherwise
 	 */
-	public boolean addToken(double x, double y, String type)
+	private boolean addToken(double x, double y, String type)
 	{
 		if (type.equalsIgnoreCase("Shield"))
 		{
@@ -470,7 +470,7 @@ public class Main extends Application implements Serializable
 	/**
 	 * Adds a RowOfBlock at the top of screen.
 	 */
-	public void addBlocks()
+	private void addBlocks()
 	{
 		RowOfBlocks rBlocks = new RowOfBlocks(s.getSize(), root);
 		blocks.add(rBlocks);
@@ -507,7 +507,7 @@ public class Main extends Application implements Serializable
 	 * @param height height of wall to be added
 	 * @return True if the wall was successfully added, false otherwise
 	 */
-	public boolean addWall(int x, double y, double height)
+	private boolean addWall(int x, double y, double height)
 	{
 		Wall w1 = new Wall(x * 500 / 8, y, height);
 		if (checkAlreadyOccupied(w1))
@@ -523,7 +523,7 @@ public class Main extends Application implements Serializable
 	 * Generates content on the basis, probabilistic models that depend upon the time since an object of same type was added, as well as snake size
 	 * Increasing the chances of objects that haven't occurred recently
 	 */
-	public void generateContent()
+	private void generateContent()
 	{
 		Random random = new Random();
 		int guess = random.nextInt(150);
@@ -724,7 +724,7 @@ public class Main extends Application implements Serializable
 	 * @param first The Node whose collision is to be checked
 	 * @return true, if there is an intersection, false otherwise
 	 */
-	public boolean checkAlreadyOccupied(Node first)
+	private boolean checkAlreadyOccupied(Node first)
 	{
 		boolean flag = false;
 		for (Wall w : walls)
@@ -770,7 +770,7 @@ public class Main extends Application implements Serializable
 	/**
 	 * Checks collision of snake with walls, and shifts it if required.
 	 */
-	public void deflectFromWalls()
+	private void deflectFromWalls()
 	{
 		Wall hitter;
 		for (Wall w : walls)
@@ -796,7 +796,7 @@ public class Main extends Application implements Serializable
 	/**
 	 * Checks collision of snake with Blocks, shifting it or reducing its size and removing the Block from the Main Pane of the game
 	 */
-	public void deflectFromBlocks()
+	private void deflectFromBlocks()
 	{
 		for (RowOfBlocks w1 : blocks)
 		{
@@ -887,7 +887,7 @@ public class Main extends Application implements Serializable
 	/**
 	 * Checks collision of snake with BallTokens, collecting and then removing them.
 	 */
-	public void deflectFromBalls()
+	private void deflectFromBalls()
 	{
 		BallToken hitter;
 		for (BallToken w : balls)

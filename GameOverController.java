@@ -29,14 +29,24 @@ public class GameOverController
 	private AnchorPane rootLol;
 	private Player player;
 	private ArrayList<Score> scores;
-	
+
+
+	/**
+	 * method for Handling event for Main Screen button, and returning to main menu
+	 * @param e An action event to know when the Go to Main button is pressed.
+	 * @throws IOException
+	 */
 	public void gotoMain(ActionEvent e) throws IOException
 	{
 		URL fxmlfile = getClass().getResource("MainScreen.fxml");
 		URL cssfile = getClass().getResource("MainScreen.css");
 		ScreenLoader.loadScreen(fxmlfile, cssfile, player, rootLol);
 	}
-	
+
+	/**
+	 * Add player score to score arrayList
+	 * @param value
+	 */
 	public void addScore(Integer value)
 	{
 		scores = LeaderboardControllerGlobal.deserialize();
@@ -44,7 +54,10 @@ public class GameOverController
 		Collections.sort(scores, ScoreComparator.getInstance());
 		LeaderboardControllerGlobal.serialize(scores);
 	}
-	
+
+	/**
+	 * set, score and player according to parameters
+	 */
 	public void setScore(int score, Player player)
 	{
 		this.player = player;

@@ -9,13 +9,22 @@ import javafx.scene.layout.Pane;
 
 public class RowOfBlocks implements Serializable
 {
+	/**
+	 * Container class to store Blocks, that are in the same row.
+	 */
 	private static final long serialVersionUID = 102L;
 	private ArrayList<Block> blockrow;
 	private ArrayList<Integer> values;
 	private ArrayList<Boolean> pos;
 	private transient Pane root;
 	double y;
-	
+
+
+	/**
+	 * Creates an Arraylist of Blocks, as well as the blocks themselves, add them to pane of the game
+	 * @param size
+	 * @param root
+	 */
 	public RowOfBlocks(int size, Pane root)
 	{
 		this.values = new ArrayList<Integer>();
@@ -82,7 +91,7 @@ public class RowOfBlocks implements Serializable
 				{
 					b1 = new Block(i * 500 / 8, 45, String.valueOf(val), 3);
 				}
-				root.getChildren().addAll(b1, b1.getA());
+				root.getChildren().addAll(b1, b1.getValueLabel());
 				blockrow.add(b1);
 			}
 		}
@@ -103,7 +112,7 @@ public class RowOfBlocks implements Serializable
 		for (int i = 0; i < blockrow.size(); i++)
 		{
 			blockrow.get(i).deserialize();
-			root.getChildren().addAll(blockrow.get(i), blockrow.get(i).getA());
+			root.getChildren().addAll(blockrow.get(i), blockrow.get(i).getValueLabel());
 		}
 	}
 	

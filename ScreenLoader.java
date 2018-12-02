@@ -12,8 +12,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Utility class for loading Screens with Fade Animation effect
+ */
 public class ScreenLoader
 {
+	/**
+	 * Opens a new screen, with given FXML, CSS files on given pane and passes them the reference of player
+	 * @param fxmlFile FXMLfile name, containing page layout
+	 * @param cssFile CSS file name, containing page designs
+	 * @param player Reference of Player, that opened the screen, to be passed to the next screen
+	 * @param anchorPane Reference of AnchorPane on which the new screen is loaded
+	 */
 	public static void loadScreen(URL fxmlFile, URL cssFile, Player player, AnchorPane anchorPane)
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));

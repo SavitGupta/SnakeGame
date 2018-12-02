@@ -10,24 +10,41 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Player class contains name, and score list for the user.
+ */
 public class Player implements Serializable
 {
 	private static final long serialVersionUID = 202L;
 	private String username;
 	private ArrayList<Score> scores;
-	
+
+	/**
+	 * Initializes name with given parameter, and creates a new scoreList
+	 * @param name
+	 */
 	public Player(String name)
 	{
 		this.username = name;
 		this.scores = new ArrayList<>();
 	}
-	
+
+	/**
+	 * Adds a new Score to the scores ArrayList.
+	 * @param value
+	 */
 	public void addScore(Integer value)
 	{
 		scores.add(new Score(value, username));
 		Collections.sort(scores, ScoreComparator.getInstance());
 	}
-	
+
+	/**
+	 * Deserializes the given filename into objects of this class.
+	 * @param fileName filename that contains the object to be deserialized
+	 * @return player object formed by deserializing the filename
+	 * @throws NoSuchPlayerException
+	 */
 	public static Player deserialize(String fileName) throws NoSuchPlayerException
 	{
 		FileInputStream fil1 = null;
@@ -52,7 +69,10 @@ public class Player implements Serializable
 		}
 		return p1;
 	}
-	
+
+	/**
+	 * Serializes the object to a file with name: username + ".txt"
+	 */
 	public void serialize()
 	{
 		String fileName = username + ".txt";
@@ -78,29 +98,24 @@ public class Player implements Serializable
 			System.out.println("exception while closing out in player " + fileName + "\n in " + e.getMessage());
 		}
 	}
-	
+
+	/**
+	 * standard getter
+	 * @return player name
+	 */
 	public String getName()
 	{
 		return username;
 	}
-	
-	public String getUsername()
-	{
-		return username;
-	}
-	
-	public void setUsername(String username)
-	{
-		this.username = username;
-	}
-	
+
+
+	/**
+	 * standard getter
+	 * @return ArrayList of scores	 */
 	public ArrayList<Score> getScores()
 	{
 		return scores;
 	}
 	
-	public void setScores(ArrayList<Score> scores)
-	{
-		this.scores = scores;
-	}
+
 }

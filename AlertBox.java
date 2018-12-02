@@ -7,7 +7,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * The AlertBox class creates an AlertBox
+ * utility Class for displaying an AlertBox on new Stage.
  */
 public class AlertBox
 {
@@ -16,7 +16,7 @@ public class AlertBox
 	/** Displays the alert Box on a new Stage
 	 *
 	 * @param title title of the alert
-	 * @param message content of body of alert
+	 * @param message body of alert
 	 */
 	public static void display(String title, String message)
 	{

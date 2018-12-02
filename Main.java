@@ -75,11 +75,19 @@ public class Main extends Application implements Serializable
 	private transient Boolean alreadyGameover = false;
 	private int pausetill = 0;
 
+	/**
+	 * Standard setter
+	 * @param player value to be assigned player attribute
+	 */
 	public void setPlayer(Player player)
 	{
 		this.player = player;
 	}
-	
+
+	/**
+	 * Standard setter
+	 * @param gameMode 0,1 value. 0 for Normal Mode, 1 for Blind Mode
+	 */
 	public void setGameMode(int gameMode)
 	{
 		if (gameMode == 0)
@@ -94,7 +102,11 @@ public class Main extends Application implements Serializable
 		}
 		this.gameMode = gameMode;
 	}
-	
+
+	/**
+	 *  Serializes the game, while storing the state of all non-serializable GUI elements in serializable elements.
+	 *  The object is serialized to file in folder PlayerGameFiles with name: username + "_game.txt"
+	 */
 	private void serialize()
 	{
 		try
@@ -136,8 +148,12 @@ public class Main extends Application implements Serializable
 			System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
 		}
 	}
-	
-	@Nullable
+
+	/**
+	 * Deserializes object from given filename, uses non-GUI serializable state variables to initialize non-serializable GUI elements
+	 * @param filename filename from which the object is read
+	 * @return The object that was read from the file, with GUI elements also initialized
+	 */
 	public static Main deserialize(String filename)
 	{
 
@@ -157,7 +173,7 @@ public class Main extends Application implements Serializable
 				{
 					b.deserialize();
 					m1.root.getChildren().add(b);
-					m1.root.getChildren().add(b.getA());
+					m1.root.getChildren().add(b.getValueLabel());
 				}
 				for (Token t1 : m1.tokens)
 				{
@@ -214,7 +230,10 @@ public class Main extends Application implements Serializable
 		}
 		return m1;
 	}
-	
+
+	/**
+	 * Creates initial GUI elements present on all Games
+	 */
 	private void createContent() {
 		explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("./Images/exp.png")));
 		root.setPrefSize(500, 700);
@@ -258,7 +277,7 @@ public class Main extends Application implements Serializable
 		dropdown.getItems().add("Restart");
 		dropdown.getItems().add("Exit");
 		dropdown.setPromptText("Options");
-		dropdown.setOnAction(e -> getChoice(dropdown, e));
+		dropdown.setOnAction(e -> getChoice(dropdown));
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
 		setGameMode(gameMode);
@@ -275,8 +294,12 @@ public class Main extends Application implements Serializable
 		timer.start();
 		}
 	}
-	
-	public void getChoice(ComboBox<String> dropdown, ActionEvent e)
+
+	/**
+	 * Method for taking action on the basis on option selected in the dropdown menu on the game screen.
+	 * @param dropdown ComboBox whose options are to be evaluated
+	 */
+	public void getChoice(ComboBox<String> dropdown)
 	{
 		if (dropdown.getValue().equals("Pause"))
 		{
@@ -299,7 +322,10 @@ public class Main extends Application implements Serializable
 			forceExit();
 		}
 	}
-	
+
+	/**
+	 * Method serializing and then exiting the from game screen to main screen
+	 */
 	private void forceExit()
 	{
 		timer.stop();
@@ -333,7 +359,10 @@ public class Main extends Application implements Serializable
 		});
 		fadeTransition.play();
 	}
-	
+
+	/**
+	 * Restarts the game, resetting all state variables.
+	 */
 	public void restart()
 	{
 		root.getChildren().clear();
@@ -354,7 +383,14 @@ public class Main extends Application implements Serializable
 		distSinceBlock = 0;
 		createContent();
 	}
-	
+
+	/**
+	 * Adds a BallToken at given x, y co-ordinates with given point value
+	 * @param x x co-ordinate of the BallToken
+	 * @param y y-co-ordinate of the BallToke
+	 * @param value point value
+	 * @return True if the BallToken was successfully added, false otherwise
+	 */
 	public boolean addBallToken(double x, double y, int value)
 	{
 		if (value <= 0)
@@ -372,10 +408,17 @@ public class Main extends Application implements Serializable
 		}
 		balls.add(b1);
 		root.getChildren().add(b1);
-		root.getChildren().add(b1.getA());
+		root.getChildren().add(b1.getValueLabel());
 		return true;
 	}
-	
+
+	/**
+	 * Adds a Token of specified type at specified x, y co-ordinates.
+	 * @param x x co-ordinate of the Token
+	 * @param y y-co-ordinate of the Token
+	 * @param type Type of Token to be added
+	 * @return True if the Token was successfully added, false otherwise
+	 */
 	public boolean addToken(double x, double y, String type)
 	{
 		if (type.equalsIgnoreCase("Shield"))
@@ -423,7 +466,10 @@ public class Main extends Application implements Serializable
 		}
 		return true;
 	}
-	
+
+	/**
+	 * Adds a RowOfBlock at the top of screen.
+	 */
 	public void addBlocks()
 	{
 		RowOfBlocks rBlocks = new RowOfBlocks(s.getSize(), root);
@@ -453,7 +499,14 @@ public class Main extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Adds a Wall of specified height at specified x, y co-ordinates.
+	 * @param x x co-ordinate of the Token
+	 * @param y y-co-ordinate of the Token
+	 * @param height height of wall to be added
+	 * @return True if the wall was successfully added, false otherwise
+	 */
 	public boolean addWall(int x, double y, double height)
 	{
 		Wall w1 = new Wall(x * 500 / 8, y, height);
@@ -465,7 +518,11 @@ public class Main extends Application implements Serializable
 		root.getChildren().add(w1);
 		return true;
 	}
-	
+
+	/**
+	 * Generates content on the basis, probabilistic models that depend upon the time since an object of same type was added, as well as snake size
+	 * Increasing the chances of objects that haven't occurred recently
+	 */
 	public void generateContent()
 	{
 		Random random = new Random();
@@ -558,7 +615,11 @@ public class Main extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * moves the GUI components of the snake to left.
+	 * @param amt value(in pixel) by which the snake is moved
+	 */
 	private void moveLeft(double amt)
 	{
 		if(amt > 15){
@@ -605,7 +666,11 @@ public class Main extends Application implements Serializable
 			s.moveRight(dist);
 		}
 	}
-	
+
+	/**
+	 * moves the GUI components of the snake to Right.
+	 * @param amt value(in pixel) by which the snake is moved
+	 */
 	private void moveRight(double amt)
 	{
 
@@ -653,7 +718,12 @@ public class Main extends Application implements Serializable
 			s.moveLeft(dist);
 		}
 	}
-	
+
+	/**
+	 * Check if specified object intersects with any of the already existing object in the main pane.
+	 * @param first The Node whose collision is to be checked
+	 * @return true, if there is an intersection, false otherwise
+	 */
 	public boolean checkAlreadyOccupied(Node first)
 	{
 		boolean flag = false;
@@ -695,7 +765,11 @@ public class Main extends Application implements Serializable
 		}
 		return false;
 	}
-	
+
+
+	/**
+	 * Checks collision of snake with walls, and shifts it if required.
+	 */
 	public void deflectFromWalls()
 	{
 		Wall hitter;
@@ -718,7 +792,10 @@ public class Main extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Checks collision of snake with Blocks, shifting it or reducing its size and removing the Block from the Main Pane of the game
+	 */
 	public void deflectFromBlocks()
 	{
 		for (RowOfBlocks w1 : blocks)
@@ -747,7 +824,7 @@ public class Main extends Application implements Serializable
 									score += 1;
 									scoreLabel.setText(Integer.toString(score));
 									value = value - 1;
-									hitter.getA().setText(Integer.toString(value));
+									hitter.getValueLabel().setText(Integer.toString(value));
 									hitter.setValue(value);
 								}
 								else
@@ -765,7 +842,7 @@ public class Main extends Application implements Serializable
 									System.out.println("hitter is removed " + String.valueOf(hitter));
 									Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
 									root.getChildren().remove(hitter);
-									root.getChildren().remove(hitter.getA());
+									root.getChildren().remove(hitter.getValueLabel());
 									w1.getBlockrow().remove(hitter);
 									Image mag = new Image(getClass().getResourceAsStream("./Images/exp.png"));
 									r1.setFill(new ImagePattern(mag));
@@ -787,7 +864,7 @@ public class Main extends Application implements Serializable
 							score += value;
 							Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
 							root.getChildren().remove(hitter);
-							root.getChildren().remove(hitter.getA());
+							root.getChildren().remove(hitter.getValueLabel());
 							w1.getBlockrow().remove(hitter);
 							r1.setFill(explosionImage);
 							burst.add(r1);
@@ -806,7 +883,10 @@ public class Main extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Checks collision of snake with BallTokens, collecting and then removing them.
+	 */
 	public void deflectFromBalls()
 	{
 		BallToken hitter;
@@ -833,12 +913,15 @@ public class Main extends Application implements Serializable
 				});
 				scale2.play();
 				root.getChildren().remove(hitter);
-				root.getChildren().remove(hitter.getA());
+				root.getChildren().remove(hitter.getValueLabel());
 				balls.remove(hitter);
 			}
 		}
 	}
-	
+
+	/**
+	 * Checks collision of snake with Tokens, collecting and then removing them.
+	 */
 	private void deflectFromTokens()
 	{
 		for (int i = 0; i < tokens.size(); i++)
@@ -886,7 +969,7 @@ public class Main extends Application implements Serializable
 							score += blocks.get(j).getBlockrow().get(m).getValue();
 							Rectangle r1 = new Rectangle(blocks.get(j).getBlockrow().get(m).getTranslateX() + 15, blocks.get(j).getBlockrow().get(m).getTranslateY() + 30, 20, 20);
 							root.getChildren().remove(blocks.get(j).getBlockrow().get(m));
-							root.getChildren().remove(blocks.get(j).getBlockrow().get(m).getA());
+							root.getChildren().remove(blocks.get(j).getBlockrow().get(m).getValueLabel());
 							blocks.get(j).getBlockrow().remove(blocks.get(j).getBlockrow().get(m));
 							r1.setFill(explosionImage);
 							burst.add(r1);
@@ -930,7 +1013,10 @@ public class Main extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Method for adding score to player score, changing screen to gameOverScreen.
+	 */
 	public void gameover()
 	{
 		timer.stop();
@@ -983,7 +1069,11 @@ public class Main extends Application implements Serializable
 		fadeTransition.play();
 		// System.exit(0);
 	}
-	
+
+	/**
+	 * Method for moving walls, BallTokens, Tokens, Blocks upwards
+	 * to simulate the effect of the snake being pushed back from collsion with row of block
+	 */
 	public void moveUp()
 	{
 		double movUpAmt = 1.2*speedScale;
@@ -1002,7 +1092,7 @@ public class Main extends Application implements Serializable
 		{
 			BallToken w = balls.get(i);
 			w.setTranslateY(w.getTranslateY() - movUpAmt);
-			w.getA().setTranslateY(w.getTranslateY() - movUpAmt);
+			w.getValueLabel().setTranslateY(w.getTranslateY() - movUpAmt);
 			if (w.getTranslateY() > 800)
 			{
 				root.getChildren().remove(w);
@@ -1025,11 +1115,15 @@ public class Main extends Application implements Serializable
 			{
 				Block w = blocks.get(i).getBlockrow().get(j);
 				w.setTranslateY(w.getTranslateY() - movUpAmt);
-				w.getA().setTranslateY(w.getTranslateY() - movUpAmt);
+				w.getValueLabel().setTranslateY(w.getTranslateY() - movUpAmt);
 			}
 		}
 	}
-	
+
+	/**
+	 * Method for moving walls, BallTokens, Tokens, Blocks downwards
+	 * and removing them once they are off the screen
+	 */
 	private void removeItems()
 	{
 		for (int i = 0; i < walls.size(); i++)
@@ -1046,7 +1140,7 @@ public class Main extends Application implements Serializable
 		{
 			BallToken w = balls.get(i);
 			w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-			w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+			w.getValueLabel().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
 			if (w.getTranslateY() > 750)
 			{
 				root.getChildren().remove(w);
@@ -1069,7 +1163,7 @@ public class Main extends Application implements Serializable
 			{
 				Block w = blocks.get(i).getBlockrow().get(j);
 				w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-				w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+				w.getValueLabel().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
 				if (w.getTranslateY() > 750)
 				{
 					root.getChildren().remove(w);
@@ -1092,7 +1186,12 @@ public class Main extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Updates the GameScreen at every call from animation timer, moving all BallTokens, walls, Tokens and Blocks downward,
+	 * checking for collisions, checking and updating timer for temporary power-ups
+	 * @throws ConcurrentModificationException
+	 */
 	private void update() throws ConcurrentModificationException
 	{
 
@@ -1177,7 +1276,8 @@ public class Main extends Application implements Serializable
 		}
 		sizeLabel.setTranslateY(420);
 	}
-	
+
+
 	@Override
 	public void start(Stage stage) throws Exception
 	{
@@ -1232,9 +1332,5 @@ public class Main extends Application implements Serializable
 		stage.setScene(scene);
 		stage.show();
 	}
-	
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
+
 }

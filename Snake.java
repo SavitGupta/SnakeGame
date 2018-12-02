@@ -3,9 +3,17 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javafx.animation.Animation;
+import javafx.animation.FillTransition;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
+/**
+ *
+ */
 public class Snake implements Serializable
 {
 	private static final long serialVersionUID = 104L;
@@ -15,14 +23,23 @@ public class Snake implements Serializable
 	private double x;
 	private double y;
 	private int type;
-	
-	public Snake(double x, double y, int size, Pane root, int j)
+
+	/**
+	 * Initializes a Snake with following parameters on a given pane
+	 * @param x x co-ordinate of the head of the snake
+	 * @param y y co-ordinate of the head of the snake
+	 * @param size Length of snake ( number of balls in it)
+	 * @param root Pane on which GUI elements are placed
+	 * @param gameType Takes 0,1 as input to define what gameType the Snake belongs to. 0 : normal Mode, 1: Blind Mode
+	 *
+	 */
+	public Snake(double x, double y, int size, Pane root, int gameType)
 	{
 		this.x = x;
 		this.y = y;
 		this.size = size;
 		this.root = root;
-		this.type = j;
+		this.type = gameType;
 		System.out.println("x is " + String.valueOf(x));
 		for (int i = 0; i < size; i++)
 		{
@@ -35,7 +52,11 @@ public class Snake implements Serializable
 		System.out.println("Size2 is " + String.valueOf(l1.size()));
 		assert (size == l1.size());
 	}
-	
+
+	/**
+	 * Places the GUI components of the snake onto a container pane, on the basis of serialized non-GUI class attributes
+	 * @param root the Pane on which the GUI components are placed.
+	 */
 	public void deserialize(Pane root)
 	{
 		this.root = root;
@@ -49,7 +70,11 @@ public class Snake implements Serializable
 			tempy += 13;
 		}
 	}
-	
+
+	/**
+	 * Increases the length of the snake, by adding new balls at the bottom to it.
+	 * @param amt Number of balls to be addded
+	 */
 	public void incLenghtBy(int amt)
 	{
 		for (int i = 0; i < amt; i++)
@@ -61,7 +86,11 @@ public class Snake implements Serializable
 		}
 		assert (size == l1.size());
 	}
-	
+
+	/**
+	 * Decreases the length of the snake, by removing bottom-most balls from it.
+	 * @param amt Number of balls to be removed.
+	 */
 	public void decLenghtBy(int amt)
 	{
 		if (amt > l1.size())
@@ -77,12 +106,19 @@ public class Snake implements Serializable
 		}
 		assert (size == l1.size());
 	}
-	
+
+	/**
+	 * Saves the state of various GUI components into Serializable state variables/
+	 */
 	public void prepareSerialize()
 	{
 		x = l1.get(size - 1).getTranslateX();
 	}
-	
+
+	/**
+	 * Shifts snake to the left by specified amount
+	 * @param amt value(in pixels) by which it is moved to the left.
+	 */
 	public void moveLeft(double amt)
 	{
 		System.out.println(l1.size());
@@ -91,7 +127,24 @@ public class Snake implements Serializable
 			b.moveLeft(amt);
 		}
 	}
-	
+
+	/**
+	 * Shifts snake to the Right by specified amount
+	 * @param amt value(in pixels) by which it is moved to the Right.
+	 */
+	public void moveRight(double amt)
+	{
+		for (Balls b : l1)
+		{
+			b.moveRight(amt);
+		}
+	}
+
+	/**
+	 * Check Intersection between the GUI components of the snake with the given GUI component.
+	 * @param other the GUI component against which intersection is checked.
+	 * @return true if there is an intersection, false otherwise.
+	 */
 	public boolean intersection(Node other)
 	{
 		if (l1.size() == 0)
@@ -101,50 +154,54 @@ public class Snake implements Serializable
 		}
 		return l1.get(0).getBoundsInParent().intersects(other.getBoundsInParent());
 	}
-	
-	public void moveRight(double amt)
-	{
-		for (Balls b : l1)
-		{
-			b.moveRight(amt);
-		}
-	}
-	
+
+
+	/**
+	 * getter Function
+	 * @return x co-ordinate of the head of snake
+	 */
 	public double getx()
 	{
 		return l1.get(0).getTranslateX();
 	}
-	
+
+	/**
+	 * getter Function
+	 * @return y co-ordinate of the head of snake
+	 */
 	public double gety()
 	{
 		return l1.get(0).getTranslateY();
 	}
-	
+
+	/**
+	 * getter Function
+	 * @return size of snake (number of balls in snake).
+	 */
 	public int getSize()
 	{
 		return this.size;
 	}
-	
+
+	/**
+	 * getter Function
+	 * @return Entire Arraylist of balls, represents the Graphical component snake
+	 */
 	public ArrayList<Balls> getL1()
 	{
 		return l1;
 	}
-	
-	public void setL1(ArrayList<Balls> l1)
-	{
-		this.l1 = l1;
-	}
-	
-	public void setSize(int size)
-	{
-		this.size = size;
-	}
-	
-	public void animate(int j)
+
+
+	/**
+	 * begins the animation for color chages of the balls in the snake
+	 * @param gameType specifies the gameType for color changes
+	 */
+	public void animate(int gameType)
 	{
 		for (int i = 0; i < l1.size(); i++)
 		{
-			l1.get(i).animate(j);
+			l1.get(i).animate(gameType);
 		}
 	}
 }

@@ -35,7 +35,7 @@ public class GameOverController
 	{
 		scores = LeaderboardControllerGlobal.deserialize();
 		scores.add(new Score(value, player.getName()));
-		Collections.sort(scores, new ScoreComparator());
+		Collections.sort(scores, ScoreComparator.getInstance());
 		LeaderboardControllerGlobal.serialize(scores);
 	}
 	

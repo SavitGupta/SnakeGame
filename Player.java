@@ -25,7 +25,7 @@ public class Player implements Serializable
 	public void addScore(Integer value)
 	{
 		scores.add(new Score(value, username));
-		Collections.sort(scores, new ScoreComparator());
+		Collections.sort(scores, ScoreComparator.getInstance());
 	}
 	
 	public static Player deserialize(String fileName) throws NoSuchPlayerException
@@ -33,7 +33,7 @@ public class Player implements Serializable
 		FileInputStream fil1 = null;
 		try
 		{
-			fil1 = new FileInputStream(fileName);
+			fil1 = new FileInputStream("PlayerFiles/" + fileName);
 		}
 		catch (FileNotFoundException e)
 		{
@@ -61,7 +61,7 @@ public class Player implements Serializable
 		{
 			try
 			{
-				out = new ObjectOutputStream(new FileOutputStream(fileName));
+				out = new ObjectOutputStream(new FileOutputStream("PlayerFiles/" + fileName));
 				out.writeObject(this);
 			}
 			catch (IOException e)

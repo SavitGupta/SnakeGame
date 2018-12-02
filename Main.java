@@ -73,6 +73,7 @@ public class Main extends Application implements Serializable
 	private Player player;
 	private transient Stage mainStage;
 	private transient Boolean alreadyGameover = false;
+	private int pausetill = 0;
 
 	public void setPlayer(Player player)
 	{
@@ -119,7 +120,7 @@ public class Main extends Application implements Serializable
 					System.out.println("serialized");
 				}
 				s.prepareSerialize();
-				out = new ObjectOutputStream(new FileOutputStream(player.getName() + "_game.txt"));
+				out = new ObjectOutputStream(new FileOutputStream("PlayerGameFiles/" + player.getName() + "_game.txt"));
 				out.writeObject(this);
 			}
 			finally
@@ -146,7 +147,7 @@ public class Main extends Application implements Serializable
 		{
 			try
 			{
-				in = new ObjectInputStream(new FileInputStream(filename));
+				in = new ObjectInputStream(new FileInputStream("PlayerGameFiles/" + filename));
 				m1 = (Main) in.readObject();
 				m1.root = new Pane();
 				m1.GameOn = true;
@@ -560,6 +561,10 @@ public class Main extends Application implements Serializable
 	
 	private void moveLeft(double amt)
 	{
+		if(amt > 15){
+			System.out.println("67152 moved left by " + amt );
+			return;
+		}
 		s.moveLeft(amt);
 		boolean flag = false;
 		double dist = 0;
@@ -582,11 +587,11 @@ public class Main extends Application implements Serializable
 		{
 			for (Block b : b1.getBlockrow())
 			{
-				flag = s.intersection(b);
+				flag = s.intersection(b) && b.getTranslateY() + 50 > s.gety();
 				if (flag)
 				{
-					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
 					dist = abs(s.getx() - b.getTranslateX() - 67); // width of
+					System.out.println(String.valueOf("intersection with BLOCL left" + s.getx()) + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
 					break;
 				}
 			}
@@ -603,6 +608,7 @@ public class Main extends Application implements Serializable
 	
 	private void moveRight(double amt)
 	{
+
 		s.moveRight(amt);
 		boolean flag = false;
 		double dist = 0;
@@ -625,11 +631,11 @@ public class Main extends Application implements Serializable
 		{
 			for (Block b : b1.getBlockrow())
 			{
-				flag = s.intersection(b);
+				flag = s.intersection(b) && b.getTranslateY() + 50 > s.gety();
 				if (flag)
 				{
-					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
 					dist = abs(s.getx() + 7 - b.getTranslateX()); // 7 is radius
+					System.out.println("intersection with BLOCL Right" + s.getx() + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
 					// of
 					// snake
 					break;
@@ -643,6 +649,7 @@ public class Main extends Application implements Serializable
 		if (flag)
 		{
 			System.out.println("dist moved left " + String.valueOf(dist));
+
 			s.moveLeft(dist);
 		}
 	}
@@ -736,6 +743,7 @@ public class Main extends Application implements Serializable
 								{
 									s.decLenghtBy(1);
 									moveUp();
+									pausetill = 5;
 									score += 1;
 									scoreLabel.setText(Integer.toString(score));
 									value = value - 1;
@@ -745,10 +753,11 @@ public class Main extends Application implements Serializable
 								else
 								{
 									System.out.println(" attempt to decrease snake size 89212");
-									s.decLenghtBy(value);
+									int decvalby = min(value,s.getSize());
+									s.decLenghtBy(decvalby);
 									System.out.println("successful attempt to decrease snake size 1723");
-									score += value;
-									value = 0;
+									score += decvalby;
+									value-=decvalby;
 								}
 								if (value == 0)
 								{
@@ -936,7 +945,7 @@ public class Main extends Application implements Serializable
 			System.out.println("Score " + String.valueOf(i) + " is " + String.valueOf(player.getScores().get(i).getValue()));
 		}
 		player.serialize();
-		File file = new File(player.getName() + "_game.txt");
+		File file = new File("PlayerGameFiles/" + player.getName() + "_game.txt");
 		if (file.delete())
 		{
 			System.out.println("File deleted successfully");
@@ -977,11 +986,12 @@ public class Main extends Application implements Serializable
 	
 	public void moveUp()
 	{
-		distSinceBlock -= 3 * speedScale;
+		double movUpAmt = 1.2*speedScale;
+		distSinceBlock -= movUpAmt;
 		for (int i = 0; i < walls.size(); i++)
 		{
 			Wall w = walls.get(i);
-			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
+			w.setTranslateY(w.getTranslateY() - movUpAmt);
 			if (w.getTranslateY() > 800)
 			{
 				root.getChildren().remove(w);
@@ -991,8 +1001,8 @@ public class Main extends Application implements Serializable
 		for (int i = 0; i < balls.size(); i++)
 		{
 			BallToken w = balls.get(i);
-			w.setTranslateY(w.getTranslateY() - 3 * speedScale);
-			w.getA().setTranslateY(w.getTranslateY() - 3 * speedScale);
+			w.setTranslateY(w.getTranslateY() - movUpAmt);
+			w.getA().setTranslateY(w.getTranslateY() - movUpAmt);
 			if (w.getTranslateY() > 800)
 			{
 				root.getChildren().remove(w);
@@ -1002,7 +1012,7 @@ public class Main extends Application implements Serializable
 		for (int i = 0; i < tokens.size(); i++)
 		{
 			Token t1 = tokens.get(i);
-			t1.moveDown(-(3 * speedScale));
+			t1.moveDown(-(movUpAmt));
 			if (t1.getTranslateY() > 800)
 			{
 				root.getChildren().remove(t1);
@@ -1014,8 +1024,8 @@ public class Main extends Application implements Serializable
 			for (int j = 0; j < blocks.get(i).getBlockrow().size(); j++)
 			{
 				Block w = blocks.get(i).getBlockrow().get(j);
-				w.setTranslateY(w.getTranslateY() - 3 * speedScale);
-				w.getA().setTranslateY(w.getTranslateY() - 3 * speedScale);
+				w.setTranslateY(w.getTranslateY() - movUpAmt);
+				w.getA().setTranslateY(w.getTranslateY() - movUpAmt);
 			}
 		}
 	}
@@ -1085,9 +1095,14 @@ public class Main extends Application implements Serializable
 	
 	private void update() throws ConcurrentModificationException
 	{
+
 		if (s.getSize() <= 0)
 		{
 			gameover();
+		}
+		if(pausetill > 0){
+			pausetill -=1;
+			return;
 		}
 		distSinceBlock += 0.5 * speedScale;
 		last -= 0.4 * speedScale;
@@ -1098,15 +1113,6 @@ public class Main extends Application implements Serializable
 		{
 			for (int j = 0; j < tokens.size(); j++)
 			{
-				if (s.getSize() <= 0)
-				{
-					System.out.println("about to check movement 12356");
-					double bullshit = s.getx();
-					System.out.println("int got 7y23");
-					boolean temp = tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250
-							&& !tokens.get(j).isEnabled();
-					System.out.println("checked the condition successfully 23e87");
-				}
 				if (tokens.get(j).getType().equals("Coin") && abs(tokens.get(j).getTranslateX() - s.getx()) < 250 && abs(tokens.get(j).getTranslateY() - s.gety()) < 250 && !tokens.get(j).isEnabled())
 				{
 					tokens.get(j).setEnabled(true);
@@ -1144,13 +1150,14 @@ public class Main extends Application implements Serializable
 			Image mag = new Image(getClass().getResourceAsStream("./Images/shieldoff.png"));
 			shield.setFill(new ImagePattern(mag));
 		}
+		deflectFromTokens();
+		deflectFromWalls();
+		deflectFromBlocks();
 		if (t > 2)
 		{
 			generateContent();
 		}
-		deflectFromTokens();
-		deflectFromWalls();
-		deflectFromBlocks();
+
 		if (s.getSize() <= 0)
 		{
 			System.out.println("exited deflect from blocks 98230");

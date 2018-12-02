@@ -1,9 +1,5 @@
 
 //@formatter:on
-import static java.lang.Math.abs;
-import static java.lang.Math.floor;
-import static java.lang.Math.max;
-import static java.lang.Math.sqrt;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,6 +38,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import static java.lang.Math.*;
+
 public class Main extends Application implements Serializable
 {
 	private static final long serialVersionUID = 101L;
@@ -71,10 +69,11 @@ public class Main extends Application implements Serializable
 	private int ShieldCheck = 0;
 	private int MagnetCheck = 0;
 	private double distSinceBlock = 0;
-	private transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
+	private transient ImagePattern explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("./Images/exp.png")));
 	private Player player;
-	private Stage mainStage;
-	
+	private transient Stage mainStage;
+	private transient Boolean alreadyGameover = false;
+
 	public void setPlayer(Player player)
 	{
 		this.player = player;
@@ -140,6 +139,7 @@ public class Main extends Application implements Serializable
 	@Nullable
 	public static Main deserialize(String filename)
 	{
+
 		ObjectInputStream in = null;
 		Main m1 = null;
 		try
@@ -151,6 +151,7 @@ public class Main extends Application implements Serializable
 				m1.root = new Pane();
 				m1.GameOn = true;
 				m1.burst = new ArrayList<>();
+				m1.alreadyGameover = false;
 				for (BallToken b : m1.balls)
 				{
 					b.deserialize();
@@ -215,7 +216,7 @@ public class Main extends Application implements Serializable
 	
 	private void createContent()
 	{
-		explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("exp.png")));
+		explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("./Images/exp.png")));
 		root.setPrefSize(500, 700);
 		root.setStyle("-fx-background-color: #000000;");
 		sizeLabel.setTextFill(Color.DEEPPINK);
@@ -236,24 +237,24 @@ public class Main extends Application implements Serializable
 		shield = new Rectangle(20, 20);
 		if (ShieldOn)
 		{
-			Image mag = new Image(getClass().getResourceAsStream("shieldon.png"));
+			Image mag = new Image(getClass().getResourceAsStream("./Images/shieldon.png"));
 			shield.setFill(new ImagePattern(mag));
 		}
 		else
 		{
-			Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
+			Image mag2 = new Image(getClass().getResourceAsStream("./Images/shieldoff.png"));
 			shield.setFill(new ImagePattern(mag2));
 		}
 		a.getChildren().add(shield);
 		magnet = new Rectangle(20, 20);
 		if (MagnetOn)
 		{
-			Image mag = new Image(getClass().getResourceAsStream("magneton.png"));
+			Image mag = new Image(getClass().getResourceAsStream("./Images/magneton.png"));
 			magnet.setFill(new ImagePattern(mag));
 		}
 		else
 		{
-			Image mag2 = new Image(getClass().getResourceAsStream("magnetoff.png"));
+			Image mag2 = new Image(getClass().getResourceAsStream("./Images/magnetoff.png"));
 			magnet.setFill(new ImagePattern(mag2));
 		}
 		a.getChildren().add(magnet);
@@ -380,24 +381,24 @@ public class Main extends Application implements Serializable
 		shield = new Rectangle(20, 20);
 		if (ShieldOn)
 		{
-			Image mag = new Image(getClass().getResourceAsStream("shieldon.png"));
+			Image mag = new Image(getClass().getResourceAsStream("./Images/shieldon.png"));
 			shield.setFill(new ImagePattern(mag));
 		}
 		else
 		{
-			Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
+			Image mag2 = new Image(getClass().getResourceAsStream("./Images/shieldoff.png"));
 			shield.setFill(new ImagePattern(mag2));
 		}
 		a.getChildren().add(shield);
 		magnet = new Rectangle(20, 20);
 		if (MagnetOn)
 		{
-			Image mag = new Image(getClass().getResourceAsStream("magneton.png"));
+			Image mag = new Image(getClass().getResourceAsStream("./Images/magneton.png"));
 			magnet.setFill(new ImagePattern(mag));
 		}
 		else
 		{
-			Image mag2 = new Image(getClass().getResourceAsStream("magnetoff.png"));
+			Image mag2 = new Image(getClass().getResourceAsStream("./Images/magnetoff.png"));
 			magnet.setFill(new ImagePattern(mag2));
 		}
 		a.getChildren().add(magnet);
@@ -646,14 +647,6 @@ public class Main extends Application implements Serializable
 				{
 					System.out.println(String.valueOf("intersection with BLOCL" + s.getx()) + " : " + String.valueOf(b.getTranslateX()));
 					dist = abs(s.getx() - b.getTranslateX() - 67); // width of
-					// block
-					// - radius
-					// ( as
-					// translatex
-					// is
-					// measured
-					// form
-					// top-l
 					break;
 				}
 			}
@@ -825,7 +818,7 @@ public class Main extends Application implements Serializable
 									root.getChildren().remove(hitter);
 									root.getChildren().remove(hitter.getA());
 									w1.getBlockrow().remove(hitter);
-									Image mag = new Image(getClass().getResourceAsStream("exp.png"));
+									Image mag = new Image(getClass().getResourceAsStream("./Images/exp.png"));
 									r1.setFill(new ImagePattern(mag));
 									burst.add(r1);
 									root.getChildren().add(r1);
@@ -863,10 +856,6 @@ public class Main extends Application implements Serializable
 				}
 			}
 		}
-		if (s.getSize() == 0)
-		{
-			gameover();
-		}
 	}
 	
 	public void deflectFromBalls()
@@ -882,7 +871,7 @@ public class Main extends Application implements Serializable
 				System.out.println("Value of snake " + String.valueOf(s.getSize()));
 				s.incLenghtBy(value);
 				Rectangle r2 = new Rectangle(w.getTranslateX() + 10, w.getTranslateY() + 20, 10, 10);
-				Image mag2 = new Image(getClass().getResourceAsStream("expcoin.png"));
+				Image mag2 = new Image(getClass().getResourceAsStream("./Images/expcoin.png"));
 				r2.setFill(new ImagePattern(mag2));
 				burst.add(r2);
 				root.getChildren().add(r2);
@@ -918,7 +907,7 @@ public class Main extends Application implements Serializable
 				else if (t1.getType().equals("Magnet"))
 				{
 					Rectangle r2 = new Rectangle(t1.getTranslateX() - 10, t1.getTranslateY(), 10, 10);
-					Image mag2 = new Image(getClass().getResourceAsStream("expmagnet.png"));
+					Image mag2 = new Image(getClass().getResourceAsStream("./Images/expmagnet.png"));
 					r2.setFill(new ImagePattern(mag2));
 					burst.add(r2);
 					root.getChildren().add(r2);
@@ -931,7 +920,7 @@ public class Main extends Application implements Serializable
 					});
 					scale2.play();
 					MagnetOn = true;
-					Image mag = new Image(getClass().getResourceAsStream("magneton.png"));
+					Image mag = new Image(getClass().getResourceAsStream("./Images/magneton.png"));
 					magnet.setFill(new ImagePattern(mag));
 					MagnetCheck = 0;
 					root.getChildren().remove(t1);
@@ -971,7 +960,7 @@ public class Main extends Application implements Serializable
 				{
 					ShieldCheck = 0;
 					Rectangle r2 = new Rectangle(t1.getTranslateX(), t1.getTranslateY(), 10, 10);
-					Image mag2 = new Image(getClass().getResourceAsStream("expshield.png"));
+					Image mag2 = new Image(getClass().getResourceAsStream("./Images/expshield.png"));
 					r2.setFill(new ImagePattern(mag2));
 					burst.add(r2);
 					root.getChildren().add(r2);
@@ -984,7 +973,7 @@ public class Main extends Application implements Serializable
 					});
 					scale2.play();
 					ShieldOn = true;
-					Image mag = new Image(getClass().getResourceAsStream("shieldon.png"));
+					Image mag = new Image(getClass().getResourceAsStream("./Images/shieldon.png"));
 					shield.setFill(new ImagePattern(mag));
 					root.getChildren().remove(t1);
 					tokens.remove(t1);
@@ -996,6 +985,10 @@ public class Main extends Application implements Serializable
 	public void gameover()
 	{
 		timer.stop();
+		if(alreadyGameover){
+			return;
+		}
+		alreadyGameover = true;
 		System.out.println("in dgameover function 97123");
 		player.addScore(score);
 		for (int i = 0; i < player.getScores().size(); i++)
@@ -1192,7 +1185,7 @@ public class Main extends Application implements Serializable
 		{
 			MagnetCheck = 0;
 			MagnetOn = false;
-			Image mag = new Image(getClass().getResourceAsStream("magnetoff.png"));
+			Image mag = new Image(getClass().getResourceAsStream("./Images/magnetoff.png"));
 			magnet.setFill(new ImagePattern(mag));
 		}
 		if (ShieldOn)
@@ -1208,7 +1201,7 @@ public class Main extends Application implements Serializable
 		{
 			ShieldCheck = 0;
 			ShieldOn = false;
-			Image mag = new Image(getClass().getResourceAsStream("shieldoff.png"));
+			Image mag = new Image(getClass().getResourceAsStream("./Images/shieldoff.png"));
 			shield.setFill(new ImagePattern(mag));
 		}
 		if (t > 2)

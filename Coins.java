@@ -8,12 +8,12 @@ public class Coins extends Token
 	private static Image mag;
 	private void instantiateImages()
 	{
-		mag = new Image(getClass().getResourceAsStream("coin.png"));
+		mag = new Image(getClass().getResourceAsStream("Images/coin.png"));
 	}
 	public Coins(double x, double y)
 	{
 
-		super(x, y, "Coin", "coin.png");
+		super(x, y, "Coin", "Images/coin.png");
 		if(mag == null){
 			instantiateImages();
 		}

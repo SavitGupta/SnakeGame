@@ -18,7 +18,7 @@ public class BallToken extends Rectangle implements Serializable
 	private static Image mag;
 	private void instantiateImages()
 	{
-		mag = new Image(getClass().getResourceAsStream("yellowball.png"));
+		mag = new Image(getClass().getResourceAsStream("./Images/yellowball.png"));
 	}
 	public BallToken(double x, double y, String value)
 	{
@@ -52,7 +52,7 @@ public class BallToken extends Rectangle implements Serializable
 		this.setWidth(25);
 		this.setHeight(25);
 		Image mag;
-		mag = new Image(getClass().getResourceAsStream("yellowball.png"));
+		mag = new Image(getClass().getResourceAsStream("./Images/yellowball.png"));
 		this.setFill(new ImagePattern(mag));
 		a = new Label(String.valueOf(value));
 		a.setPrefHeight(25);

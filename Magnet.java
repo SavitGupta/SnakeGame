@@ -9,14 +9,14 @@ public class Magnet extends Token
 	private static Image mag;
 	private void instantiateImages()
 	{
-		mag = new Image(getClass().getResourceAsStream("magnet.jpg"));
+		mag = new Image(getClass().getResourceAsStream("./Images/magnet.jpg"));
 	}
 
 
 
 	public Magnet(double x, double y)
 	{
-		super(x, y, "Magnet", "magnet.jpg");
+		super(x, y, "Magnet", "./Images/magnet.jpg");
 		if(mag == null){
 			instantiateImages();
 		}

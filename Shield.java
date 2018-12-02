@@ -8,11 +8,11 @@ public class Shield extends Token
 	private static Image mag;
 	private void instantiateImages()
 	{
-		mag = new Image(getClass().getResourceAsStream("shield.png"));
+		mag = new Image(getClass().getResourceAsStream("./Images/shield.png"));
 	}
 	public Shield(double x, double y)
 	{
-		super(x, y, "Shield", "shield.png");
+		super(x, y, "Shield", "./Images/shield.png");
 		if(mag == null){
 			instantiateImages();
 		}

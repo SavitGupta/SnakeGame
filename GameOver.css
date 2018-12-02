@@ -1,5 +1,5 @@
 .root{
-    -fx-background-image: url("scorepg.png");
+    -fx-background-image: url("Images/scorepg.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 500 700;
     -fx-background-position: center center;

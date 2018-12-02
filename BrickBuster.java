@@ -9,12 +9,12 @@ public class BrickBuster extends Token
 	private static Image mag;
 	private void instantiateImages()
 	{
-		mag = new Image(getClass().getResourceAsStream("bomb.jpg"));
+		mag = new Image(getClass().getResourceAsStream("./Images/bomb.jpg"));
 	}
 	public BrickBuster(double x, double y)
 	{
 
-		super(x, y, "BrickBuster", "bomb.jpg");
+		super(x, y, "BrickBuster", "./Images/bomb.jpg");
 		if(mag == null){
 			instantiateImages();
 		}

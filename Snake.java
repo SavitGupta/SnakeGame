@@ -40,7 +40,7 @@ public class Snake implements Serializable
 		this.size = size;
 		this.root = root;
 		this.type = gameType;
-		System.out.println("x is " + String.valueOf(x));
+		//System.out.println("x is " + String.valueOf(x));
 		for (int i = 0; i < size; i++)
 		{
 			Balls b = new Balls(x, y, type);
@@ -48,8 +48,8 @@ public class Snake implements Serializable
 			l1.add(b);
 			y += 13;
 		}
-		System.out.println("Size1 is " + String.valueOf(this.size));
-		System.out.println("Size2 is " + String.valueOf(l1.size()));
+		//System.out.println("Size1 is " + String.valueOf(this.size));
+		//System.out.println("Size2 is " + String.valueOf(l1.size()));
 		assert (size == l1.size());
 	}
 
@@ -95,7 +95,7 @@ public class Snake implements Serializable
 	{
 		if (amt > l1.size())
 		{
-			System.out.println("amt is greater 83401");
+			//System.out.println("amt is greater 83401");
 			amt = l1.size();
 		}
 		for (int i = 0; i < amt; i++)
@@ -121,7 +121,7 @@ public class Snake implements Serializable
 	 */
 	public void moveLeft(double amt)
 	{
-		System.out.println(l1.size());
+		//System.out.println(l1.size());
 		for (Balls b : l1)
 		{
 			b.moveLeft(amt);
@@ -149,7 +149,7 @@ public class Snake implements Serializable
 	{
 		if (l1.size() == 0)
 		{
-			System.out.println("Snake size is zero");
+			//System.out.println("Snake size is zero");
 			return false;
 		}
 		return l1.get(0).getBoundsInParent().intersects(other.getBoundsInParent());

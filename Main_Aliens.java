@@ -75,12 +75,20 @@ public class Main_Aliens extends Application implements Serializable
 	private transient Stage mainStage;
 	private transient Boolean alreadyGameover = false;
 	private int pausetill = 0;
-	
+
+	/**
+	 * Standard setter
+	 * @param player value to be assigned player attribute
+	 */
 	public void setPlayer(Player player)
 	{
 		this.player = player;
 	}
-	
+
+	/**
+	 * Standard setter
+	 * @param gameMode 0,1 value. 0 for Normal Mode, 1 for Blind Mode
+	 */
 	public void setGameMode(int gameMode)
 	{
 		if (gameMode == 0)
@@ -95,7 +103,11 @@ public class Main_Aliens extends Application implements Serializable
 		}
 		this.gameMode = gameMode;
 	}
-	
+
+	/**
+	 *  Serializes the game, while storing the state of all non-serializable GUI elements in serializable elements.
+	 *  The object is serialized to file in folder PlayerGameFiles with name: username + "_game.txt"
+	 */
 	private void serialize()
 	{
 		try
@@ -122,7 +134,7 @@ public class Main_Aliens extends Application implements Serializable
 				for (RowOfBlocks r : blocks)
 				{
 					r.prepareSerialize();
-					System.out.println("serialized");
+					//System.out.println("serialized");
 				}
 				s.prepareSerialize();
 				out = new ObjectOutputStream(new FileOutputStream("PlayerGameFiles/" + player.getName() + "_game2.txt"));
@@ -138,11 +150,15 @@ public class Main_Aliens extends Application implements Serializable
 		}
 		catch (IOException e)
 		{
-			System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
+			//System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
 		}
 	}
-	
-	@Nullable
+
+	/**
+	 * Deserializes object from given filename, uses non-GUI serializable state variables to initialize non-serializable GUI elements
+	 * @param filename filename from which the object is read
+	 * @return The object that was read from the file, with GUI elements also initialized
+	 */
 	public static Main_Aliens deserialize(String filename)
 	{
 		ObjectInputStream in = null;
@@ -162,7 +178,7 @@ public class Main_Aliens extends Application implements Serializable
 				{
 					b.deserialize();
 					m1.root.getChildren().add(b);
-					m1.root.getChildren().add(b.getA());
+					m1.root.getChildren().add(b.getValueLabel());
 				}
 				for (Enemy b : m1.enemies)
 				{
@@ -180,7 +196,7 @@ public class Main_Aliens extends Application implements Serializable
 				for (RowOfBlocks r : m1.blocks)
 				{
 					r.deserialize(m1.root);
-					System.out.println("deserialized");
+					//System.out.println("deserialized");
 				}
 				m1.root.getChildren().addAll(m1.tokens);
 				m1.root.getChildren().addAll(m1.walls);
@@ -204,11 +220,11 @@ public class Main_Aliens extends Application implements Serializable
 			}
 			catch (IOException e)
 			{
-				System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
+				//System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
 			}
 			catch (ClassNotFoundException e)
 			{
-				System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
+				//System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
 			}
 			finally
 			{
@@ -220,11 +236,14 @@ public class Main_Aliens extends Application implements Serializable
 		}
 		catch (IOException e)
 		{
-			System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
+			//System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
 		}
 		return m1;
 	}
-	
+
+	/**
+	 * Creates initial GUI elements present on all Games
+	 */
 	private void createContent()
 	{
 		explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("./Images/exp.png")));
@@ -286,7 +305,11 @@ public class Main_Aliens extends Application implements Serializable
 			timer.start();
 		}
 	}
-	
+
+	/**
+	 * Method for taking action on the basis on option selected in the dropdown menu on the game screen.
+	 * @param dropdown ComboBox whose options are to be evaluated
+	 */
 	public void getChoice(ComboBox<String> dropdown, ActionEvent e)
 	{
 		if (dropdown.getValue().equals("Pause"))
@@ -310,7 +333,10 @@ public class Main_Aliens extends Application implements Serializable
 			forceExit();
 		}
 	}
-	
+
+	/**
+	 * Method serializing and then exiting the from game screen to main screen
+	 */
 	private void forceExit()
 	{
 		timer.stop();
@@ -344,7 +370,10 @@ public class Main_Aliens extends Application implements Serializable
 		});
 		fadeTransition.play();
 	}
-	
+
+	/**
+	 * Restarts the game, resetting all state variables.
+	 */
 	public void restart()
 	{
 		root.getChildren().clear();
@@ -363,7 +392,14 @@ public class Main_Aliens extends Application implements Serializable
 		distSinceBlock = 0;
 		createContent();
 	}
-	
+
+	/**
+	 * Adds a BallToken at given x, y co-ordinates with given point value
+	 * @param x x co-ordinate of the BallToken
+	 * @param y y-co-ordinate of the BallToke
+	 * @param value point value
+	 * @return True if the BallToken was successfully added, false otherwise
+	 */
 	public boolean addBallToken(double x, double y, int value)
 	{
 		if (value <= 0)
@@ -381,10 +417,16 @@ public class Main_Aliens extends Application implements Serializable
 		}
 		balls.add(b1);
 		root.getChildren().add(b1);
-		root.getChildren().add(b1.getA());
+		root.getChildren().add(b1.getValueLabel());
 		return true;
 	}
-	
+
+	/**
+	 * Adds an Enemy at given x, y co-ordinates with given point value
+	 * @param x x co-ordinate of the Enemy
+	 * @param y y-co-ordinate of the Enemy
+	 * @return True if the Enemy was successfully added, false otherwise
+	 */
 	public boolean addEnemy(double x, double y)
 	{
 		Enemy b1 = new Enemy(x, y);
@@ -396,7 +438,14 @@ public class Main_Aliens extends Application implements Serializable
 		root.getChildren().add(b1);
 		return true;
 	}
-	
+
+	/**
+	 * Adds a Token of specified type at specified x, y co-ordinates.
+	 * @param x x co-ordinate of the Token
+	 * @param y y-co-ordinate of the Token
+	 * @param type Type of Token to be added
+	 * @return True if the Token was successfully added, false otherwise
+	 */
 	public boolean addToken(double x, double y, String type)
 	{
 		if (type.equalsIgnoreCase("Shield"))
@@ -414,7 +463,7 @@ public class Main_Aliens extends Application implements Serializable
 			// Coins s1 = new Coins(x, y);
 			// if (checkAlreadyOccupied(s1))
 			// {
-			// // System.out.println("skipped");
+			// // //System.out.println("skipped");
 			// return false;
 			// }
 			// tokens.add(s1);
@@ -426,7 +475,7 @@ public class Main_Aliens extends Application implements Serializable
 			// Magnet s1 = new Magnet(x, y);
 			// if (checkAlreadyOccupied(s1))
 			// {
-			// // System.out.println("skipped");
+			// // //System.out.println("skipped");
 			// return false;
 			// }
 			// tokens.add(s1);
@@ -437,7 +486,7 @@ public class Main_Aliens extends Application implements Serializable
 			BrickBuster s1 = new BrickBuster(x, y);
 			if (checkAlreadyOccupied(s1))
 			{
-				// System.out.println("skipped");
+				// //System.out.println("skipped");
 				return false;
 			}
 			tokens.add(s1);
@@ -445,7 +494,10 @@ public class Main_Aliens extends Application implements Serializable
 		}
 		return true;
 	}
-	
+
+	/**
+	 * Adds a RowOfBlock at the top of screen.
+	 */
 	public void addBlocks()
 	{
 		RowOfBlocks rBlocks = new RowOfBlocks(s.getSize(), root);
@@ -483,7 +535,14 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Adds a Wall of specified height at specified x, y co-ordinates.
+	 * @param x x co-ordinate of the Token
+	 * @param y y-co-ordinate of the Token
+	 * @param height height of wall to be added
+	 * @return True if the wall was successfully added, false otherwise
+	 */
 	public boolean addWall(int x, double y, double height)
 	{
 		Wall w1 = new Wall(x * 500 / 8, y, height);
@@ -495,7 +554,11 @@ public class Main_Aliens extends Application implements Serializable
 		root.getChildren().add(w1);
 		return true;
 	}
-	
+
+	/**
+	 * Generates content on the basis, probabilistic models that depend upon the time since an object of same type was added, as well as snake size
+	 * Increasing the chances of objects that haven't occurred recently
+	 */
 	public void generateContent()
 	{
 		Random random = new Random();
@@ -503,7 +566,7 @@ public class Main_Aliens extends Application implements Serializable
 		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
 		{
 			t = 0;
-			// System.out.println("generating blocks");
+			// //System.out.println("generating blocks");
 			distSinceBlock = 0;
 			addBlocks();
 		}
@@ -581,12 +644,16 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * moves the GUI components of the snake to left.
+	 * @param amt value(in pixel) by which the snake is moved
+	 */
 	private void moveLeft(double amt)
 	{
 		if (amt > 15)
 		{
-			System.out.println("67152 moved left by " + amt);
+			//System.out.println("67152 moved left by " + amt);
 			return;
 		}
 		s.moveLeft(amt);
@@ -597,7 +664,7 @@ public class Main_Aliens extends Application implements Serializable
 			flag = s.intersection(w);
 			if (flag)
 			{
-				System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
+				//System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
 				dist = abs(s.getx() - w.getTranslateX() - 10);
 				break;
 			}
@@ -615,7 +682,7 @@ public class Main_Aliens extends Application implements Serializable
 				if (flag)
 				{
 					dist = abs(s.getx() - b.getTranslateX() - 67); // width of
-					System.out.println(String.valueOf("intersection with BLOCL left" + s.getx()) + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
+					//System.out.println(String.valueOf("intersection with BLOCL left" + s.getx()) + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
 					break;
 				}
 			}
@@ -629,7 +696,11 @@ public class Main_Aliens extends Application implements Serializable
 			s.moveRight(dist);
 		}
 	}
-	
+
+	/**
+	 * moves the GUI components of the snake to Right.
+	 * @param amt value(in pixel) by which the snake is moved
+	 */
 	private void moveRight(double amt)
 	{
 		s.moveRight(amt);
@@ -640,7 +711,7 @@ public class Main_Aliens extends Application implements Serializable
 			flag = s.intersection(w);
 			if (flag)
 			{
-				System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
+				//System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
 				dist = abs(s.getx() - w.getTranslateX() + 8);
 				break;
 			}
@@ -658,7 +729,7 @@ public class Main_Aliens extends Application implements Serializable
 				if (flag)
 				{
 					dist = abs(s.getx() + 7 - b.getTranslateX()); // 7 is radius
-					System.out.println("intersection with BLOCL Right" + s.getx() + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
+					//System.out.println("intersection with BLOCL Right" + s.getx() + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
 					// of
 					// snake
 					break;
@@ -671,11 +742,16 @@ public class Main_Aliens extends Application implements Serializable
 		}
 		if (flag)
 		{
-			System.out.println("dist moved left " + String.valueOf(dist));
+			//System.out.println("dist moved left " + String.valueOf(dist));
 			s.moveLeft(dist);
 		}
 	}
-	
+
+	/**
+	 * Check if specified object intersects with any of the already existing object in the main pane.
+	 * @param first The Node whose collision is to be checked
+	 * @return true, if there is an intersection, false otherwise
+	 */
 	public boolean checkAlreadyOccupied(Node first)
 	{
 		boolean flag = false;
@@ -684,7 +760,7 @@ public class Main_Aliens extends Application implements Serializable
 			flag = w.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + w.getClass() + " " + w.getBoundsInParent());
+				//System.out.println("SKIPPED " + first.getClass() + " " + w.getClass() + " " + w.getBoundsInParent());
 				return true;
 			}
 		}
@@ -693,7 +769,7 @@ public class Main_Aliens extends Application implements Serializable
 			flag = e.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + e.getClass() + " " + e.getBoundsInParent());
+				//System.out.println("SKIPPED " + first.getClass() + " " + e.getClass() + " " + e.getBoundsInParent());
 				return true;
 			}
 		}
@@ -702,7 +778,7 @@ public class Main_Aliens extends Application implements Serializable
 			flag = t1.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + t1.getClass() + " " + t1.getBoundsInParent());
+				//System.out.println("SKIPPED " + first.getClass() + " " + t1.getClass() + " " + t1.getBoundsInParent());
 				return true;
 			}
 		}
@@ -711,7 +787,7 @@ public class Main_Aliens extends Application implements Serializable
 			flag = b1.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + b1.getClass() + " " + b1.getBoundsInParent());
+				//System.out.println("SKIPPED " + first.getClass() + " " + b1.getClass() + " " + b1.getBoundsInParent());
 				return true;
 			}
 		}
@@ -720,13 +796,16 @@ public class Main_Aliens extends Application implements Serializable
 			flag = b2.intersection(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + b2.getClass());
+				//System.out.println("SKIPPED " + first.getClass() + " " + b2.getClass());
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Checks collision of snake with walls, and shifts it if required.
+	 */
 	public void deflectFromWalls()
 	{
 		Wall hitter;
@@ -736,7 +815,7 @@ public class Main_Aliens extends Application implements Serializable
 			{
 				hitter = w;
 				double dist = hitter.getTranslateX() - s.getx() + 5;
-				System.out.println("Inersection with wall head " + String.valueOf(dist));
+				//System.out.println("Inersection with wall head " + String.valueOf(dist));
 				if (dist > 0)
 				{
 					s.moveLeft(12 - dist);
@@ -749,7 +828,10 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Checks collision of snake with Blocks, shifting it or reducing its size and removing the Block from the Main Pane of the game
+	 */
 	public void deflectFromBlocks()
 	{
 		for (RowOfBlocks w1 : blocks)
@@ -760,12 +842,12 @@ public class Main_Aliens extends Application implements Serializable
 				{
 					if (w.getTranslateY() < 390)
 					{
-						System.out.println("location of block is " + String.valueOf(w.getTranslateY()));
+						//System.out.println("location of block is " + String.valueOf(w.getTranslateY()));
 						Block hitter = w;
 						int value = hitter.getValue();
 						int value2 = hitter.getInitialValue();
-						System.out.println("Value of block " + String.valueOf(value));
-						System.out.println("Value of snake " + String.valueOf(s.getSize()));
+						//System.out.println("Value of block " + String.valueOf(value));
+						//System.out.println("Value of snake " + String.valueOf(s.getSize()));
 						if (!ShieldOn)
 						{
 							if (s.getSize() > 0)
@@ -778,25 +860,25 @@ public class Main_Aliens extends Application implements Serializable
 									score += 1;
 									scoreLabel.setText(Integer.toString(score));
 									value = value - 1;
-									hitter.getA().setText(Integer.toString(value));
+									hitter.getValueLabel().setText(Integer.toString(value));
 									hitter.setValue(value);
 								}
 								else
 								{
-									System.out.println(" attempt to decrease snake size 89212");
+									//System.out.println(" attempt to decrease snake size 89212");
 									int decvalby = min(value, s.getSize());
 									s.decLenghtBy(decvalby);
-									System.out.println("successful attempt to decrease snake size 1723");
+									//System.out.println("successful attempt to decrease snake size 1723");
 									score += decvalby;
 									value -= decvalby;
 								}
 								if (value == 0)
 								{
-									System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
-									System.out.println("hitter is removed " + String.valueOf(hitter));
+									//System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
+									//System.out.println("hitter is removed " + String.valueOf(hitter));
 									Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
 									root.getChildren().remove(hitter);
-									root.getChildren().remove(hitter.getA());
+									root.getChildren().remove(hitter.getValueLabel());
 									w1.getBlockrow().remove(hitter);
 									Image mag = new Image(getClass().getResourceAsStream("./Images/exp.png"));
 									r1.setFill(new ImagePattern(mag));
@@ -818,7 +900,7 @@ public class Main_Aliens extends Application implements Serializable
 							score += value;
 							Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
 							root.getChildren().remove(hitter);
-							root.getChildren().remove(hitter.getA());
+							root.getChildren().remove(hitter.getValueLabel());
 							w1.getBlockrow().remove(hitter);
 							r1.setFill(explosionImage);
 							burst.add(r1);
@@ -837,7 +919,10 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Checks collision of snake with BallTokens, collecting and then removing them.
+	 */
 	public void deflectFromBalls()
 	{
 		BallToken hitter;
@@ -847,8 +932,8 @@ public class Main_Aliens extends Application implements Serializable
 			{
 				hitter = w;
 				int value = Integer.parseInt(hitter.getValue());
-				System.out.println("Value of circle " + String.valueOf(value));
-				System.out.println("Value of snake " + String.valueOf(s.getSize()));
+				//System.out.println("Value of circle " + String.valueOf(value));
+				//System.out.println("Value of snake " + String.valueOf(s.getSize()));
 				s.incLenghtBy(value);
 				Rectangle r2 = new Rectangle(w.getTranslateX() + 10, w.getTranslateY() + 20, 10, 10);
 				Image mag2 = new Image(getClass().getResourceAsStream("./Images/expcoin.png"));
@@ -864,12 +949,15 @@ public class Main_Aliens extends Application implements Serializable
 				});
 				scale2.play();
 				root.getChildren().remove(hitter);
-				root.getChildren().remove(hitter.getA());
+				root.getChildren().remove(hitter.getValueLabel());
 				balls.remove(hitter);
 			}
 		}
 	}
-	
+
+	/**
+	 * Checks collision of snake with Tokens, collecting and then removing them.
+	 */
 	public void deflectFromTokens()
 	{
 		for (int i = 0; i < tokens.size(); i++)
@@ -877,7 +965,7 @@ public class Main_Aliens extends Application implements Serializable
 			Token t1 = tokens.get(i);
 			if (s.intersection(t1))
 			{
-				System.out.println("Token of type " + t1.getType());
+				//System.out.println("Token of type " + t1.getType());
 				if (t1.getType().equals("Coin"))
 				{
 				}
@@ -895,7 +983,7 @@ public class Main_Aliens extends Application implements Serializable
 							score += blocks.get(j).getBlockrow().get(m).getValue();
 							Rectangle r1 = new Rectangle(blocks.get(j).getBlockrow().get(m).getTranslateX() + 15, blocks.get(j).getBlockrow().get(m).getTranslateY() + 30, 20, 20);
 							root.getChildren().remove(blocks.get(j).getBlockrow().get(m));
-							root.getChildren().remove(blocks.get(j).getBlockrow().get(m).getA());
+							root.getChildren().remove(blocks.get(j).getBlockrow().get(m).getValueLabel());
 							blocks.get(j).getBlockrow().remove(blocks.get(j).getBlockrow().get(m));
 							r1.setFill(explosionImage);
 							burst.add(r1);
@@ -939,7 +1027,10 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Checks collision of snake with Enemy, set snake size to zero in case of collision
+	 */
 	public void deflectFromEnemy()
 	{
 		for (int i = 0; i < enemies.size(); i++)
@@ -947,7 +1038,7 @@ public class Main_Aliens extends Application implements Serializable
 			Enemy t1 = enemies.get(i);
 			if (s.intersection(t1))
 			{
-				System.out.println("Enemy is hit by snake");
+				//System.out.println("Enemy is hit by snake");
 				s.decLenghtBy(s.getSize());
 				// Rectangle r2 = new Rectangle(t1.getTranslateX(), t1.getTranslateY(), 10, 10);
 				// Image mag2 = new Image(getClass().getResourceAsStream("./Images/expenemy.png"));
@@ -967,7 +1058,11 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+
+	/**
+	 * Checks collision of Bullets with Enemy, removing them incase of collision
+	 */
 	public void deflectFromEnemyBullet()
 	{
 		for (int i = 0; i < enemies.size(); i++)
@@ -977,7 +1072,7 @@ public class Main_Aliens extends Application implements Serializable
 			{
 				if (t1.intersection(bullets.get(j)))
 				{
-					System.out.println("Enemy is hit by bullet");
+					//System.out.println("Enemy is hit by bullet");
 					Rectangle r2 = new Rectangle(t1.getTranslateX(), t1.getTranslateY(), 8, 8);
 					Image mag2 = new Image(getClass().getResourceAsStream("./Images/expenemy.png"));
 					r2.setFill(new ImagePattern(mag2));
@@ -999,7 +1094,10 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Method for adding score to player score, changing screen to gameOverScreen.
+	 */
 	public void gameover()
 	{
 		timer.stop();
@@ -1008,21 +1106,21 @@ public class Main_Aliens extends Application implements Serializable
 			return;
 		}
 		alreadyGameover = true;
-		System.out.println("in dgameover function 97123");
+		//System.out.println("in dgameover function 97123");
 		player.addScore(score);
 		for (int i = 0; i < player.getScores().size(); i++)
 		{
-			System.out.println("Score " + String.valueOf(i) + " is " + String.valueOf(player.getScores().get(i).getValue()));
+			//System.out.println("Score " + String.valueOf(i) + " is " + String.valueOf(player.getScores().get(i).getValue()));
 		}
 		player.serialize();
 		File file = new File("PlayerGameFiles/" + player.getName() + "_game2.txt");
 		if (file.delete())
 		{
-			System.out.println("File deleted successfully");
+			//System.out.println("File deleted successfully");
 		}
 		else
 		{
-			System.out.println("Failed to delete the file");
+			//System.out.println("Failed to delete the file");
 		}
 		GameOn = false;
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -1053,7 +1151,11 @@ public class Main_Aliens extends Application implements Serializable
 		fadeTransition.play();
 		// System.exit(0);
 	}
-	
+
+	/**
+	 * Method for moving walls, BallTokens, Tokens, Blocks,Enemies upwards
+	 * to simulate the effect of the snake being pushed back from collsion with row of block
+	 */
 	public void moveUp()
 	{
 		double movUpAmt = 1.2 * speedScale;
@@ -1072,7 +1174,7 @@ public class Main_Aliens extends Application implements Serializable
 		{
 			BallToken w = balls.get(i);
 			w.setTranslateY(w.getTranslateY() - movUpAmt);
-			w.getA().setTranslateY(w.getTranslateY() - movUpAmt);
+			w.getValueLabel().setTranslateY(w.getTranslateY() - movUpAmt);
 			if (w.getTranslateY() > 800)
 			{
 				root.getChildren().remove(w);
@@ -1095,7 +1197,7 @@ public class Main_Aliens extends Application implements Serializable
 			{
 				Block w = blocks.get(i).getBlockrow().get(j);
 				w.setTranslateY(w.getTranslateY() - movUpAmt);
-				w.getA().setTranslateY(w.getTranslateY() - movUpAmt);
+				w.getValueLabel().setTranslateY(w.getTranslateY() - movUpAmt);
 			}
 		}
 		for (int i = 0; i < enemies.size(); i++)
@@ -1109,7 +1211,11 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Method for moving walls, BallTokens, Tokens, Blocks,Enemies downwards
+	 * and removing them once they are off the screen
+	 */
 	private void removeItems()
 	{
 		for (int i = 0; i < walls.size(); i++)
@@ -1126,7 +1232,7 @@ public class Main_Aliens extends Application implements Serializable
 		{
 			BallToken w = balls.get(i);
 			w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-			w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+			w.getValueLabel().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
 			if (w.getTranslateY() > 750)
 			{
 				root.getChildren().remove(w);
@@ -1149,7 +1255,7 @@ public class Main_Aliens extends Application implements Serializable
 			{
 				Block w = blocks.get(i).getBlockrow().get(j);
 				w.setTranslateY(w.getTranslateY() + 0.5 * speedScale);
-				w.getA().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
+				w.getValueLabel().setTranslateY(w.getTranslateY() + 0.5 * speedScale);
 				if (w.getTranslateY() > 750)
 				{
 					root.getChildren().remove(w);
@@ -1179,7 +1285,7 @@ public class Main_Aliens extends Application implements Serializable
 			{
 				root.getChildren().remove(w);
 				bullets.remove(w);
-				System.out.println("Bullet Removed");
+				//System.out.println("Bullet Removed");
 			}
 		}
 		for (int i = 0; i < enemies.size(); i++)
@@ -1198,7 +1304,12 @@ public class Main_Aliens extends Application implements Serializable
 			}
 		}
 	}
-	
+
+	/**
+	 * Updates the GameScreen at every call from animation timer, moving all BallTokens, walls, Tokens,Enemies and Blocks downward,
+	 * checking for collisions, checking and updating timer for temporary power-ups
+	 * @throws ConcurrentModificationException
+	 */
 	private void update() throws ConcurrentModificationException
 	{
 		if (s.getSize() <= 0)
@@ -1242,7 +1353,7 @@ public class Main_Aliens extends Application implements Serializable
 		}
 		if (s.getSize() <= 0)
 		{
-			System.out.println("exited deflect from blocks 98230");
+			//System.out.println("exited deflect from blocks 98230");
 		}
 		deflectFromBalls();
 		removeItems();
@@ -1259,7 +1370,10 @@ public class Main_Aliens extends Application implements Serializable
 		}
 		sizeLabel.setTranslateY(420);
 	}
-	
+
+	/**
+	 * Creates an Upward moving bullet, originating from head of the snake.
+	 */
 	public void shoot()
 	{
 		Rectangle r1 = new Rectangle(10, 20, Color.BLUE);
@@ -1332,8 +1446,5 @@ public class Main_Aliens extends Application implements Serializable
 		stage.show();
 	}
 	
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
+
 }

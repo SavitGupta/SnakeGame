@@ -145,7 +145,7 @@ public class Main extends Application implements Serializable
 		}
 		catch (IOException e)
 		{
-			System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
+			//System.out.println(e.getMessage() + "\nIOException\n" + e.getStackTrace());
 		}
 	}
 
@@ -186,7 +186,7 @@ public class Main extends Application implements Serializable
 				for (RowOfBlocks r : m1.blocks)
 				{
 					r.deserialize(m1.root);
-					System.out.println("deserialized");
+					//System.out.println("deserialized");
 				}
 				m1.root.getChildren().addAll(m1.tokens);
 				m1.root.getChildren().addAll(m1.walls);
@@ -210,11 +210,11 @@ public class Main extends Application implements Serializable
 			}
 			catch (IOException e)
 			{
-				System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
+				//System.out.println(e.getMessage() + "\nIOException in in.readobject()\n" + e.getStackTrace());
 			}
 			catch (ClassNotFoundException e)
 			{
-				System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
+				//System.out.println(e.getMessage() + "\nClassNotFoundException\n" + e.getStackTrace());
 			}
 			finally
 			{
@@ -226,7 +226,7 @@ public class Main extends Application implements Serializable
 		}
 		catch (IOException e)
 		{
-			System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
+			//System.out.println(e.getMessage() + "\nIOException in in.close()\n" + e.getStackTrace());
 		}
 		return m1;
 	}
@@ -436,7 +436,7 @@ public class Main extends Application implements Serializable
 			Coins s1 = new Coins(x, y);
 			if (checkAlreadyOccupied(s1))
 			{
-				// System.out.println("skipped");
+				// //System.out.println("skipped");
 				return false;
 			}
 			tokens.add(s1);
@@ -447,7 +447,7 @@ public class Main extends Application implements Serializable
 			Magnet s1 = new Magnet(x, y);
 			if (checkAlreadyOccupied(s1))
 			{
-				// System.out.println("skipped");
+				// //System.out.println("skipped");
 				return false;
 			}
 			tokens.add(s1);
@@ -458,7 +458,7 @@ public class Main extends Application implements Serializable
 			BrickBuster s1 = new BrickBuster(x, y);
 			if (checkAlreadyOccupied(s1))
 			{
-				// System.out.println("skipped");
+				// //System.out.println("skipped");
 				return false;
 			}
 			tokens.add(s1);
@@ -530,7 +530,7 @@ public class Main extends Application implements Serializable
 		if (distSinceBlock > 350 && distSinceBlock + guess > 500)
 		{
 			t = 0;
-			// System.out.println("generating blocks");
+			// //System.out.println("generating blocks");
 			distSinceBlock = 0;
 			addBlocks();
 		}
@@ -623,7 +623,7 @@ public class Main extends Application implements Serializable
 	private void moveLeft(double amt)
 	{
 		if(amt > 15){
-			System.out.println("67152 moved left by " + amt );
+			//System.out.println("67152 moved left by " + amt );
 			return;
 		}
 		s.moveLeft(amt);
@@ -634,7 +634,7 @@ public class Main extends Application implements Serializable
 			flag = s.intersection(w);
 			if (flag)
 			{
-				System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
+				//System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
 				dist = abs(s.getx() - w.getTranslateX() - 10);
 				break;
 			}
@@ -652,7 +652,7 @@ public class Main extends Application implements Serializable
 				if (flag)
 				{
 					dist = abs(s.getx() - b.getTranslateX() - 67); // width of
-					System.out.println(String.valueOf("intersection with BLOCL left" + s.getx()) + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
+					//System.out.println(String.valueOf("intersection with BLOCL left" + s.getx()) + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
 					break;
 				}
 			}
@@ -682,7 +682,7 @@ public class Main extends Application implements Serializable
 			flag = s.intersection(w);
 			if (flag)
 			{
-				System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
+				//System.out.println(String.valueOf(s.getx()) + " : " + String.valueOf(w.getTranslateX()));
 				dist = abs(s.getx() - w.getTranslateX() + 8);
 				break;
 			}
@@ -700,7 +700,7 @@ public class Main extends Application implements Serializable
 				if (flag)
 				{
 					dist = abs(s.getx() + 7 - b.getTranslateX()); // 7 is radius
-					System.out.println("intersection with BLOCL Right" + s.getx() + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
+					//System.out.println("intersection with BLOCL Right" + s.getx() + " : " + String.valueOf(b.getTranslateX()) + " dist is " + dist);
 					// of
 					// snake
 					break;
@@ -713,7 +713,7 @@ public class Main extends Application implements Serializable
 		}
 		if (flag)
 		{
-			System.out.println("dist moved left " + String.valueOf(dist));
+			//System.out.println("dist moved left " + String.valueOf(dist));
 
 			s.moveLeft(dist);
 		}
@@ -732,7 +732,7 @@ public class Main extends Application implements Serializable
 			flag = w.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + w.getClass() + " " + w.getBoundsInParent());
+				//System.out.println("SKIPPED " + first.getClass() + " " + w.getClass() + " " + w.getBoundsInParent());
 				return true;
 			}
 		}
@@ -741,7 +741,7 @@ public class Main extends Application implements Serializable
 			flag = t1.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + t1.getClass() + " " + t1.getBoundsInParent());
+				//System.out.println("SKIPPED " + first.getClass() + " " + t1.getClass() + " " + t1.getBoundsInParent());
 				return true;
 			}
 		}
@@ -750,7 +750,7 @@ public class Main extends Application implements Serializable
 			flag = b1.getBoundsInParent().intersects(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + b1.getClass() + " " + b1.getBoundsInParent());
+				//System.out.println("SKIPPED " + first.getClass() + " " + b1.getClass() + " " + b1.getBoundsInParent());
 				return true;
 			}
 		}
@@ -759,7 +759,7 @@ public class Main extends Application implements Serializable
 			flag = b2.intersection(first.getBoundsInParent());
 			if (flag)
 			{
-				System.out.println("SKIPPED " + first.getClass() + " " + b2.getClass());
+				//System.out.println("SKIPPED " + first.getClass() + " " + b2.getClass());
 				return true;
 			}
 		}
@@ -779,7 +779,7 @@ public class Main extends Application implements Serializable
 			{
 				hitter = w;
 				double dist = hitter.getTranslateX() - s.getx() + 5;
-				System.out.println("Inersection with wall head " + String.valueOf(dist));
+				//System.out.println("Inersection with wall head " + String.valueOf(dist));
 				if (dist > 0)
 				{
 					s.moveLeft(12 - dist);
@@ -806,12 +806,12 @@ public class Main extends Application implements Serializable
 				{
 					if (w.getTranslateY() < 390)
 					{
-						System.out.println("location of block is " + String.valueOf(w.getTranslateY()));
+						//System.out.println("location of block is " + String.valueOf(w.getTranslateY()));
 						Block hitter = w;
 						int value = hitter.getValue();
 						int value2 = hitter.getInitialValue();
-						System.out.println("Value of block " + String.valueOf(value));
-						System.out.println("Value of snake " + String.valueOf(s.getSize()));
+						//System.out.println("Value of block " + String.valueOf(value));
+						//System.out.println("Value of snake " + String.valueOf(s.getSize()));
 						if (!ShieldOn)
 						{
 							if (s.getSize() > 0)
@@ -829,17 +829,17 @@ public class Main extends Application implements Serializable
 								}
 								else
 								{
-									System.out.println(" attempt to decrease snake size 89212");
+									//System.out.println(" attempt to decrease snake size 89212");
 									int decvalby = min(value,s.getSize());
 									s.decLenghtBy(decvalby);
-									System.out.println("successful attempt to decrease snake size 1723");
+									//System.out.println("successful attempt to decrease snake size 1723");
 									score += decvalby;
 									value-=decvalby;
 								}
 								if (value == 0)
 								{
-									System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
-									System.out.println("hitter is removed " + String.valueOf(hitter));
+									//System.out.println("Size of children " + String.valueOf(root.getChildren().size()));
+									//System.out.println("hitter is removed " + String.valueOf(hitter));
 									Rectangle r1 = new Rectangle(hitter.getTranslateX() + 15, hitter.getTranslateY() + 30, 20, 20);
 									root.getChildren().remove(hitter);
 									root.getChildren().remove(hitter.getValueLabel());
@@ -896,8 +896,8 @@ public class Main extends Application implements Serializable
 			{
 				hitter = w;
 				int value = Integer.parseInt(hitter.getValue());
-				System.out.println("Value of circle " + String.valueOf(value));
-				System.out.println("Value of snake " + String.valueOf(s.getSize()));
+				//System.out.println("Value of circle " + String.valueOf(value));
+				//System.out.println("Value of snake " + String.valueOf(s.getSize()));
 				s.incLenghtBy(value);
 				Rectangle r2 = new Rectangle(w.getTranslateX() + 10, w.getTranslateY() + 20, 10, 10);
 				Image mag2 = new Image(getClass().getResourceAsStream("./Images/expcoin.png"));
@@ -929,7 +929,7 @@ public class Main extends Application implements Serializable
 			Token t1 = tokens.get(i);
 			if (s.intersection(t1))
 			{
-				System.out.println("Token of type " + t1.getType());
+				//System.out.println("Token of type " + t1.getType());
 				if (t1.getType().equals("Coin"))
 				{
 					score += 2;
@@ -1024,21 +1024,21 @@ public class Main extends Application implements Serializable
 			return;
 		}
 		alreadyGameover = true;
-		System.out.println("in dgameover function 97123");
+		//System.out.println("in dgameover function 97123");
 		player.addScore(score);
 		for (int i = 0; i < player.getScores().size(); i++)
 		{
-			System.out.println("Score " + String.valueOf(i) + " is " + String.valueOf(player.getScores().get(i).getValue()));
+			//System.out.println("Score " + String.valueOf(i) + " is " + String.valueOf(player.getScores().get(i).getValue()));
 		}
 		player.serialize();
 		File file = new File("PlayerGameFiles/" + player.getName() + "_game.txt");
 		if (file.delete())
 		{
-			System.out.println("File deleted successfully");
+			//System.out.println("File deleted successfully");
 		}
 		else
 		{
-			System.out.println("Failed to delete the file");
+			//System.out.println("Failed to delete the file");
 		}
 		GameOn = false;
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -1259,7 +1259,7 @@ public class Main extends Application implements Serializable
 
 		if (s.getSize() <= 0)
 		{
-			System.out.println("exited deflect from blocks 98230");
+			//System.out.println("exited deflect from blocks 98230");
 		}
 		deflectFromBalls();
 		removeItems();

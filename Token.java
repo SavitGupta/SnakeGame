@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 /**
  * Parent class of every Powerup in the game
  */
-public class Token extends Circle implements Serializable
+public abstract class Token extends Circle implements Serializable
 {
 	private static final long serialVersionUID = 105L;
 	private String type;

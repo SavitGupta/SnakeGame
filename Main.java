@@ -214,8 +214,7 @@ public class Main extends Application implements Serializable
 		return m1;
 	}
 	
-	private void createContent()
-	{
+	private void createContent() {
 		explosionImage = new ImagePattern(new Image(getClass().getResourceAsStream("./Images/exp.png")));
 		root.setPrefSize(500, 700);
 		root.setStyle("-fx-background-color: #000000;");
@@ -235,25 +234,19 @@ public class Main extends Application implements Serializable
 		scoreLabel.setStyle("-fx-font-weight: bold;");
 		a.getChildren().add(scoreLabel);
 		shield = new Rectangle(20, 20);
-		if (ShieldOn)
-		{
+		if (ShieldOn) {
 			Image mag = new Image(getClass().getResourceAsStream("./Images/shieldon.png"));
 			shield.setFill(new ImagePattern(mag));
-		}
-		else
-		{
+		} else {
 			Image mag2 = new Image(getClass().getResourceAsStream("./Images/shieldoff.png"));
 			shield.setFill(new ImagePattern(mag2));
 		}
 		a.getChildren().add(shield);
 		magnet = new Rectangle(20, 20);
-		if (MagnetOn)
-		{
+		if (MagnetOn) {
 			Image mag = new Image(getClass().getResourceAsStream("./Images/magneton.png"));
 			magnet.setFill(new ImagePattern(mag));
-		}
-		else
-		{
+		} else {
 			Image mag2 = new Image(getClass().getResourceAsStream("./Images/magnetoff.png"));
 			magnet.setFill(new ImagePattern(mag2));
 		}
@@ -268,21 +261,18 @@ public class Main extends Application implements Serializable
 		a.getChildren().add(dropdown);
 		root.getChildren().add(a);
 		setGameMode(gameMode);
-		timer = new AnimationTimer()
-		{
-			@Override
-			public void handle(long now)
-			{
-				try
-				{
-					update();
+		if (timer == null){
+			timer = new AnimationTimer() {
+				@Override
+				public void handle(long now) {
+					try {
+						update();
+					} catch (Exception e) {
+					}
 				}
-				catch (Exception e)
-				{
-				}
-			}
-		};
+			};
 		timer.start();
+		}
 	}
 	
 	public void getChoice(ComboBox<String> dropdown, ActionEvent e)
@@ -361,57 +351,7 @@ public class Main extends Application implements Serializable
 		ShieldCheck = 0;
 		MagnetCheck = 0;
 		distSinceBlock = 0;
-		root.setPrefSize(500, 700);
-		root.setStyle("-fx-background-color: #000000;");
-		sizeLabel.setTextFill(Color.DEEPPINK);
-		sizeLabel.setStyle("-fx-font-weight: bold;");
-		root.getChildren().add(sizeLabel);
-		sizeLabel2.setTextFill(Color.DEEPPINK);
-		sizeLabel2.setStyle("-fx-font-weight: bold;");
-		root.getChildren().add(sizeLabel2);
-		HBox a = new HBox();
-		a.setPrefHeight(30);
-		a.setPrefWidth(500);
-		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(40);
-		a.setPadding(new Insets(10, 10, 10, 10));
-		scoreLabel.setTextFill(Color.DEEPPINK);
-		scoreLabel.setStyle("-fx-font-weight: bold;");
-		a.getChildren().add(scoreLabel);
-		shield = new Rectangle(20, 20);
-		if (ShieldOn)
-		{
-			Image mag = new Image(getClass().getResourceAsStream("./Images/shieldon.png"));
-			shield.setFill(new ImagePattern(mag));
-		}
-		else
-		{
-			Image mag2 = new Image(getClass().getResourceAsStream("./Images/shieldoff.png"));
-			shield.setFill(new ImagePattern(mag2));
-		}
-		a.getChildren().add(shield);
-		magnet = new Rectangle(20, 20);
-		if (MagnetOn)
-		{
-			Image mag = new Image(getClass().getResourceAsStream("./Images/magneton.png"));
-			magnet.setFill(new ImagePattern(mag));
-		}
-		else
-		{
-			Image mag2 = new Image(getClass().getResourceAsStream("./Images/magnetoff.png"));
-			magnet.setFill(new ImagePattern(mag2));
-		}
-		a.getChildren().add(magnet);
-		a.getChildren().add(sizeLabel2);
-		dropdown.getItems().add("Pause");
-		dropdown.getItems().add("Resume");
-		dropdown.getItems().add("Restart");
-		dropdown.getItems().add("Exit");
-		dropdown.setPromptText("Options");
-		dropdown.setOnAction(e -> getChoice(dropdown, e));
-		a.getChildren().add(dropdown);
-		root.getChildren().add(a);
-		setGameMode(gameMode);
+		createContent();
 	}
 	
 	public boolean addBallToken(double x, double y, int value)

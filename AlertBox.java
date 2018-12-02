@@ -6,8 +6,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * The AlertBox class creates an AlertBox
+ */
 public class AlertBox
 {
+
+
+	/** Displays the alert Box on a new Stage
+	 *
+	 * @param title title of the alert
+	 * @param message content of body of alert
+	 */
 	public static void display(String title, String message)
 	{
 		Stage window = new Stage();

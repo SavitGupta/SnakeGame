@@ -15,15 +15,20 @@ public class BallToken extends Rectangle implements Serializable
 	private int value;
 	private transient Label a;
 	private double x, y;
-	
+	private static Image mag;
+	private void instantiateImages()
+	{
+		mag = new Image(getClass().getResourceAsStream("yellowball.png"));
+	}
 	public BallToken(double x, double y, String value)
 	{
 		super(0, 0, 25, 25);
 		this.setTranslateX(x);
 		this.setTranslateY(y);
 		this.value = Integer.parseInt(value);
-		Image mag;
-		mag = new Image(getClass().getResourceAsStream("yellowball.png"));
+		if(mag == null){
+			instantiateImages();
+		}
 		this.setFill(new ImagePattern(mag));
 		a = new Label(value);
 		a.setPrefHeight(25);

@@ -11,6 +11,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * A screen which is displayed when the game gets over, that is your snake has died. It displays your last score along with a congratulations message if you set a global high score.
+ *
+ * @author AYUSH SHRIVASTAVA
+ *
+ */
 public class GameOverController
 {
 	@FXML

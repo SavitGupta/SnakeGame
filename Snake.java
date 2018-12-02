@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
 
 public class Snake implements Serializable
 {
-	private static long serialVersionUID = 104L;
+	private static final long serialVersionUID = 104L;
 	private int size;
 	private transient Pane root;
 	private ArrayList<Balls> l1 = new ArrayList<>();

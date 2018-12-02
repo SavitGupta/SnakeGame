@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Score implements Serializable
 {
-	private static long serialVersionUID = 201L;
+	private static final long serialVersionUID = 201L;
 	private Date date;
 	private Integer value;
 	private String name;

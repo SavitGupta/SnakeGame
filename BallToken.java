@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 
 public class BallToken extends Rectangle implements Serializable
 {
-	private static long serialVersionUID = 108L;
+	private static final long serialVersionUID = 108L;
 	private int value;
 	private transient Label a;
 	private double x, y;

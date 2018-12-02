@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 
 public class Block extends Rectangle implements Serializable
 {
-	private static long serialVersionUID = 103L;
+	private static final long serialVersionUID = 103L;
 	private int value;
 	private transient Label a;
 	private int InitialValue;

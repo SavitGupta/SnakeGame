@@ -12,7 +12,7 @@ import java.util.Collections;
 
 public class Player implements Serializable
 {
-	private static long serialVersionUID = 202L;
+	private static final long serialVersionUID = 202L;
 	private String username;
 	private ArrayList<Score> scores;
 	

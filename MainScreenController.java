@@ -14,6 +14,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * This is the controller for the main screen having 4 buttons that are start game, our both leader boards and a button to next screen.
+ *
+ * @author AYUSH SHRIVASTAVA
+ *
+ */
 public class MainScreenController
 {
 	@FXML
@@ -46,6 +52,13 @@ public class MainScreenController
 		game = Main.deserialize(filename);
 	}
 	
+	/**
+	 * Takes you to the page for choosing game modes.
+	 *
+	 * @param e
+	 *            Runs action on button press
+	 * @throws Exception
+	 */
 	public void startGame(ActionEvent e) throws Exception
 	{
 		deserialize();
@@ -82,6 +95,12 @@ public class MainScreenController
 		fadeTransition.play();
 	}
 	
+	/**
+	 * Opens the Individual leaderboard.
+	 *
+	 * @param e
+	 * @throws IOException
+	 */
 	public void ILeader(ActionEvent e) throws IOException
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -109,6 +128,12 @@ public class MainScreenController
 		fadeTransition.play();
 	}
 	
+	/**
+	 * Opens the Global leaderboard.
+	 *
+	 * @param e
+	 * @throws IOException
+	 */
 	public void GLeader(ActionEvent e) throws IOException
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));

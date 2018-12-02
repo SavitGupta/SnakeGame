@@ -11,6 +11,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * This controller is used to make the main screen for choosing between the options for different game modes implemented. There are three game modes as Normal, Blind and Alien mode. The button for
+ * Resume button gets enabled only when an earlier game was left incomplete.
+ *
+ * @author AYUSH SHRIVASTAVA
+ *
+ */
 public class PlayvsResumeController
 {
 	@FXML
@@ -34,12 +41,22 @@ public class PlayvsResumeController
 		resume.setDisable(Game == null);
 	}
 	
+	/**
+	 *
+	 * @param game
+	 *            game refers to the object of the main class of either of the Normal/Blind mode.
+	 */
 	public void setGame(Main game)
 	{
 		Game = game;
 		resume.setDisable(Game == null);
 	}
 	
+	/**
+	 *
+	 * @param game
+	 *            game refers to the object of the main class of either of the Aliens mode.
+	 */
 	public void setGame2(Main_Aliens game)
 	{
 		Game2 = game;
@@ -51,6 +68,14 @@ public class PlayvsResumeController
 		this.player = player;
 	}
 	
+	/**
+	 * Begins the game in the Blind Mode.
+	 *
+	 * @param e
+	 *            Action event activated on clicking the button
+	 * @throws Exception
+	 *             Exception is thrown by the start function in main class
+	 */
 	public void startGame(ActionEvent e) throws Exception
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -76,6 +101,14 @@ public class PlayvsResumeController
 		fadeTransition.play();
 	}
 	
+	/**
+	 * Begins the game in the Normal Mode.
+	 *
+	 * @param e
+	 *            Action event activated on clicking the button
+	 * @throws Exception
+	 *             Exception is thrown by the start function in main class
+	 */
 	public void startGameNormal(ActionEvent e) throws Exception
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -99,6 +132,14 @@ public class PlayvsResumeController
 		fadeTransition.play();
 	}
 	
+	/**
+	 * Begins the game in the Alien Mode.
+	 *
+	 * @param e
+	 *            Action event activated on clicking the button
+	 * @throws Exception
+	 *             Exception is thrown by the start function in main class
+	 */
 	public void startGameAlien(ActionEvent e) throws Exception
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -122,6 +163,14 @@ public class PlayvsResumeController
 		fadeTransition.play();
 	}
 	
+	/**
+	 * Begins the game in the the last paused or ended mode.
+	 * 
+	 * @param e
+	 *            Action event activated on clicking the button
+	 * @throws Exception
+	 *             Exception is thrown by the start function in main class
+	 */
 	public void resumeGame(ActionEvent e) throws Exception
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));

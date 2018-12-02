@@ -22,6 +22,14 @@
 	-fx-border-radius: 8;
 	-fx-font-weight: bold;
 }
+#startAlien
+{
+	-fx-font-size: 20px;
+	-fx-text-fill: #320456;
+	-fx-padding: 6,6,6,6;
+	-fx-border-radius: 8;
+	-fx-font-weight: bold;
+}
 
 #resume
 {

@@ -45,9 +45,9 @@ public class LeaderboardControllerIndividual
 			Label l2 = new Label(score.getValue().toString());
 			l2.setPrefHeight(51);
 			l2.setPrefWidth(90);
-			Label l3 = new Label(score.getDate().toString());
+			Label l3 = new Label(score.concatenatedDate());
 			l3.setPrefHeight(51);
-			l3.setPrefWidth(140);
+			l3.setPrefWidth(170);
 			l1.setTextFill(Color.WHITE);
 			l1.setStyle("-fx-font-weight: bold;");
 			l2.setTextFill(Color.WHITE);

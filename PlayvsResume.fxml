@@ -5,9 +5,10 @@
 
 <AnchorPane fx:id="rootLol" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayvsResumeController">
    <children>
-      <Button fx:id="startNormal" layoutX="228.0" layoutY="323.0" mnemonicParsing="false" onAction="#startGameNormal" prefHeight="42.0" prefWidth="145.0" text="Start Normal" />
-      <Button fx:id="resume" layoutX="246.0" layoutY="251.0" mnemonicParsing="false" onAction="#resumeGame" prefHeight="42.0" prefWidth="110.0" text="Resume" />
-      <Button fx:id="startBlind" layoutX="228.0" layoutY="398.0" mnemonicParsing="false" onAction="#startGame" prefHeight="42.0" prefWidth="145.0" text="Start Blind" />
+      <Button fx:id="startNormal" layoutX="228.0" layoutY="341.0" mnemonicParsing="false" onAction="#startGameNormal" prefHeight="42.0" prefWidth="145.0" text="Start Normal" />
+      <Button fx:id="resume" layoutX="246.0" layoutY="263.0" mnemonicParsing="false" onAction="#resumeGame" prefHeight="42.0" prefWidth="110.0" text="Resume" />
+      <Button fx:id="startBlind" layoutX="228.0" layoutY="417.0" mnemonicParsing="false" onAction="#startGame" prefHeight="42.0" prefWidth="145.0" text="Start Blind" />
       <Button fx:id="Main" layoutX="421.0" layoutY="617.0" mnemonicParsing="false" onAction="#returnToMain" prefHeight="70.0" prefWidth="76.0" />
+      <Button fx:id="startAlien" layoutX="200.0" layoutY="493.0" mnemonicParsing="false" onAction="#startGameAlien" prefHeight="42.0" prefWidth="202.0" text="Start Alien Mode" />
    </children>
 </AnchorPane>

@@ -7,11 +7,11 @@
 
 <AnchorPane fx:id="rootLol" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LeaderboardControllerIndividual">
    <children>
-      <Button fx:id="Main" contentDisplay="CENTER" layoutX="381.0" layoutY="596.0" mnemonicParsing="false" onAction="#returnToMain" prefHeight="104.0" prefWidth="119.0" textAlignment="CENTER">
+      <Button fx:id="Main" contentDisplay="CENTER" layoutX="389.0" layoutY="604.0" mnemonicParsing="false" onAction="#returnToMain" prefHeight="96.0" prefWidth="111.0" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <VBox fx:id="vbox" layoutX="85.0" layoutY="101.0" prefHeight="500.0" prefWidth="370.0" />
+      <VBox fx:id="vbox" layoutX="83.0" layoutY="97.0" prefHeight="500.0" prefWidth="400.0" />
    </children>
 </AnchorPane>

@@ -89,14 +89,14 @@ public class LeaderboardControllerGlobal
 			}
 			HBox h1 = new HBox();
 			Label l1 = new Label(score.getName());
-			l1.setPrefHeight(51);
+			l1.setPrefHeight(48.5);
 			l1.setPrefWidth(140);
 			Label l2 = new Label(score.getValue().toString());
-			l2.setPrefHeight(51);
+			l2.setPrefHeight(48.5);
 			l2.setPrefWidth(90);
-			Label l3 = new Label(score.getDate().toString());
-			l3.setPrefHeight(51);
-			l3.setPrefWidth(140);
+			Label l3 = new Label(score.concatenatedDate());
+			l3.setPrefHeight(48.5);
+			l3.setPrefWidth(170);
 			l1.setTextFill(Color.WHITE);
 			l1.setStyle("-fx-font-weight: bold;");
 			l2.setTextFill(Color.WHITE);

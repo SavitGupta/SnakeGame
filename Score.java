@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Score implements Serializable
 {
-	private static final long serialVersionUID = 201L;
+	private static long serialVersionUID = 201L;
 	private Date date;
 	private Integer value;
 	private String name;
@@ -45,5 +45,12 @@ public class Score implements Serializable
 	public void setValue(Integer value)
 	{
 		this.value = value;
+	}
+	
+	public String concatenatedDate()
+	{
+		String x = date.toString();
+		return x.substring(0, x.lastIndexOf("IST"));
+		// x = date.getMinutes() + ":" + date.getHours() + " " + date.getDate() + " " + String.valueOf(date.getMonth()) + " " + date.getYear()
 	}
 }

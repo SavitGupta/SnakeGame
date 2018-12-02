@@ -28,6 +28,7 @@ public class MainScreenController
 	private Button nx;
 	@FXML
 	private AnchorPane rootLol;
+	private Main_Aliens game2;
 	private Main game;
 	private Player player;
 	
@@ -39,6 +40,8 @@ public class MainScreenController
 	
 	public void deserialize()
 	{
+		String filename2 = player.getName() + "_game2.txt";
+		game2 = Main_Aliens.deserialize(filename2);
 		String filename = player.getName() + "_game.txt";
 		game = Main.deserialize(filename);
 	}
@@ -61,6 +64,10 @@ public class MainScreenController
 				if (game != null)
 				{
 					cnt.setGame(game);
+				}
+				else if (game2 != null)
+				{
+					cnt.setGame2(game2);
 				}
 				Scene newScene = new Scene(newParent);
 				newScene.getStylesheets().add(getClass().getResource("PlayvsResume.css").toExternalForm());

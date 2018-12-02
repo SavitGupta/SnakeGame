@@ -18,12 +18,15 @@ public class PlayvsResumeController
 	@FXML
 	private Button startBlind;
 	@FXML
+	private Button startAlien;
+	@FXML
 	private Button resume;
 	@FXML
 	private Button Main;
 	@FXML
 	private AnchorPane rootLol;
 	private Main Game;
+	private Main_Aliens Game2;
 	private Player player;
 	
 	public void initialize()
@@ -35,6 +38,12 @@ public class PlayvsResumeController
 	{
 		Game = game;
 		resume.setDisable(Game == null);
+	}
+	
+	public void setGame2(Main_Aliens game)
+	{
+		Game2 = game;
+		resume.setDisable(Game2 == null);
 	}
 	
 	public void setPlayer(Player player)
@@ -90,6 +99,29 @@ public class PlayvsResumeController
 		fadeTransition.play();
 	}
 	
+	public void startGameAlien(ActionEvent e) throws Exception
+	{
+		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
+		fadeTransition.setNode(rootLol);
+		fadeTransition.setFromValue(1);
+		fadeTransition.setToValue(0);
+		fadeTransition.setOnFinished((ActionEvent event) -> {
+			try
+			{
+				((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
+				Game2 = new Main_Aliens();
+				Game2.setPlayer(player);
+				Stage primaryStage = new Stage();
+				Game2.start(primaryStage);
+			}
+			catch (Exception e1)
+			{
+				e1.printStackTrace();
+			}
+		});
+		fadeTransition.play();
+	}
+	
 	public void resumeGame(ActionEvent e) throws Exception
 	{
 		FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.25));
@@ -101,7 +133,14 @@ public class PlayvsResumeController
 			{
 				((javafx.scene.Node) e.getSource()).getScene().getWindow().hide();
 				Stage primaryStage = new Stage();
-				Game.start(primaryStage);
+				if (Game != null)
+				{
+					Game.start(primaryStage);
+				}
+				else
+				{
+					Game2.start(primaryStage);
+				}
 			}
 			catch (Exception e1)
 			{

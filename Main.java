@@ -356,7 +356,9 @@ public class Main extends Application implements Serializable
 		ColorCheck = 0;
 		GameOn = true;
 		ShieldOn = false;
+		MagnetOn = false;
 		ShieldCheck = 0;
+		MagnetCheck = 0;
 		distSinceBlock = 0;
 		root.setPrefSize(500, 700);
 		root.setStyle("-fx-background-color: #000000;");
@@ -370,15 +372,35 @@ public class Main extends Application implements Serializable
 		a.setPrefHeight(30);
 		a.setPrefWidth(500);
 		a.setStyle("-fx-background-color: #000000");
-		a.setSpacing(60);
+		a.setSpacing(40);
 		a.setPadding(new Insets(10, 10, 10, 10));
 		scoreLabel.setTextFill(Color.DEEPPINK);
 		scoreLabel.setStyle("-fx-font-weight: bold;");
 		a.getChildren().add(scoreLabel);
 		shield = new Rectangle(20, 20);
-		Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
-		shield.setFill(new ImagePattern(mag2));
+		if (ShieldOn)
+		{
+			Image mag = new Image(getClass().getResourceAsStream("shieldon.png"));
+			shield.setFill(new ImagePattern(mag));
+		}
+		else
+		{
+			Image mag2 = new Image(getClass().getResourceAsStream("shieldoff.png"));
+			shield.setFill(new ImagePattern(mag2));
+		}
 		a.getChildren().add(shield);
+		magnet = new Rectangle(20, 20);
+		if (MagnetOn)
+		{
+			Image mag = new Image(getClass().getResourceAsStream("magneton.png"));
+			magnet.setFill(new ImagePattern(mag));
+		}
+		else
+		{
+			Image mag2 = new Image(getClass().getResourceAsStream("magnetoff.png"));
+			magnet.setFill(new ImagePattern(mag2));
+		}
+		a.getChildren().add(magnet);
 		a.getChildren().add(sizeLabel2);
 		dropdown.getItems().add("Pause");
 		dropdown.getItems().add("Resume");
